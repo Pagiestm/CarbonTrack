@@ -12,3 +12,52 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(100)
+  name      String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+  Projects  Project[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(100)
+  Materials Material[]
+}
+
+model Material {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(50)
+  supplier       String    @db.VarChar(50)
+  carbonFootprint Decimal  @db.Decimal(15, 2)
+  unit           String    @db.VarChar(50)
+  pricePerUnit   Decimal   @db.Decimal(15, 2)
+  categoryId     Int
+  category       Category  @relation(fields: [categoryId], references: [id])
+  ProjectMaterial ProjectMaterial[]
+}
+
+model Project {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(100)
+  description    String?          @db.Text
+  totalFootprint Decimal          @db.Decimal(15, 2)
+  createdAt      DateTime         @default(now())
+  userId         Int
+  user           User             @relation(fields: [userId], references: [id])
+  ProjectMaterial ProjectMaterial[]
+}
+
+model ProjectMaterial {
+  id         Int      @id @default(autoincrement())
+  projectId  Int
+  materialId Int
+  quantity   Float    @db.Double
+  project    Project  @relation(fields: [projectId], references: [id])
+  material   Material @relation(fields: [materialId], references: [id])
+  @@unique([projectId, materialId])
+}
+
