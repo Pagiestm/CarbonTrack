@@ -1,6 +1,7 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import RegisterForm from '../components/RegisterForm.vue';
+import LoginForm from '../components/LoginForm.vue';
 
 const routes = [
   {
@@ -8,7 +9,11 @@ const routes = [
     name: 'Register',
     component: RegisterForm,
   },
-  // Ajoutez d'autres routes ici si nécessaire
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginForm,
+  },
 ];
 
 const router = createRouter({
