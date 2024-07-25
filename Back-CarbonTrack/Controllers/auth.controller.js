@@ -7,13 +7,26 @@ class AuthController {
     register() {
         return async (req, res) => {
             const { email, password, name } = req.body;
-            console.log('Register request:', { email, password, name });
+
+            // Regex for password validation
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            // Regex for email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Validate password
+            if (!passwordRegex.test(password)) {
+                return res.status(400).json({ error: 'Password must be at least 8 characters long, contain at least one number, one symbol, one lowercase and one uppercase letter.' });
+            }
+
+            // Validate email
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({ error: 'Invalid email format.' });
+            }
+
             try {
                 const user = await authService.register(email, password, name);
-                console.log('User created:', user);
                 res.status(201).json({ user });
             } catch (error) {
-                console.error('Register error:', error.message);
                 res.status(400).json({ error: error.message });
             }
         };
@@ -22,13 +35,10 @@ class AuthController {
     login() {
         return async (req, res) => {
             const { email, password } = req.body;
-            console.log('Login request:', { email, password });
             try {
                 const { token, user } = await authService.login(email, password);
-                console.log('Login successful:', { token, user });
                 res.status(200).json({ token, user });
             } catch (error) {
-                console.error('Login error:', error.message);
                 res.status(400).json({ error: error.message });
             }
         };
