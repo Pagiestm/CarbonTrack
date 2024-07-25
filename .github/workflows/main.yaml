@@ -34,7 +34,7 @@ jobs:
 
       - name: Deploy
         run: |
-          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} << 'EOF'
+          sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
           cd CarbonTrack/ &&
           git pull origin master &&
           cd Back-CarbonTrack &&
@@ -43,5 +43,4 @@ jobs:
           pm2 restart all &&
           cd ../Front-CarbonTrack &&
           npm install &&
-          npm run build &&
-          EOF
+          npm run build
