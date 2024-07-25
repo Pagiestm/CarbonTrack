@@ -34,13 +34,4 @@ jobs:
 
       - name: Deploy
         run: |
-          sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
-          cd CarbonTrack/ &&
-          git pull origin master &&
-          cd Back-CarbonTrack &&
-          npm install &&
-          npx prisma migrate deploy &&
-          pm2 restart all &&
-          cd ../Front-CarbonTrack &&
-          npm install &&
-          npm run build
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "cd CarbonTrack && git pull origin master && cd Back-CarbonTrack && npm install && npx prisma migrate deploy && pm2 restart all && cd ../Front-CarbonTrack && npm install && npm run build"
