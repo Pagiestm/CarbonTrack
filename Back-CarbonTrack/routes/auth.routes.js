@@ -80,8 +80,8 @@ export const router = express.Router();
  *               password:
  *                 type: string
  *             example:
- *               email: user@example.com
- *               password: secret
+ *               email: test@gmail.com
+ *               password: azerty
  *     responses:
  *       200:
  *         description: Successfully logged in

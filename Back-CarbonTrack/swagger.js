@@ -8,8 +8,22 @@ const options = {
       version: '1.0.0',
       description: 'Documentation de l\'API de CarbonTrack',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ['./routes/*.js'], // Assurez-vous que ce chemin correspond à l'emplacement de vos fichiers de route
+  apis: ['./routes/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
