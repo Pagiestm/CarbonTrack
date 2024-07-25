@@ -34,7 +34,7 @@ const router = useRouter();
 
 const login = async () => {
     try {
-        const response = await axios.post('https://carbon-track-omega.vercel.app/auth/login', {
+        const response = await axios.post('http://localhost:3000/auth/login', {
             email: formState.value.email,
             password: formState.value.password,
         });
