@@ -20,8 +20,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { loginUser } from '../services/userService';
 
 const formState = ref({
     email: '',
@@ -34,11 +34,10 @@ const router = useRouter();
 
 const login = async () => {
     try {
-        const response = await axios.post('http://localhost:3000/auth/login', {
+        const { token } = await loginUser({
             email: formState.value.email,
             password: formState.value.password,
         });
-        const token = response.data.token;
         localStorage.setItem('authToken', token);
         router.push('/');
     } catch (error) {

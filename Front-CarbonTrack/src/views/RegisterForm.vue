@@ -25,8 +25,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { registerUser } from '../services/userService';
 import PasswordCriteria from '../components/PasswordCriteria.vue';
 
 const formState = ref({
@@ -66,14 +66,14 @@ const validatePassword = () => {
 
 const register = async () => {
     validatePassword();
-    if (Object.values(passwordCriteria.value).every(criterion => criterion)) {
+    if (Object.values(formState.value.passwordCriteria).every(criterion => criterion)) {
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', {
-                name: name.value,
-                email: email.value,
-                password: password.value,
+            await registerUser({
+                name: formState.value.name,
+                email: formState.value.email,
+                password: formState.value.password,
             });
-            successMessage.value = 'Registration successful! Redirecting to homepage...';
+            formState.value.successMessage = 'Registration successful! Redirecting to homepage...';
             setTimeout(() => {
                 router.push('/');
             }, 2000);
