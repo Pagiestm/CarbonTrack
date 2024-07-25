@@ -1,24 +1,26 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import RegisterForm from '../components/RegisterForm.vue';
-import LoginForm from '../components/LoginForm.vue';
+import HomePage from '../views/HomePage.vue';
+import LoginForm from '../views/LoginForm.vue';
+import RegisterForm from '../views/RegisterForm.vue';
 
 const routes = [
-  {
-    path: '/register',
-    name: 'Register',
-    component: RegisterForm,
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: LoginForm,
-  },
+    { path: '/', name: 'Home', component: HomePage },
+    { path: '/login', name: 'Login', component: LoginForm },
+    { path: '/register', name: 'Register', component: RegisterForm },
 ];
 
 const router = createRouter({
-  history: createWebHistory(''),
-  routes,
+    history: createWebHistory('/'),
+    routes,
+});
+
+router.beforeEach((to, from, next) => {
+    const isAuthenticated = !!localStorage.getItem('authToken');
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;
