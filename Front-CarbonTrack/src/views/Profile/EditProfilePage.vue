@@ -1,7 +1,8 @@
 <template>
-    <div class="container mx-auto mt-10">
-        <div class="mt-6 text-center">
-            <h1 class="text-3xl font-bold">Edit Profile</h1>
+    <NavBar />
+    <div class="container mx-auto mt-10 p-6">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-indigo-600">Edit Profile</h1>
             <p v-if="loading" class="mt-4 text-gray-600">Loading...</p>
             <form v-else @submit.prevent="submitUpdateUserProfile" class="mt-6">
                 <div class="mb-4">
@@ -31,7 +32,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getUserProfile, updateUserProfile } from '../services/userService';
+import { getUserProfile, updateUserProfile } from '../../services/userService';
+import NavBar from '../../components/NavBar.vue';
 
 const user = ref(null);
 const loading = ref(true);

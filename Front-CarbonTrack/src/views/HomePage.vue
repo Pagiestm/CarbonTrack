@@ -1,5 +1,4 @@
 <template>
-  <div>
     <NavBar />
     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 bg-gray-100 text-gray-800">
       <div class="p-6 text-center md:text-left flex items-center">
@@ -15,7 +14,6 @@
           class="md:ml-auto block md:h-full" style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)" />
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>

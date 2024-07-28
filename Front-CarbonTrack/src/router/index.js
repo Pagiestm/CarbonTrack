@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginForm from '../views/LoginForm.vue';
 import RegisterForm from '../views/RegisterForm.vue';
-import ProfilePage from '../views/ProfilePage.vue';
-import EditProfilePage from '../views/EditProfilePage.vue';
+import ProfilePage from '../views/Profile/ProfilePage.vue';
+import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
