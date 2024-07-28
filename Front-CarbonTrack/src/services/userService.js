@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { getToken, getHeaders } from '../helpers/token';
 
-const API_BASE_URL = 'https://carbontrack.onrender.com/';
+const API_BASE_URL = 'http://localhost:3000';
 
 export const registerUser = async (userData) => {
   try {
