@@ -15,3 +15,8 @@ export const getHeaders = (token) => ({
     Authorization: `Bearer ${token}`,
     Accept: 'application/json'
 });
+
+export const isAdmin = () => {
+    const { decodedToken } = getToken();
+    return decodedToken && decodedToken.role && decodedToken.role.includes('ADMIN');
+};
