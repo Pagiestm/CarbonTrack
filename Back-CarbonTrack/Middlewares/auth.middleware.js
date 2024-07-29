@@ -17,6 +17,7 @@ export const authMiddleware = (req, res, next) => {
       }
       console.log('Token verified, user:', user);
       req.userId = user.userId;
+      req.userRole = user.role;
       next();
   });
 };
