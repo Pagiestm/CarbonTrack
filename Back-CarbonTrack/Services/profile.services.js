@@ -13,6 +13,7 @@ export class ProfileService {
                     id: true,
                     email: true,
                     name: true,
+                    role: true,
                     createdAt: true,
                 },
             });

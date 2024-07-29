@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginForm from '../views/LoginForm.vue';
+import NotFound from '../views/NotFound.vue';
 import RegisterForm from '../views/RegisterForm.vue';
 import ProfilePage from '../views/Profile/ProfilePage.vue';
 import EditProfilePage from '../views/Profile/EditProfilePage.vue';
+import AdminPage from '../views/Admin/AdminPage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
     { path: '/login', name: 'Login', component: LoginForm },
     { path: '/register', name: 'Register', component: RegisterForm },
     { path: '/profile', name: 'Profile', component: ProfilePage, meta: { requiresAuth: true } },
-    {
-        path: '/profile/edit',
-        name: 'EditProfile',
-        component: EditProfilePage
-    },
+    { path: '/profile/edit', name: 'EditProfile', component: EditProfilePage, meta: { requiresAuth: true } },
+    { path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAdmin: true } },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
 const router = createRouter({
@@ -24,10 +24,28 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated = !!localStorage.getItem('authToken');
-    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-        next('/login');
-    } else {
-        next();
+    const role = localStorage.getItem('role');
+
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+    switch (true) {
+        case requiresAdmin:
+            if (isAuthenticated && role === 'ADMIN') {
+                next();
+            } else {
+                next({ name: 'NotFound' });
+            }
+            break;
+        case requiresAuth:
+            if (isAuthenticated) {
+                next();
+            } else {
+                next('/login');
+            }
+            break;
+        default:
+            next();
     }
 });
 

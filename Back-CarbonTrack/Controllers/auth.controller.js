@@ -7,6 +7,7 @@ class AuthController {
     register() {
         return async (req, res) => {
             const { email, password, name } = req.body;
+            const role = 'USER';
 
             // Regex for password validation
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -24,7 +25,7 @@ class AuthController {
             }
 
             try {
-                const user = await authService.register(email, password, name);
+                const user = await authService.register(email, password, name, role);
                 res.status(201).json({ user });
             } catch (error) {
                 res.status(400).json({ error: error.message });

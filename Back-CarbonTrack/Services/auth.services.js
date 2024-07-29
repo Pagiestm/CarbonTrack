@@ -5,13 +5,14 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class AuthService {
-  async register(email, password, name) {
+  async register(email, password, name, role) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name,
+        role,
       },
     });
     return user;

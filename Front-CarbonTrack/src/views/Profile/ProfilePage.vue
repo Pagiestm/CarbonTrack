@@ -8,6 +8,7 @@
             <div v-else>
                 <div class="mt-6">
                     <p class="mt-4 text-gray-600"><i class="fas fa-user mr-2"></i>Name: {{ user.name }}</p>
+                    <p class="mt-4 text-gray-600"><i class="fas fa-user mr-2"></i>Role: {{ user.role }}</p>
                     <p class="mt-4 text-gray-600"><i class="fas fa-envelope mr-2"></i>Email: {{ user.email }}</p>
                 </div>
                 <div class="mt-6 text-center">
