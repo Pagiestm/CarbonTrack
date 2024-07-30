@@ -82,7 +82,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Material'
  */
-router.get('/', authMiddleware, adminMiddleware, getAllMaterials);
+router.get('/', authMiddleware, getAllMaterials);
 
 /**
  * @swagger
@@ -105,7 +105,7 @@ router.get('/', authMiddleware, adminMiddleware, getAllMaterials);
  *             schema:
  *               $ref: '#/components/schemas/Material'
  */
-router.get('/:id', authMiddleware, adminMiddleware, getMaterialById);
+router.get('/:id', authMiddleware, getMaterialById);
 
 /**
  * @swagger

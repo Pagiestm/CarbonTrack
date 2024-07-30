@@ -81,7 +81,7 @@ export const router = express.Router();
  *                 type: string
  *             example:
  *               email: test@gmail.com
- *               password: azerty
+ *               password: Azerty123*
  *     responses:
  *       200:
  *         description: Successfully logged in
