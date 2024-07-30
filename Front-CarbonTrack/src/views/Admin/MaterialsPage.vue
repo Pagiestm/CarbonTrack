@@ -45,6 +45,7 @@
                             </td>
                             <td class="border px-4 py-2">
                                 <button @click="saveMaterial(material)" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                                <button @click="deleteMaterials(material.id)" class="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -56,7 +57,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getMaterials, updateMaterial, getCategories } from '../../services/materialsService.js';
+import { getMaterials, updateMaterial, deleteMaterial } from '../../services/materialsService.js';
+import { getCategories } from '../../services/categoriesService.js';
 
 const state = ref({
     materials: [],
@@ -82,6 +84,18 @@ const saveMaterial = async (material) => {
         alert('Material updated successfully');
     } catch (error) {
         alert('Failed to update material');
+    }
+};
+
+const deleteMaterials = async (id) => {
+    if (confirm('Are you sure you want to delete this material?')) {
+        try {
+            await deleteMaterial(id);
+            state.value.materials = state.value.materials.filter(material => material.id !== id);
+            alert('Material deleted successfully');
+        } catch (error) {
+            alert('Failed to delete material');
+        }
     }
 };
 </script>
