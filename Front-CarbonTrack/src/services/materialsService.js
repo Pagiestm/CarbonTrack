@@ -19,3 +19,35 @@ export const getMaterials = async () => {
     throw new Error(error.response?.data?.error || 'Failed to fetch materials');
   }
 };
+
+export const updateMaterial = async (id, updatedData) => {
+  const tokenData = getToken();
+  if (!tokenData) throw new Error('Token not found');
+
+  const { token } = tokenData;
+
+  try {
+    const response = await axios.put(`${API_BASE_URL}/materials/${id}`, updatedData, {
+      headers: getHeaders(token)
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Failed to update material');
+  }
+};
+
+export const getCategories = async () => {
+  const tokenData = getToken();
+  if (!tokenData) throw new Error('Token not found');
+
+  const { token } = tokenData;
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/categories`, {
+      headers: getHeaders(token)
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Failed to fetch categories');
+  }
+};

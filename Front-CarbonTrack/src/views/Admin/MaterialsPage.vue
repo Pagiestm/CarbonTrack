@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto">
+    <div class="container mx-auto mt-10 p-6">
         <div class="text-center">
             <h1 class="text-3xl font-bold text-indigo-600 mt-4">Materials</h1>
             <p v-if="state.loading" class="mt-4 text-gray-600">Loading...</p>
@@ -14,18 +14,38 @@
                             <th class="px-4 py-2">Carbon Footprint</th>
                             <th class="px-4 py-2">Unit</th>
                             <th class="px-4 py-2">Price Per Unit</th>
-                            <th class="px-4 py-2">Category ID</th>
+                            <th class="px-4 py-2">Category</th>
+                            <th class="px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="material in state.materials" :key="material.id">
                             <td class="border px-4 py-2">{{ material.id }}</td>
-                            <td class="border px-4 py-2">{{ material.name }}</td>
-                            <td class="border px-4 py-2">{{ material.supplier }}</td>
-                            <td class="border px-4 py-2">{{ material.carbonFootprint }}</td>
-                            <td class="border px-4 py-2">{{ material.unit }}</td>
-                            <td class="border px-4 py-2">{{ material.pricePerUnit }}</td>
-                            <td class="border px-4 py-2">{{ material.categoryId }}</td>
+                            <td class="border px-4 py-2">
+                                <input v-model="material.name" class="border px-2 py-1" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input v-model="material.supplier" class="border px-2 py-1" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input v-model="material.carbonFootprint" class="border px-2 py-1" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input v-model="material.unit" class="border px-2 py-1" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input v-model="material.pricePerUnit" class="border px-2 py-1" />
+                            </td>
+                            <td class="border px-4 py-2">
+                                <select v-model="material.categoryId" class="border px-2 py-1">
+                                    <option v-for="category in state.categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </td>
+                            <td class="border px-4 py-2">
+                                <button @click="saveMaterial(material)" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -36,10 +56,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getMaterials } from '../../services/materialsService.js';
+import { getMaterials, updateMaterial, getCategories } from '../../services/materialsService.js';
 
 const state = ref({
     materials: [],
+    categories: [],
     loading: true,
     errorMessage: ''
 });
@@ -47,10 +68,20 @@ const state = ref({
 onMounted(async () => {
     try {
         state.value.materials = await getMaterials();
+        state.value.categories = await getCategories();
     } catch (error) {
         state.value.errorMessage = 'Une erreur est survenue, veuillez réessayer';
     } finally {
         state.value.loading = false;
     }
 });
+
+const saveMaterial = async (material) => {
+    try {
+        await updateMaterial(material.id, material);
+        alert('Material updated successfully');
+    } catch (error) {
+        alert('Failed to update material');
+    }
+};
 </script>
