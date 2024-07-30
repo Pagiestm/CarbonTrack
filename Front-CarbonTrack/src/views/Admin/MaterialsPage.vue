@@ -5,6 +5,19 @@
             <p v-if="state.loading" class="mt-4 text-gray-600">Loading...</p>
             <p v-if="state.errorMessage" class="mt-4 text-red-600">{{ state.errorMessage }}</p>
             <div v-else>
+                <form @submit.prevent="createNewMaterial">
+                    <input v-model="newMaterial.name" placeholder="Name" class="border px-2 py-1" />
+                    <input v-model="newMaterial.supplier" placeholder="Supplier" class="border px-2 py-1" />
+                    <input v-model="newMaterial.carbonFootprint" placeholder="Carbon Footprint" class="border px-2 py-1" />
+                    <input v-model="newMaterial.unit" placeholder="Unit" class="border px-2 py-1" />
+                    <input v-model="newMaterial.pricePerUnit" placeholder="Price Per Unit" class="border px-2 py-1" />
+                    <select v-model="newMaterial.categoryId" class="border px-2 py-1">
+                        <option v-for="category in state.categories" :key="category.id" :value="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+                </form>
                 <table class="table-auto w-full mt-6">
                     <thead>
                         <tr>
@@ -57,7 +70,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getMaterials, updateMaterial, deleteMaterial } from '../../services/materialsService.js';
+import { getMaterials, createMaterial, updateMaterial, deleteMaterial } from '../../services/materialsService.js';
 import { getCategories } from '../../services/categoriesService.js';
 
 const state = ref({
@@ -65,6 +78,15 @@ const state = ref({
     categories: [],
     loading: true,
     errorMessage: ''
+});
+
+const newMaterial = ref({
+    name: '',
+    supplier: '',
+    carbonFootprint: '',
+    unit: '',
+    pricePerUnit: '',
+    categoryId: ''
 });
 
 onMounted(async () => {
@@ -77,6 +99,24 @@ onMounted(async () => {
         state.value.loading = false;
     }
 });
+
+const createNewMaterial = async () => {
+    try {
+        const createdMaterial = await createMaterial(newMaterial.value);
+        state.value.materials.push(createdMaterial);
+        newMaterial.value = {
+            name: '',
+            supplier: '',
+            carbonFootprint: '',
+            unit: '',
+            pricePerUnit: '',
+            categoryId: ''
+        };
+        alert('Material created successfully');
+    } catch (error) {
+        alert('Failed to create material');
+    }
+};
 
 const saveMaterial = async (material) => {
     try {

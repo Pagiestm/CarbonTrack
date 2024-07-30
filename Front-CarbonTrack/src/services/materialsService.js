@@ -20,6 +20,22 @@ export const getMaterials = async () => {
   }
 };
 
+export const createMaterial = async (newData) => {
+  const tokenData = getToken();
+  if (!tokenData) throw new Error('Token not found');
+
+  const { token } = tokenData;
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials`, newData, {
+      headers: getHeaders(token)
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Failed to create material');
+  }
+};
+
 export const updateMaterial = async (id, updatedData) => {
   const tokenData = getToken();
   if (!tokenData) throw new Error('Token not found');
