@@ -10,6 +10,7 @@ module.exports = {
         primary: '#1D1F2A',
         secondary: '#111111',
         light: '#EEEEEE',
+        customGreen: '#42B883',
       },
     },
   },

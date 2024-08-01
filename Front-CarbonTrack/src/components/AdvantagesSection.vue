@@ -1,5 +1,5 @@
 <template>
-    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-400 bg-light dark:bg-secondary flex justify-center">
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-400 bg-secondary flex justify-center">
         <div class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12">
             <div class="grid grid-cols-2 gap-6 order-last lg:order-first">
                 <AdvantageCard icon="M12 8V2 M8 22h8 M12 16v-6" title="Précision"
@@ -15,11 +15,11 @@
                     title="Support" description="Une équipe dédiée pour répondre à toutes vos questions." />
             </div>
             <div class="space-y-4 animate-fadeIn">
-                <div class="inline-block rounded-lg bg-gray-500 dark:bg-gray-700 px-3 py-1 text-sm text-gray-100">
+                <div class="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-light">
                     Avantages
                 </div>
                 <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-100">
-                    Pourquoi choisir CarbonTrack ?
+                    Pourquoi choisir <span class="text-customGreen">CarbonTrack ?</span>
                 </h2>
                 <p class="max-w-2xl text-gray-300 md:text-xl lg:text-base xl:text-xl">
                     CarbonTrack offre une solution complète et facile à utiliser pour calculer et réduire votre
