@@ -1,28 +1,55 @@
 <template>
     <NavBar />
-    <div class="container mx-auto mt-10 p-6">
-        <div class="text-center">
-            <img src="https://via.placeholder.com/150" alt="User Avatar" class="mx-auto rounded-full w-32 h-32">
-            <h1 class="text-3xl font-bold text-indigo-600 mt-4">User Profile</h1>
-            <p v-if="loading" class="mt-4 text-gray-600">Loading...</p>
-            <div v-else>
-                <div class="mt-6">
-                    <p class="mt-4 text-gray-600"><i class="fas fa-user mr-2"></i>Name: {{ user.name }}</p>
-                    <p class="mt-4 text-gray-600"><i class="fas fa-user mr-2"></i>Role: {{ user.role }}</p>
-                    <p class="mt-4 text-gray-600"><i class="fas fa-envelope mr-2"></i>Email: {{ user.email }}</p>
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-secondary flex justify-center items-center">
+        <div class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12 justify-center items-center">
+            <div class="space-y-4 text-center lg:text-left">
+                <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-customGreen mb-8">
+                    Mon profil</h1>
+                <div v-if="user" class="flex flex-col items-center lg:flex-row lg:items-center gap-4">
+                    <span
+                        class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary justify-center items-center">
+                        <svg class="w-8 h-8 text-customGreen" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    </span>
+                    <div class="grid gap-1 text-center lg:text-left">
+                        <div class="text-lg font-semibold text-light">{{ user.name }}</div>
+                        <div class="text-light">{{ user.email }}</div>
+                    </div>
                 </div>
-                <div class="mt-6 text-center">
-                    <router-link to="/profile/edit" class="text-blue-500 hover:underline">Edit Profile</router-link>
+                <div v-if="user" class="grid gap-4 text-center lg:text-left">
+                    <div>
+                        <div class="text-lg font-medium text-light underline mb-2 mt-4">Informations personnelles :</div>
+                        <div class="text-light">
+                            Nom: {{ user.name }}<br>
+                            Email: {{ user.email }}<br>
+                            Rôle: {{ user.role }}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 min-[400px]:flex-row justify-center lg:justify-start">
+                    <router-link to="/profile/edit"
+                        class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-primary hover:text-light hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary">Modifier
+                        le profil</router-link>
                 </div>
             </div>
+            <div
+                class="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square">
+                <img src="https://images.unsplash.com/photo-1505235687559-28b5f54645b7?q=80&w=3864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    width="550" height="550" alt="Profile" class="w-full h-full object-cover" />
+            </div>
         </div>
-    </div>
+    </section>
+    <Footer />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getUserProfile } from '../../services/userService';
 import NavBar from '../../components/NavBar.vue';
+import Footer from '../../components/Footer.vue'
 
 const user = ref(null);
 const loading = ref(true);
@@ -30,10 +57,10 @@ const errorMessage = ref('');
 
 onMounted(async () => {
     try {
-        user.value = await getUserProfile();
+        const profile = await getUserProfile();
+        user.value = profile;
     } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-        errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+        errorMessage.value = 'Failed to load profile';
     } finally {
         loading.value = false;
     }
