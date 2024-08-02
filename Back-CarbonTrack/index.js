@@ -5,6 +5,7 @@ import { router as authRouter } from './routes/auth.routes.js';
 import { router as profileRouter } from './routes/profile.routes.js';
 import { router as materialRoutes } from './routes/material.routes.js';
 import { router as categoryRoutes } from './routes/category.routes.js';
+import { router as projectRoutes } from './routes/project.routes.js';
 import cors from 'cors';
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/materials', materialRoutes);
 app.use('/categories', categoryRoutes);
+app.use('/projects', projectRoutes);
 
 app.listen(port, () => {
     console.log(`App started, listening to port ${port}`);
