@@ -11,6 +11,7 @@ module.exports = {
         secondary: '#111111',
         light: '#EEEEEE',
         customGreen: '#42B883',
+        customGray: '#b4b4b4',
       },
     },
   },

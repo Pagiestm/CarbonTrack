@@ -11,11 +11,11 @@
                     décisions éclairées pour vos projets.
                 </p>
                 <div class="flex flex-col gap-2 sm:flex-row justify-center lg:justify-start">
-                    <a class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-primary hover:text-light hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                    <a class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-primary hover:text-light focus:outline-none focus:ring-2 focus:ring-primary"
                         href="#">
                         Créer un projet
                     </a>
-                    <a class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-primary hover:text-light hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                    <a class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:text-light hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary"
                         href="#">
                         Contactez-nous
                     </a>
