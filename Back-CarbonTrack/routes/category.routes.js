@@ -1,9 +1,9 @@
 // category.routes.js
 import express from 'express';
-import { CategoryController } from '../Controllers/category.controller.js';
+import { categoryController } from '../Controllers/category.controller.js';
+import { authMiddleware } from '../Middlewares/auth.middleware.js';
 
 const router = express.Router();
-const categoryController = new CategoryController();
 
 /**
  * @swagger
@@ -49,6 +49,6 @@ const categoryController = new CategoryController();
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get('/', (req, res) => categoryController.getAllCategories(req, res));
+router.get('/', authMiddleware, categoryController.getAllCategories());
 
 export { router };

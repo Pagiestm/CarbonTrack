@@ -1,11 +1,5 @@
 import express from 'express';
-import {
-    getAllMaterials,
-    getMaterialById,
-    createMaterial,
-    updateMaterial,
-    deleteMaterial
-} from '../Controllers/material.controller.js';
+import { materialController } from '../Controllers/material.controller.js';
 import { authMiddleware } from '../Middlewares/auth.middleware.js';
 import { adminMiddleware } from '../Middlewares/admin.middleware.js';
 
@@ -82,7 +76,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Material'
  */
-router.get('/', authMiddleware, getAllMaterials);
+router.get('/', authMiddleware, materialController.getAllMaterials());
 
 /**
  * @swagger
@@ -105,7 +99,7 @@ router.get('/', authMiddleware, getAllMaterials);
  *             schema:
  *               $ref: '#/components/schemas/Material'
  */
-router.get('/:id', authMiddleware, getMaterialById);
+router.get('/:id', authMiddleware, materialController.getMaterialById());
 
 /**
  * @swagger
@@ -127,7 +121,7 @@ router.get('/:id', authMiddleware, getMaterialById);
  *             schema:
  *               $ref: '#/components/schemas/Material'
  */
-router.post('/', authMiddleware, adminMiddleware, createMaterial);
+router.post('/', authMiddleware, adminMiddleware, materialController.createMaterial());
 
 /**
  * @swagger
@@ -156,7 +150,7 @@ router.post('/', authMiddleware, adminMiddleware, createMaterial);
  *             schema:
  *               $ref: '#/components/schemas/Material'
  */
-router.put('/:id', authMiddleware, adminMiddleware, updateMaterial);
+router.put('/:id', authMiddleware, adminMiddleware, materialController.updateMaterial());
 
 /**
  * @swagger
@@ -175,6 +169,6 @@ router.put('/:id', authMiddleware, adminMiddleware, updateMaterial);
  *       204:
  *         description: No content
  */
-router.delete('/:id', authMiddleware, adminMiddleware, deleteMaterial);
+router.delete('/:id', authMiddleware, adminMiddleware, materialController.deleteMaterial());
 
 export { router };

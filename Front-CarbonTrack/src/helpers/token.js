@@ -8,7 +8,17 @@ export const getToken = () => {
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-    return { token, decodedToken: JSON.parse(jsonPayload) };
+    const decodedToken = JSON.parse(jsonPayload);
+
+    // Vérifie si le token a expiré
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decodedToken.exp < currentTime) {
+        // Redirige l'utilisateur vers la page de connexion
+        window.location.href = '/login';
+        return null;
+    }
+
+    return { token, decodedToken };
 };
 
 export const getHeaders = (token) => ({
