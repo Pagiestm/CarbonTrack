@@ -4,10 +4,12 @@
       <div class="w-full md:w-1/2 lg:w-1/3 mb-4 md:mb-0 md:mr-4">
         <SearchBar @search="handleSearch" />
       </div>
-      <button @click="createProject"
-        class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-        Nouveau Projet
-      </button>
+      <router-link to="/projects/create">
+        <button
+          class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+          Nouveau Projet
+        </button>
+      </router-link>
     </div>
     <div v-if="loading" class="text-center text-gray-500 mt-6">Chargement des projets...</div>
     <div v-else-if="paginatedProjects.length" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-6">

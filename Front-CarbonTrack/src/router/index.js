@@ -8,6 +8,7 @@ import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 import AdminPage from '../views/Admin/AdminPage.vue';
 import Materials from '../views/Admin/MaterialsPage.vue';
 import ProjectPage from '../views/Project/ProjectPage.vue';
+import CreateProjectPage from '../views/Project/CreateProjectPage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -16,6 +17,7 @@ const routes = [
     { path: '/profile', name: 'Profile', component: ProfilePage, meta: { requiresAuth: true } },
     { path: '/profile/edit', name: 'EditProfile', component: EditProfilePage, meta: { requiresAuth: true } },
     { path: '/projects', name: 'UserProjects', component: ProjectPage, meta: { requiresAuth: true } },
+    { path: '/projects/create', name: 'CreateProjectPage', component: CreateProjectPage, meta: { requiresAuth: true } },
     {
         path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAdmin: true }, children: [
             {
