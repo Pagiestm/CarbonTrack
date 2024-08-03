@@ -7,7 +7,7 @@ import ProfilePage from '../views/Profile/ProfilePage.vue';
 import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 import AdminPage from '../views/Admin/AdminPage.vue';
 import Materials from '../views/Admin/MaterialsPage.vue';
-import UserDashboard from '../views/Project/UserDashboard.vue';
+import ProjectPage from '../views/Project/ProjectPage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -15,7 +15,7 @@ const routes = [
     { path: '/register', name: 'Register', component: RegisterForm },
     { path: '/profile', name: 'Profile', component: ProfilePage, meta: { requiresAuth: true } },
     { path: '/profile/edit', name: 'EditProfile', component: EditProfilePage, meta: { requiresAuth: true } },
-    { path: '/projects', name: 'UserProjects', component: UserDashboard, meta: { requiresAuth: true } },
+    { path: '/projects', name: 'UserProjects', component: ProjectPage, meta: { requiresAuth: true } },
     {
         path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAdmin: true }, children: [
             {
