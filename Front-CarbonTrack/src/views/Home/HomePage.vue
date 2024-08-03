@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import NavBar from '../components/NavBar.vue';
-import MainSection from '../components/MainSection.vue'
-import FeaturesSection from '../components/FeaturesSection.vue'
-import AdvantagesSection from '../components/AdvantagesSection.vue'
-import Footer from '../components/Footer.vue'
+import NavBar from '../../components/NavBar.vue';
+import MainSection from '../../components/Home/MainSection.vue';
+import FeaturesSection from '../../components/Home/FeaturesSection.vue'
+import AdvantagesSection from '../../components/Home/AdvantagesSection.vue'
+import Footer from '../../components/Footer.vue'
 
 export default {
   components: {

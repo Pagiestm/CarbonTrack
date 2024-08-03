@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import NavBarAdmin from '../../components/NavBarAdmin.vue';
+import NavBarAdmin from '../../components/Admin/NavBarAdmin.vue';
 </script>

@@ -8,6 +8,8 @@
                     class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300">Connexion</router-link>
                 <router-link v-if="isAuthenticated" to="/profile"
                     class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300">Profil</router-link>
+                <router-link v-if="isAuthenticated" to="/projects"
+                    class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300">Mes projets</router-link>
                 <router-link v-if="isAuthenticated && isAdmin" to="/admin"
                     class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300">Admin</router-link>
                 <button v-if="isAuthenticated" @click="logout"
@@ -53,6 +55,15 @@
                     class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
                     @click="toggleMenu">
                     Profil
+                    <svg class="w-6 h-6 ml-2 text-customGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </router-link>
+                <router-link v-if="isAuthenticated" to="/projects"
+                    class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
+                    @click="toggleMenu">
+                    Mes projets
                     <svg class="w-6 h-6 ml-2 text-customGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

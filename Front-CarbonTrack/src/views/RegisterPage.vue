@@ -35,7 +35,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { registerUser } from '../services/userService';
-import PasswordCriteria from '../components/PasswordCriteria.vue';
+import PasswordCriteria from '../components/Register/PasswordCriteria.vue';
 
 const formState = ref({
     name: '',
