@@ -1,11 +1,5 @@
 import express from 'express';
-import {
-    getAllProjects,
-    getProjectById,
-    createProject,
-    updateProject,
-    deleteProject
-} from '../Controllers/project.controller.js';
+import ProjectController from '../Controllers/project.controller.js';
 import { authMiddleware } from '../Middlewares/auth.middleware.js';
 
 const router = express.Router();
@@ -42,10 +36,8 @@ const router = express.Router();
  *           type: integer
  *           description: The id of the user who created the project
  *       example:
- *         id: 1
  *         name: Project Alpha
  *         description: A sample project
- *         userId: 19
  *         materials:
  *           - materialId: 1
  *             quantity: 10
@@ -76,7 +68,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Project'
  */
-router.get('/', authMiddleware, getAllProjects);
+router.get('/', authMiddleware, ProjectController.getAllProjects());
 
 /**
  * @swagger
@@ -99,7 +91,7 @@ router.get('/', authMiddleware, getAllProjects);
  *             schema:
  *               $ref: '#/components/schemas/Project'
  */
-router.get('/:id', authMiddleware, getProjectById);
+router.get('/:id', authMiddleware, ProjectController.getProjectById());
 
 /**
  * @swagger
@@ -121,7 +113,7 @@ router.get('/:id', authMiddleware, getProjectById);
  *             schema:
  *               $ref: '#/components/schemas/Project'
  */
-router.post('/', authMiddleware, createProject);
+router.post('/', authMiddleware, ProjectController.createProject());
 
 /**
  * @swagger
@@ -201,7 +193,7 @@ router.post('/', authMiddleware, createProject);
  *             schema:
  *               $ref: '#/components/schemas/Project'
  */
-router.put('/:id', authMiddleware, updateProject);
+router.put('/:id', authMiddleware, ProjectController.updateProject());
 
 /**
  * @swagger
@@ -220,6 +212,6 @@ router.put('/:id', authMiddleware, updateProject);
  *       204:
  *         description: No content
  */
-router.delete('/:id', authMiddleware, deleteProject);
+router.delete('/:id', authMiddleware, ProjectController.deleteProject());
 
 export { router };

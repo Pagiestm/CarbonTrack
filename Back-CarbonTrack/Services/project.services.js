@@ -4,19 +4,25 @@ const prisma = new PrismaClient();
 
 export class ProjectService {
 
-    async getAllProjects() {
+    async getAllProjects(userId) {
         try {
-            return await prisma.project.findMany();
+            return await prisma.project.findMany({
+                where: {
+                    userId: parseInt(userId, 10)
+                }
+            });
         } catch (error) {
             throw new Error(error.message);
         }
     }
 
-    async getProjectById(id) {
+    async getProjectById(id, userId) {
         try {
-            const project = await prisma.project.findUnique({ where: { id: parseInt(id, 10) } });
-            if (!project) {
-                throw new Error('Project not found');
+            const project = await prisma.project.findUnique({
+                where: { id: parseInt(id, 10) }
+            });
+            if (!project || project.userId !== parseInt(userId, 10)) {
+                throw new Error('Project not found or access denied');
             }
             return project;
         } catch (error) {
@@ -24,9 +30,9 @@ export class ProjectService {
         }
     }
 
-    async createProject(data) {
+    async createProject(data, userId) {
         try {
-            const { name, description, userId, materials } = data;
+            const { name, description, materials } = data;
     
             // Récupére les détails des matériaux depuis la base de données
             const materialDetails = await prisma.material.findMany({
@@ -48,9 +54,7 @@ export class ProjectService {
                     name,
                     description,
                     totalFootprint,
-                    user: {
-                        connect: { id: userId }
-                    },
+                    userId: parseInt(userId, 10),
                     ProjectMaterial: {
                         create: materials.map(material => ({
                             materialId: material.materialId,
@@ -67,10 +71,18 @@ export class ProjectService {
         }
     }
 
-    async updateProject(id, data) {
+    async updateProject(id, data, userId) {
         try {
             const { materials, ...projectData } = data;
             const projectId = parseInt(id, 10);
+
+            // Vérifie si l'utilisateur est le propriétaire du projet
+            const project = await prisma.project.findUnique({
+                where: { id: projectId }
+            });
+            if (!project || project.userId !== parseInt(userId, 10)) {
+                throw new Error('Project not found or access denied');
+            }
     
             // Récupére les matériaux actuels associés au projet
             const currentMaterials = await prisma.projectMaterial.findMany({
@@ -127,9 +139,17 @@ export class ProjectService {
         }
     }
 
-    async deleteProject(id) {
+    async deleteProject(id, userId) {
         try {
             const projectId = parseInt(id, 10);
+
+            // Vérifie si l'utilisateur est le propriétaire du projet
+            const project = await prisma.project.findUnique({
+                where: { id: projectId }
+            });
+            if (!project || project.userId !== parseInt(userId, 10)) {
+                throw new Error('Project not found or access denied');
+            }
     
             // Supprime les matériaux associés
             await prisma.projectMaterial.deleteMany({
