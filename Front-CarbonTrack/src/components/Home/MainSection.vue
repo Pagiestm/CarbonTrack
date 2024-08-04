@@ -18,9 +18,12 @@
                             Créer un projet
                         </button>
                     </router-link>
-                    <button class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-                        Contactez-nous
-                    </button>
+                    <router-link to="/contact">
+                        <button
+                            class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                            Contactez-nous
+                        </button>
+                    </router-link>
                 </div>
             </div>
             <div
