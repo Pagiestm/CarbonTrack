@@ -51,4 +51,33 @@ const router = express.Router();
  */
 router.get('/', authMiddleware, categoryController.getAllCategories());
 
+/**
+ * @swagger
+ * /categories/sync-carbontrack-webhook:
+ *   post:
+ *     summary: Synchronize categories via webhook
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               event:
+ *                 type: string
+ *                 description: The event type (entry.create, entry.update, entry.delete)
+ *               entry:
+ *                 $ref: '#/components/schemas/Category'
+ *               model:
+ *                 type: string
+ *                 description: The model type (should be 'category')
+ *     responses:
+ *       200:
+ *         description: Synchronized successfully
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/sync-category-webhook', categoryController.syncCategoryWebhook());
+
 export { router };

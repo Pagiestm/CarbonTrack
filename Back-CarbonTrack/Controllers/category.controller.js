@@ -14,6 +14,25 @@ class CategoryController {
             }
         };
     }
+
+    syncCategoryWebhook() {
+        return async (req, res) => {
+            const { event, entry, model } = req.body;
+
+            console.log('Webhook received:', req.body);
+
+            try {
+                if (model === 'category') {
+                    await categoryService.syncCategory(event, entry);
+                }
+
+                res.status(200).json({ message: 'Synchronized successfully' });
+            } catch (error) {
+                console.error('Error synchronizing:', error);
+                res.status(500).json({ error: error.message });
+            }
+        };
+    }
 }
 
 export const categoryController = new CategoryController();
