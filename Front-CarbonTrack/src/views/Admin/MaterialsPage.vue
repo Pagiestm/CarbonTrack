@@ -16,8 +16,9 @@
             <p v-if="state.loading" class="mt-4 text-gray-600">Loading...</p>
             <p v-if="state.errorMessage" class="mt-4 text-red-600">{{ state.errorMessage }}</p>
             <div v-else class="mt-6">
-                <MaterialsTable :materials="filteredMaterials" :categories="state.categories" @update="saveMaterial"
+                <MaterialsTable :materials="paginatedMaterials" :categories="state.categories" @update="saveMaterial"
                     @delete="deleteMaterials" />
+                <Pagination :totalItems="filteredMaterials.length" :itemsPerPage="itemsPerPage" @pageChange="handlePageChange" />
             </div>
         </div>
     </div>
@@ -29,6 +30,7 @@ import { getMaterials, updateMaterial, deleteMaterial as apiDeleteMaterial } fro
 import { getCategories } from '../../services/categoriesService.js';
 import MaterialsTable from '../../components/Admin/Materials/MaterialsTable.vue';
 import SearchBar from '../../components/SearchBar.vue';
+import Pagination from '../../components/Pagination.vue';
 
 const state = ref({
     materials: [],
@@ -38,9 +40,20 @@ const state = ref({
 });
 
 const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 const handleSearch = (query) => {
-    searchQuery.value = query;
+    const lowerCaseQuery = query.toLowerCase();
+    filteredMaterials.value = state.value.materials.filter(material =>
+        material.name.toLowerCase().includes(lowerCaseQuery) ||
+        material.supplier.toLowerCase().includes(lowerCaseQuery)
+    );
+    currentPage.value = 1;
+};
+
+const handlePageChange = (page) => {
+    currentPage.value = page;
 };
 
 const filteredMaterials = computed(() => {
@@ -51,6 +64,12 @@ const filteredMaterials = computed(() => {
         material.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         material.supplier.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
+});
+
+const paginatedMaterials = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return filteredMaterials.value.slice(start, end);
 });
 
 onMounted(async () => {
