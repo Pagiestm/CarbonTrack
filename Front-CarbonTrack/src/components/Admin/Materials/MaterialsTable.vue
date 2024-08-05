@@ -1,28 +1,75 @@
 <template>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Supplier</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Carbon Footprint</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Unit</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Price Per Unit</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Category</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                <MaterialsRow v-for="material in materials" :key="material.id" :material="material" :categories="categories"
-                    @updated="updateMaterial" @deleted="deleteMaterial" />
-            </tbody>
-        </table>
+    <div class="flex flex-col">
+        <!-- Card view for mobile -->
+        <div class="block lg:hidden">
+            <div v-for="material in materials" :key="material.id" class="bg-white shadow-md rounded-lg p-4 mb-4">
+                <div class="flex flex-col">
+                    <h2 class="text-lg font-bold">{{ material.name }}</h2>
+                    <p class="text-gray-600">ID: {{ material.id }}</p>
+                    <p class="text-gray-600">Fournisseur: {{ material.supplier }}</p>
+                    <p class="text-gray-600">Empreinte carbone: {{ material.carbonFootprint }}</p>
+                    <p class="text-gray-600">Unité: {{ material.unit }}</p>
+                    <p class="text-gray-600">Prix par unité: {{ material.pricePerUnit }}</p>
+                    <p class="text-gray-600">Catégorie: {{ getCategoryName(material.categoryId) }}</p>
+                    <div class="flex justify-center space-x-2 mt-4">
+                        <router-link :to="{ name: 'EditMaterial', params: { id: material.id } }">
+                            <button class="text-blue-500">
+                                <i class="fas fa-edit fa-lg"></i>
+                            </button>
+                        </router-link>
+                        <button @click="deleteMaterial(material.id)" class="text-red-500">
+                            <i class="fas fa-trash-alt fa-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table view for desktop -->
+        <div class="hidden lg:flex flex-col flex-grow overflow-x-auto">
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">ID</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Nom</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Fournisseur</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Empreinte carbone</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Unité</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Prix par unité</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Catégorie</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="material in materials" :key="material.id">
+                        <td class="border px-4 py-2 text-center">{{ material.id }}</td>
+                        <td class="border px-4 py-2 text-center">{{ material.name }}</td>
+                        <td class="border px-4 py-2 text-center">{{ material.supplier }}</td>
+                        <td class="border px-4 py-2 text-center">{{ material.carbonFootprint }}</td>
+                        <td class="border px-4 py-2 text-center">{{ material.unit }}</td>
+                        <td class="border px-4 py-2 text-center">{{ material.pricePerUnit }}</td>
+                        <td class="border px-4 py-2 text-center">{{ getCategoryName(material.categoryId) }}</td>
+                        <td class="border px-4 py-2 text-center">
+                            <div class="flex justify-center space-x-2">
+                                <router-link :to="{ name: 'EditMaterial', params: { id: material.id } }">
+                                    <button class="text-blue-500 px-2 py-2">
+                                        <i class="fas fa-edit fa-lg"></i>
+                                    </button>
+                                </router-link>
+                                <button @click="deleteMaterial(material.id)" class="text-red-500 px-2 py-2 ml-2">
+                                    <i class="fas fa-trash-alt fa-lg"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script setup>
-import MaterialsRow from './MaterialsRow.vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
     materials: Array,
@@ -37,5 +84,10 @@ const updateMaterial = (material) => {
 
 const deleteMaterial = (id) => {
     emit('delete', id);
+};
+
+const getCategoryName = (categoryId) => {
+    const category = props.categories.find((cat) => cat.id === categoryId);
+    return category ? category.name : 'Non spécifiée';
 };
 </script>

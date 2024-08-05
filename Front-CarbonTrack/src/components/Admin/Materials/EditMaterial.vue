@@ -42,12 +42,10 @@ import { updateMaterial, getMaterialById } from '../../../services/materialsServ
 import { getCategories } from '../../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
 
-// Utilisation du composable `useRoute` pour accéder aux paramètres de la route
 const route = useRoute();
 const router = useRouter();
 const materialId = route.params.id;
 
-// Chargement du matériau initial pour préremplir le formulaire
 const localMaterial = ref({
     name: '',
     supplier: '',
@@ -57,7 +55,6 @@ const localMaterial = ref({
     categoryId: ''
 });
 
-// Chargement des catégories depuis le service
 const categories = ref([]);
 
 onMounted(async () => {
@@ -70,12 +67,10 @@ onMounted(async () => {
     }
 });
 
-// Fonction pour gérer la soumission du formulaire
 const handleSubmit = async () => {
     try {
         await updateMaterial(materialId, localMaterial.value);
         alert('Matériau mis à jour avec succès');
-        // Rediriger vers la page des matériaux après la mise à jour
         router.push('/');
     } catch (error) {
         alert('Échec de la mise à jour du matériau');
@@ -95,6 +90,5 @@ const handleSubmit = async () => {
 .input-field:focus {
     outline: none;
     border-color: #68d391;
-    /* Utilisation de la couleur personnalisée */
 }
 </style>

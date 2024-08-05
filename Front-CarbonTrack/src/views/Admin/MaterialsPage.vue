@@ -1,14 +1,14 @@
 <template>
-    <div class="container mx-auto mt-10 p-6">
+    <div class="container mx-auto mt-10">
         <div class="text-center">
-            <h1 class="text-3xl font-bold text-indigo-600 mt-4">Materials</h1>
-            <div class="flex justify-between items-center mt-4 space-x-4">
-                <div class="flex-grow">
+            <h1 class="text-3xl font-bold text-secondary underline mt-4">Materials</h1>
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex-grow w-full sm:w-auto">
                     <SearchBar @search="handleSearch" />
                 </div>
-                <router-link to="/materials/create">
+                <router-link to="/materials/create" class="w-full sm:w-auto">
                     <button
-                        class="bg-customGreen text-white font-semibold py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out">
+                        class="bg-customGreen text-white font-semibold py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out sm:w-auto">
                         Ajouter un Matériau
                     </button>
                 </router-link>

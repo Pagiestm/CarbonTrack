@@ -1,7 +1,7 @@
 <template>
-    <div class="flex h-screen bg-gray-100">
+    <div class="md:flex h-screen bg-gray-100">
         <NavBarAdmin />
-        <main class="flex-1 p-6">
+        <main class="md:flex-1 p-6">
             <router-view />
         </main>
     </div>
