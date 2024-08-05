@@ -2,76 +2,33 @@
     <div class="container mx-auto mt-10 p-6">
         <div class="text-center">
             <h1 class="text-3xl font-bold text-indigo-600 mt-4">Materials</h1>
+            <div class="flex justify-between items-center mt-4 space-x-4">
+                <div class="flex-grow">
+                    <SearchBar @search="handleSearch" />
+                </div>
+                <router-link to="/materials/create">
+                    <button
+                        class="bg-customGreen text-white font-semibold py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out">
+                        Ajouter un Matériau
+                    </button>
+                </router-link>
+            </div>
             <p v-if="state.loading" class="mt-4 text-gray-600">Loading...</p>
             <p v-if="state.errorMessage" class="mt-4 text-red-600">{{ state.errorMessage }}</p>
-            <div v-else>
-                <form @submit.prevent="createNewMaterial">
-                    <input v-model="newMaterial.name" placeholder="Name" class="border px-2 py-1" />
-                    <input v-model="newMaterial.supplier" placeholder="Supplier" class="border px-2 py-1" />
-                    <input v-model="newMaterial.carbonFootprint" placeholder="Carbon Footprint" class="border px-2 py-1" />
-                    <input v-model="newMaterial.unit" placeholder="Unit" class="border px-2 py-1" />
-                    <input v-model="newMaterial.pricePerUnit" placeholder="Price Per Unit" class="border px-2 py-1" />
-                    <select v-model="newMaterial.categoryId" class="border px-2 py-1">
-                        <option v-for="category in state.categories" :key="category.id" :value="category.id">
-                            {{ category.name }}
-                        </option>
-                    </select>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Create</button>
-                </form>
-                <table class="table-auto w-full mt-6">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2">ID</th>
-                            <th class="px-4 py-2">Name</th>
-                            <th class="px-4 py-2">Supplier</th>
-                            <th class="px-4 py-2">Carbon Footprint</th>
-                            <th class="px-4 py-2">Unit</th>
-                            <th class="px-4 py-2">Price Per Unit</th>
-                            <th class="px-4 py-2">Category</th>
-                            <th class="px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="material in state.materials" :key="material.id">
-                            <td class="border px-4 py-2">{{ material.id }}</td>
-                            <td class="border px-4 py-2">
-                                <input v-model="material.name" class="border px-2 py-1" />
-                            </td>
-                            <td class="border px-4 py-2">
-                                <input v-model="material.supplier" class="border px-2 py-1" />
-                            </td>
-                            <td class="border px-4 py-2">
-                                <input v-model="material.carbonFootprint" class="border px-2 py-1" />
-                            </td>
-                            <td class="border px-4 py-2">
-                                <input v-model="material.unit" class="border px-2 py-1" />
-                            </td>
-                            <td class="border px-4 py-2">
-                                <input v-model="material.pricePerUnit" class="border px-2 py-1" />
-                            </td>
-                            <td class="border px-4 py-2">
-                                <select v-model="material.categoryId" class="border px-2 py-1">
-                                    <option v-for="category in state.categories" :key="category.id" :value="category.id">
-                                        {{ category.name }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td class="border px-4 py-2">
-                                <button @click="saveMaterial(material)" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                                <button @click="deleteMaterials(material.id)" class="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div v-else class="mt-6">
+                <MaterialsTable :materials="filteredMaterials" :categories="state.categories" @update="saveMaterial"
+                    @delete="deleteMaterials" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getMaterials, createMaterial, updateMaterial, deleteMaterial } from '../../services/materialsService.js';
+import { ref, onMounted, computed } from 'vue';
+import { getMaterials, updateMaterial, deleteMaterial as apiDeleteMaterial } from '../../services/materialsService.js';
 import { getCategories } from '../../services/categoriesService.js';
+import MaterialsTable from '../../components/Admin/Materials/MaterialsTable.vue';
+import SearchBar from '../../components/SearchBar.vue';
 
 const state = ref({
     materials: [],
@@ -80,13 +37,20 @@ const state = ref({
     errorMessage: ''
 });
 
-const newMaterial = ref({
-    name: '',
-    supplier: '',
-    carbonFootprint: '',
-    unit: '',
-    pricePerUnit: '',
-    categoryId: ''
+const searchQuery = ref('');
+
+const handleSearch = (query) => {
+    searchQuery.value = query;
+};
+
+const filteredMaterials = computed(() => {
+    if (!searchQuery.value) {
+        return state.value.materials;
+    }
+    return state.value.materials.filter(material =>
+        material.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        material.supplier.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
 });
 
 onMounted(async () => {
@@ -100,42 +64,21 @@ onMounted(async () => {
     }
 });
 
-const createNewMaterial = async () => {
-    try {
-        const createdMaterial = await createMaterial(newMaterial.value);
-        state.value.materials.push(createdMaterial);
-        newMaterial.value = {
-            name: '',
-            supplier: '',
-            carbonFootprint: '',
-            unit: '',
-            pricePerUnit: '',
-            categoryId: ''
-        };
-        alert('Material created successfully');
-    } catch (error) {
-        alert('Failed to create material');
-    }
-};
-
 const saveMaterial = async (material) => {
     try {
-        await updateMaterial(material.id, material);
-        alert('Material updated successfully');
+        await updateMaterial(material);
+        state.value.materials = await getMaterials();
     } catch (error) {
-        alert('Failed to update material');
+        state.value.errorMessage = 'Une erreur est survenue lors de la mise à jour du matériau';
     }
 };
 
 const deleteMaterials = async (id) => {
-    if (confirm('Are you sure you want to delete this material?')) {
-        try {
-            await deleteMaterial(id);
-            state.value.materials = state.value.materials.filter(material => material.id !== id);
-            alert('Material deleted successfully');
-        } catch (error) {
-            alert('Failed to delete material');
-        }
+    try {
+        await apiDeleteMaterial(id);
+        state.value.materials = await getMaterials();
+    } catch (error) {
+        state.value.errorMessage = 'Une erreur est survenue lors de la suppression du matériau';
     }
 };
 </script>
