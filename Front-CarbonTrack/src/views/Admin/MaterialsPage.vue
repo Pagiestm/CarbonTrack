@@ -41,7 +41,8 @@ const state = ref({
 
 const searchQuery = ref('');
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(2);
+const filteredMaterials = ref([]);
 
 const handleSearch = (query) => {
     const lowerCaseQuery = query.toLowerCase();
@@ -56,16 +57,6 @@ const handlePageChange = (page) => {
     currentPage.value = page;
 };
 
-const filteredMaterials = computed(() => {
-    if (!searchQuery.value) {
-        return state.value.materials;
-    }
-    return state.value.materials.filter(material =>
-        material.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        material.supplier.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-});
-
 const paginatedMaterials = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage.value;
     const end = start + itemsPerPage.value;
@@ -76,6 +67,7 @@ onMounted(async () => {
     try {
         state.value.materials = await getMaterials();
         state.value.categories = await getCategories();
+        filteredMaterials.value = state.value.materials; // Initialisez les matériaux filtrés
     } catch (error) {
         state.value.errorMessage = 'Une erreur est survenue, veuillez réessayer';
     } finally {
