@@ -5,7 +5,6 @@
             <div v-for="material in materials" :key="material.id" class="bg-white shadow-md rounded-lg p-4 mb-4">
                 <div class="flex flex-col">
                     <h2 class="text-lg font-bold">{{ material.name }}</h2>
-                    <p class="text-gray-600">ID: {{ material.id }}</p>
                     <p class="text-gray-600">Fournisseur: {{ material.supplier }}</p>
                     <p class="text-gray-600">Empreinte carbone: {{ material.carbonFootprint }}</p>
                     <p class="text-gray-600">Unité: {{ material.unit }}</p>
@@ -30,7 +29,6 @@
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-primary text-white">
                     <tr>
-                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">ID</th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Nom</th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Fournisseur</th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Empreinte carbone</th>
@@ -42,7 +40,6 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="material in materials" :key="material.id">
-                        <td class="border px-4 py-2 text-center">{{ material.id }}</td>
                         <td class="border px-4 py-2 text-center">{{ material.name }}</td>
                         <td class="border px-4 py-2 text-center">{{ material.supplier }}</td>
                         <td class="border px-4 py-2 text-center">{{ material.carbonFootprint }}</td>

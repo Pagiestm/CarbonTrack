@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto mt-10">
         <div class="text-center">
-            <h1 class="text-3xl font-bold text-secondary underline mt-4">Materials</h1>
+            <h1 class="text-3xl font-bold text-primary underline mt-4">Materials</h1>
             <div class="flex flex-col sm:flex-row justify-between items-center mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow w-full sm:w-auto">
                     <SearchBar @search="handleSearch" />
