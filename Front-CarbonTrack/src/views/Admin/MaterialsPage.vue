@@ -41,7 +41,7 @@ const state = ref({
 
 const searchQuery = ref('');
 const currentPage = ref(1);
-const itemsPerPage = ref(2);
+const itemsPerPage = ref(10);
 const filteredMaterials = ref([]);
 
 const handleSearch = (query) => {

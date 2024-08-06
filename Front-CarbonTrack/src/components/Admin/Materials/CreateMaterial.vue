@@ -32,13 +32,18 @@
                 </button>
             </form>
         </div>
+        <SuccessMessage v-if="showSuccessMessage" :message="successMessage" @close="handleCloseSuccessMessage" />
+        <ErrorMessage v-if="showErrorMessage" :message="errorMessage" @close="handleCloseErrorMessage" />
     </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { createMaterial } from '../../../services/materialsService.js';
 import { getCategories } from '../../../services/categoriesService.js';
+import SuccessMessage from '../../../components/Alert/SuccessMessage.vue';
+import ErrorMessage from '../../../components/Alert/ErrorMessage.vue';
 
 // Déclaration de l'état local pour le formulaire
 const newMaterial = ref({
@@ -50,49 +55,34 @@ const newMaterial = ref({
     categoryId: ''
 });
 
-// Chargement des catégories depuis le service
 const categories = ref([]);
+const showSuccessMessage = ref(false);
+const successMessage = ref('');
+const showErrorMessage = ref(false);
+const errorMessage = ref('');
+const router = useRouter();
 
 onMounted(async () => {
-    try {
-        categories.value = await getCategories();
-    } catch (error) {
-        console.error('Erreur lors du chargement des catégories:', error);
-    }
+    categories.value = await getCategories();
 });
 
-// Fonction pour gérer la soumission du formulaire
 const handleSubmit = async () => {
     try {
         await createMaterial(newMaterial.value);
-        alert('Matériau créé avec succès');
-        // Réinitialiser le formulaire après la création
-        newMaterial.value = {
-            name: '',
-            supplier: '',
-            carbonFootprint: '',
-            unit: '',
-            pricePerUnit: '',
-            categoryId: ''
-        };
+        successMessage.value = 'Le matériau a été créé avec succès!';
+        showSuccessMessage.value = true;
     } catch (error) {
-        alert('Échec de la création du matériau');
+        errorMessage.value = 'Erreur lors de la création du matériau. Veuillez réessayer.';
+        showErrorMessage.value = true;
     }
 };
+
+const handleCloseSuccessMessage = () => {
+    showSuccessMessage.value = false;
+    router.push('/materials');
+};
+
+const handleCloseErrorMessage = () => {
+    showErrorMessage.value = false;
+};
 </script>
-
-<style scoped>
-.input-field {
-    border: 1px solid #e2e8f0;
-    padding: 8px 12px;
-    border-radius: 8px;
-    width: 100%;
-    transition: border-color 0.3s ease;
-}
-
-.input-field:focus {
-    outline: none;
-    border-color: #68d391;
-    /* Utilisation de la couleur personnalisée */
-}
-</style>
