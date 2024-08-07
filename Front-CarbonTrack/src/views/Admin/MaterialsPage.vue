@@ -67,7 +67,7 @@ onMounted(async () => {
     try {
         state.value.materials = await getMaterials();
         state.value.categories = await getCategories();
-        filteredMaterials.value = state.value.materials; // Initialisez les matériaux filtrés
+        filteredMaterials.value = state.value.materials;
     } catch (error) {
         state.value.errorMessage = 'Une erreur est survenue, veuillez réessayer';
     } finally {

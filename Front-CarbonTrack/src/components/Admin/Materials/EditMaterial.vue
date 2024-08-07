@@ -4,34 +4,40 @@
             <h2 class="text-3xl font-bold text-center text-primary underline mb-6">Modifier le Matériau</h2>
             <form @submit.prevent="handleSubmit" class="space-y-4">
                 <div>
-                    <input v-model="localMaterial.name" placeholder="Ex: Acier"
+                    <label for="name" class="block text-sm font-medium text-primary mb-1 underline">Nom du Matériau :</label>
+                    <input id="name" v-model="localMaterial.name" placeholder="Ex: Acier"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
                     <FormError :message="errors.name" />
                 </div>
                 <div>
-                    <input v-model="localMaterial.supplier" placeholder="Ex: Fournisseur XYZ"
+                    <label for="supplier" class="block text-sm font-medium text-primary mb-1 underline">Fournisseur :</label>
+                    <input id="supplier" v-model="localMaterial.supplier" placeholder="Ex: Fournisseur XYZ"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
                     <FormError :message="errors.supplier" />
                 </div>
                 <div>
-                    <input v-model="localMaterial.carbonFootprint" type="number" step="0.01" min="0"
+                    <label for="carbonFootprint" class="block text-sm font-medium text-primary mb-1 underline">Empreinte Carbone :</label>
+                    <input id="carbonFootprint" v-model.number="localMaterial.carbonFootprint" type="number" step="0.01" min="0"
                         placeholder="Ex: 123.45"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
                     <FormError :message="errors.carbonFootprint" />
                 </div>
                 <div>
-                    <input v-model="localMaterial.unit" placeholder="Ex: kg"
+                    <label for="unit" class="block text-sm font-medium text-primary mb-1 underline">Unité :</label>
+                    <input id="unit" v-model="localMaterial.unit" placeholder="Ex: kg"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
                     <FormError :message="errors.unit" />
                 </div>
                 <div>
-                    <input v-model="localMaterial.pricePerUnit" type="number" step="0.01" min="0"
+                    <label for="pricePerUnit" class="block text-sm font-medium text-primary mb-1 underline">Prix par Unité :</label>
+                    <input id="pricePerUnit" v-model.number="localMaterial.pricePerUnit" type="number" step="0.01" min="0"
                         placeholder="Ex: 50.00"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
                     <FormError :message="errors.pricePerUnit" />
                 </div>
                 <div>
-                    <select v-model="localMaterial.categoryId"
+                    <label for="categoryId" class="block text-sm font-medium text-primary mb-1 underline">Catégorie :</label>
+                    <select id="categoryId" v-model="localMaterial.categoryId"
                         class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none">
                         <option value="">Choisir une Catégorie</option>
                         <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -47,8 +53,8 @@
                     </button>
                 </div>
             </form>
-            <SuccessMessage v-if="showSuccessMessage" :message="successMessage" @close="handleCloseSuccessMessage" />
-            <FormError v-if="showErrorMessage" :message="errorMessage" @close="handleCloseErrorMessage" />
+            <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage" @close="handleCloseSuccessMessage" />
+            <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage" @close="handleCloseErrorMessage" />
         </div>
     </section>
 </template>
@@ -59,6 +65,7 @@ import { updateMaterial, getMaterialById } from '../../../services/materialsServ
 import { getCategories } from '../../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
 import SuccessMessage from '../../../components/Alert/SuccessMessage.vue';
+import ErrorMessage from '../../../components/Alert/ErrorMessage.vue';
 import FormError from '../../../components/Alert/FormError.vue';
 
 const route = useRoute();
@@ -131,18 +138,3 @@ const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
 </script>
-
-<style scoped>
-.input-field {
-    border: 1px solid #e2e8f0;
-    padding: 8px 12px;
-    border-radius: 8px;
-    width: 100%;
-    transition: border-color 0.3s ease;
-}
-
-.input-field:focus {
-    outline: none;
-    border-color: #68d391;
-}
-</style>

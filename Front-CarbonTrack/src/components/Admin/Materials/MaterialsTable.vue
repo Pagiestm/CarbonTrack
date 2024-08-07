@@ -16,7 +16,7 @@
                                 <i class="fas fa-edit fa-lg"></i>
                             </button>
                         </router-link>
-                        <button @click="deleteMaterial(material.id)" class="text-red-500">
+                        <button @click="openModal(material)" class="text-red-500">
                             <i class="fas fa-trash-alt fa-lg"></i>
                         </button>
                     </div>
@@ -31,9 +31,11 @@
                     <tr>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Nom</th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Fournisseur</th>
-                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Empreinte carbone</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Empreinte carbone
+                        </th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Unité</th>
-                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Prix par unité</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Prix par unité
+                        </th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Catégorie</th>
                         <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Actions</th>
                     </tr>
@@ -53,7 +55,7 @@
                                         <i class="fas fa-edit fa-lg"></i>
                                     </button>
                                 </router-link>
-                                <button @click="deleteMaterial(material.id)" class="text-red-500 px-2 py-2 ml-2">
+                                <button @click="openModal(material)" class="text-red-500 px-2 py-2 ml-2">
                                     <i class="fas fa-trash-alt fa-lg"></i>
                                 </button>
                             </div>
@@ -62,11 +64,18 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Modal -->
+        <DeleteConfirmationModal :show="showModal" :title="'Supprimer le matériel'"
+            :message="'Êtes-vous sûr de vouloir supprimer le matériel ' + materialToDelete?.name + ' ? Cette action est irréversible.'"
+            @confirm="confirmDelete" @cancel="closeModal" />
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { defineProps, defineEmits } from 'vue';
+import DeleteConfirmationModal from '../../Alert/DeleteConfirmationModal.vue';
 
 const props = defineProps({
     materials: Array,
@@ -75,12 +84,26 @@ const props = defineProps({
 
 const emit = defineEmits(['update', 'delete']);
 
-const updateMaterial = (material) => {
-    emit('update', material);
+const showModal = ref(false);
+const materialToDelete = ref(null);
+
+const openModal = (material) => {
+    materialToDelete.value = material;
+    showModal.value = true;
 };
 
-const deleteMaterial = (id) => {
-    emit('delete', id);
+const closeModal = () => {
+    showModal.value = false;
+    materialToDelete.value = null;
+};
+
+const confirmDelete = () => {
+    const index = props.materials.findIndex(material => material.id === materialToDelete.value.id);
+    if (index !== -1) {
+        props.materials.splice(index, 1);
+    }
+    emit('delete', materialToDelete.value.id);
+    closeModal();
 };
 
 const getCategoryName = (categoryId) => {
