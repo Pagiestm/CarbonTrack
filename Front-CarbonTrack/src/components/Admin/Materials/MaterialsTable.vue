@@ -11,7 +11,7 @@
                     <p class="text-gray-600">Prix par unité: {{ material.pricePerUnit }}</p>
                     <p class="text-gray-600">Catégorie: {{ getCategoryName(material.categoryId) }}</p>
                     <div class="flex justify-center space-x-2 mt-4">
-                        <router-link :to="{ name: 'EditMaterial', params: { id: material.id } }">
+                        <router-link :to="{ name: 'EditMaterialPage', params: { id: material.id } }">
                             <button class="text-blue-500">
                                 <i class="fas fa-edit fa-lg"></i>
                             </button>
@@ -50,7 +50,7 @@
                         <td class="border px-4 py-2 text-center">{{ getCategoryName(material.categoryId) }}</td>
                         <td class="border px-4 py-2 text-center">
                             <div class="flex justify-center space-x-2">
-                                <router-link :to="{ name: 'EditMaterial', params: { id: material.id } }">
+                                <router-link :to="{ name: 'EditMaterialPage', params: { id: material.id } }">
                                     <button class="text-blue-500 px-2 py-2">
                                         <i class="fas fa-edit fa-lg"></i>
                                     </button>

@@ -7,8 +7,8 @@ import ProfilePage from '../views/Profile/ProfilePage.vue';
 import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 import AdminPage from '../views/Admin/AdminPage.vue';
 import Materials from '../views/Admin/MaterialsPage.vue';
-import CreateMaterial from '../components/Admin/Materials/CreateMaterial.vue';
-import EditMaterial from '../components/Admin/Materials/EditMaterial.vue';
+import CreateMaterialPage from '../views/Admin/CreateMaterialPage.vue';
+import EditMaterialPage from '../views/Admin/EditMaterialPage.vue';
 import ProjectPage from '../views/Project/ProjectPage.vue';
 import CreateProjectPage from '../views/Project/CreateProjectPage.vue';
 
@@ -29,13 +29,13 @@ const routes = [
             },
             {
                 path: '/materials/create',
-                name: 'CreateMaterial',
-                component: CreateMaterial
+                name: 'CreateMaterialPage',
+                component: CreateMaterialPage
             },
             {
                 path: '/materials/edit/:id',
-                name: 'EditMaterial',
-                component: EditMaterial
+                name: 'EditMaterialPage',
+                component: EditMaterialPage
             },
         ],
     },
