@@ -14,13 +14,13 @@
                     <input v-model="projectData.name" type="text" id="name"
                         class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
                         required />
-                    <p v-if="errors.name" class="text-red-500 mt-2">{{ errors.name }}</p>
+                    <FormError :message="errors.name" />
                 </div>
                 <div class="mb-6">
                     <label for="description" class="block text-white mb-2">Description</label>
                     <textarea v-model="projectData.description" id="description"
                         class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"></textarea>
-                    <p v-if="errors.description" class="text-red-500 mt-2">{{ errors.description }}</p>
+                    <FormError :message="errors.description" />
                 </div>
                 <div class="mb-6">
                     <label for="material" class="block text-white mb-2">Matériel</label>
@@ -30,13 +30,13 @@
                             {{ material.name }}
                         </option>
                     </select>
-                    <p v-if="errors.material" class="text-red-500 mt-2">{{ errors.material }}</p>
+                    <FormError :message="errors.material" />
                 </div>
                 <div class="mb-6">
                     <label for="quantity" class="block text-white mb-2">Quantité</label>
                     <input v-model="materialQuantity" type="number" step="1" id="quantity"
                         class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
-                    <p v-if="errors.quantity" class="text-red-500 mt-2">{{ errors.quantity }}</p>
+                    <FormError :message="errors.quantity" />
                 </div>
                 <button type="button" @click="addMaterial"
                     class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out mb-6">
@@ -53,13 +53,17 @@
                         </button>
                     </li>
                 </ul>
-                <p v-if="errors.materials" class="text-red-500 mb-4">{{ errors.materials }}</p>
+                <FormError :message="errors.materials" class="mb-2"/>
                 <button type="submit"
                     class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
                     Créer le Projet
                 </button>
-                <p v-if="errors.submit" class="text-red-500 mt-4">{{ errors.submit }}</p>
+                <FormError :message="errors.submit" />
             </form>
+            <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
+                @close="handleCloseSuccessMessage" />
+            <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
+                @close="handleCloseErrorMessage" />
         </div>
     </section>
     <Footer />
@@ -72,6 +76,9 @@ import { createProject } from '../../services/projectsService';
 import { getMaterials } from '../../services/materialsService';
 import Footer from '../../components/Footer.vue';
 import NavBar from '../../components/NavBar.vue';
+import FormError from '../../components/Alert/FormError.vue';
+import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
+import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
 
 const projectData = ref({
     name: '',
@@ -85,6 +92,10 @@ const materials = ref([]);
 const selectedMaterialId = ref(null);
 const materialQuantity = ref(0);
 const errors = ref({});
+const showSuccessMessage = ref(false);
+const successMessage = ref('');
+const showErrorMessage = ref(false);
+const errorMessage = ref('');
 const router = useRouter();
 
 onMounted(async () => {
@@ -108,18 +119,18 @@ const validateFields = () => {
 
 const addMaterial = () => {
     if (selectedMaterialId.value && materialQuantity.value > 0) {
-        const existingMaterial = projectData.value.materials.find(
-            material => material.materialId === selectedMaterialId.value
-        );
-        if (!existingMaterial) {
-            projectData.value.materials.push({
-                materialId: selectedMaterialId.value,
-                quantity: materialQuantity.value
-            });
-            selectedMaterialId.value = null;
-            materialQuantity.value = 0;
-        } else {
-            errors.value.material = 'Ce matériau a déjà été ajouté.';
+    const existingMaterial = projectData.value.materials.find(
+        material => material.materialId === selectedMaterialId.value
+    );
+    if (!existingMaterial) {
+        projectData.value.materials.push({
+            materialId: selectedMaterialId.value,
+            quantity: materialQuantity.value
+        });
+        selectedMaterialId.value = null;
+        materialQuantity.value = 0;
+    } else {
+        errors.value.material = 'Ce matériau a déjà été ajouté.';
         }
     } else {
         if (!selectedMaterialId.value) {
@@ -164,13 +175,22 @@ watch(materialQuantity, () => {
 const handleSubmit = async () => {
     if (validateFields()) {
         try {
-            const response = await createProject(projectData.value);
-            console.log('Projet créé avec succès', response);
-            router.push('/projects');
+            await createProject(projectData.value);
+            successMessage.value = 'Projet créé avec succès!';
+            showSuccessMessage.value = true;
         } catch (error) {
-            console.error('Échec de la création du projet', error);
-            errors.value.submit = 'Échec de la création du projet. Veuillez réessayer.';
+            errorMessage.value = 'Échec de la création du projet. Veuillez réessayer.';
+            showErrorMessage.value = true;
         }
     }
+};
+
+const handleCloseSuccessMessage = () => {
+    showSuccessMessage.value = false;
+    router.push('/projects');
+};
+
+const handleCloseErrorMessage = () => {
+    showErrorMessage.value = false;
 };
 </script>

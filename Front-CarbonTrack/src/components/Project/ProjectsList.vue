@@ -40,7 +40,7 @@ const projects = ref([]);
 const filteredProjects = ref([]);
 const loading = ref(true);
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(9);
 
 onMounted(async () => {
   try {
