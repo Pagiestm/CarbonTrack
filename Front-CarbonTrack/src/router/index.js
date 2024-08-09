@@ -10,6 +10,7 @@ import Materials from '../views/Admin/MaterialsPage.vue';
 import CreateMaterialPage from '../views/Admin/CreateMaterialPage.vue';
 import EditMaterialPage from '../views/Admin/EditMaterialPage.vue';
 import ProjectPage from '../views/Project/ProjectPage.vue';
+import ProjectDetailsPage from '../views/Project/ProjectDetailsPage.vue';
 import CreateProjectPage from '../views/Project/CreateProjectPage.vue';
 
 const routes = [
@@ -19,6 +20,7 @@ const routes = [
     { path: '/profile', name: 'Profile', component: ProfilePage, meta: { requiresAuth: true } },
     { path: '/profile/edit', name: 'EditProfile', component: EditProfilePage, meta: { requiresAuth: true } },
     { path: '/projects', name: 'UserProjects', component: ProjectPage, meta: { requiresAuth: true } },
+    { path: '/projects/:id', name: 'ProjectDetailsPage', component: ProjectDetailsPage, props: true },
     { path: '/projects/create', name: 'CreateProjectPage', component: CreateProjectPage, meta: { requiresAuth: true } },
     {
         path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAdmin: true }, children: [

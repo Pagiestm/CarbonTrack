@@ -18,10 +18,11 @@
         <div class="p-6">
           <h3 class="text-2xl font-semibold text-light mb-2">{{ project.name }}</h3>
           <p class="text-gray-300 mb-4">{{ project.description }}</p>
-          <button @click="viewProjectDetails(project)"
-            class="bg-customGreen text-secondary py-2 px-4 rounded transition duration-300">
-            Voir les détails
-          </button>
+          <router-link :to="{ name: 'ProjectDetailsPage', params: { id: project.id } }">
+            <button class="bg-customGreen text-secondary py-2 px-4 rounded transition duration-300">
+              Voir les détails
+            </button>
+          </router-link>
         </div>
       </div>
     </div>

@@ -19,7 +19,14 @@ export class ProjectService {
     async getProjectById(id, userId) {
         try {
             const project = await prisma.project.findUnique({
-                where: { id: parseInt(id, 10) }
+                where: { id: parseInt(id, 10) },
+                include: {
+                    ProjectMaterial: {
+                        include: {
+                            material: true
+                        }
+                    }
+                }
             });
             if (!project || project.userId !== parseInt(userId, 10)) {
                 throw new Error('Project not found or access denied');
