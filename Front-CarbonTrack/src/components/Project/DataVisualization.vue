@@ -2,6 +2,14 @@
     <div class="data-visualization p-6">
         <h2 class="text-2xl font-semibold mb-4 text-customGreen">Empreinte Carbone total par matériaux</h2>
         <canvas id="chart" class="h-12"></canvas>
+        <div class="legend mt-4">
+            <p class="text-sm text-light mb-2">Ce graphique à barres montre l'empreinte carbone totale par matériau utilisé dans le projet.</p>
+            <ul class="list-disc list-inside text-sm text-light">
+                <li>Chaque barre représente un matériau différent.</li>
+                <li>La hauteur de la barre indique l'empreinte carbone totale.</li>
+                <li>Les couleurs varient en fonction de la quantité : bleu pour ≤ 50, orange pour ≤ 100, et rouge pour > 100.</li>
+            </ul>
+        </div>
     </div>
 </template>
 
