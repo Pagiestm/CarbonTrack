@@ -15,31 +15,38 @@
     <div v-else-if="paginatedProjects.length" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-6">
       <div v-for="project in paginatedProjects" :key="project.id"
         class="bg-primary rounded-lg shadow-lg overflow-hidden">
-        <div class="p-6 flex justify-between items-start">
+        <div class="p-6 flex flex-col justify-between h-full">
           <div>
             <h3 class="text-2xl font-semibold text-light mb-2">{{ project.name }}</h3>
-            <p class="text-gray-300 mb-4">{{ project.description }}</p>
+            <p class="text-gray-300 mb-4">{{ truncateText(project.description, 70) }}</p>
+          </div>
+          <div class="flex justify-between items-center">
             <router-link :to="{ name: 'ProjectDetailsPage', params: { id: project.id } }">
-              <button class="bg-customGreen text-secondary py-2 px-4 rounded transition duration-300">
+              <button class="bg-customGreen text-secondary py-2 px-4 rounded transition duration-300 flex items-center">
                 Voir les détails
+                <i class="fas fa-info-circle ml-2"></i>
               </button>
             </router-link>
+            <div class="flex space-x-2">
+              <router-link :to="{ name: 'EditProjectPage', params: { id: project.id } }">
+                <button class="text-blue-500 hover:text-blue-700 transition duration-300 flex items-center mr-2">
+                  <i class="fas fa-edit fa-lg"></i>
+                </button>
+              </router-link>
+              <button @click="confirmDelete(project)"
+                class="text-red-500 hover:text-red-700 transition duration-300 flex items-center">
+                <i class="fas fa-trash-alt fa-lg"></i>
+              </button>
+            </div>
           </div>
-          <button @click="confirmDelete(project)" class="text-red-500 hover:text-red-700 transition duration-300">
-            <i class="fas fa-trash-alt"></i>
-          </button>
         </div>
       </div>
     </div>
     <div v-else class="text-center text-gray-500 mt-6">Aucun projet trouvé.</div>
     <Pagination :totalItems="filteredProjects.length" :itemsPerPage="itemsPerPage" @pageChange="handlePageChange" />
-    <DeleteConfirmationModal
-      :show="showConfirmModal"
-      title="Confirmer la suppression"
+    <DeleteConfirmationModal :show="showConfirmModal" title="Confirmer la suppression"
       :message="`Êtes-vous sûr de vouloir supprimer le projet : ${projectToDelete?.name} ?`"
-      @confirm="deleteProjectById"
-      @cancel="showConfirmModal = false"
-    />
+      @confirm="deleteProjectById" @cancel="showConfirmModal = false" />
   </section>
 </template>
 
@@ -104,4 +111,11 @@ const paginatedProjects = computed(() => {
   const end = start + itemsPerPage.value;
   return filteredProjects.value.slice(start, end);
 });
+
+const truncateText = (text, maxLength) => {
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  return text;
+};
 </script>

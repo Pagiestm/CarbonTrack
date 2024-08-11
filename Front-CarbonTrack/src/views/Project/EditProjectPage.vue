@@ -3,9 +3,9 @@
     <section class="w-full py-24 lg:py-32 bg-secondary">
         <div class="container mx-auto px-4">
             <header class="mb-12 text-center lg:text-left">
-                <h1 class="text-5xl font-bold text-white">Créer un Nouveau Projet</h1>
+                <h1 class="text-5xl font-bold text-white">Mettre à jour le projet</h1>
                 <p class="text-lg text-gray-300 mt-4">
-                    Remplissez les informations ci-dessous pour créer un nouveau projet.
+                    Modifiez les informations ci-dessous pour mettre à jour le projet.
                 </p>
             </header>
             <form @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
@@ -53,10 +53,10 @@
                         </button>
                     </li>
                 </ul>
-                <FormError :message="errors.materials" class="mb-2"/>
+                <FormError :message="errors.materials" class="mb-2" />
                 <button type="submit"
                     class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-                    Créer le Projet
+                    Mettre à Jour le Projet
                 </button>
                 <FormError :message="errors.submit" />
             </form>
@@ -70,9 +70,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { createProject } from '../../services/projectsService';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { getProjectById, updateProject } from '../../services/projectsService';
 import { getMaterials } from '../../services/materialsService';
 import Footer from '../../components/Footer.vue';
 import NavBar from '../../components/NavBar.vue';
@@ -80,14 +80,13 @@ import FormError from '../../components/Alert/FormError.vue';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
 
+const route = useRoute();
+const projectId = route.params.id;
 const projectData = ref({
     name: '',
     description: '',
-    totalFootprint: 0,
-    userId: null,
     materials: []
 });
-
 const materials = ref([]);
 const selectedMaterialId = ref(null);
 const materialQuantity = ref(0);
@@ -101,8 +100,20 @@ const router = useRouter();
 onMounted(async () => {
     try {
         materials.value = await getMaterials();
+        const projectId = route.params.id;
+        const data = await getProjectById(projectId);
+        projectData.value = {
+            name: data.name,
+            description: data.description,
+            totalFootprint: data.totalFootprint,
+            userId: data.userId,
+            materials: data.ProjectMaterial.map(item => ({
+                materialId: item.materialId,
+                quantity: item.quantity
+            }))
+        };
     } catch (error) {
-        console.error('Échec du chargement des matériaux', error);
+        console.error('Erreur lors du chargement des données du projet ou des matériaux', error);
     }
 });
 
@@ -119,18 +130,18 @@ const validateFields = () => {
 
 const addMaterial = () => {
     if (selectedMaterialId.value && materialQuantity.value > 0) {
-    const existingMaterial = projectData.value.materials.find(
-        material => material.materialId === selectedMaterialId.value
-    );
-    if (!existingMaterial) {
-        projectData.value.materials.push({
-            materialId: selectedMaterialId.value,
-            quantity: materialQuantity.value
-        });
-        selectedMaterialId.value = null;
-        materialQuantity.value = 0;
-    } else {
-        errors.value.material = 'Ce matériau a déjà été ajouté.';
+        const existingMaterial = projectData.value.materials.find(
+            material => material.materialId === selectedMaterialId.value
+        );
+        if (!existingMaterial) {
+            projectData.value.materials.push({
+                materialId: selectedMaterialId.value,
+                quantity: materialQuantity.value
+            });
+            selectedMaterialId.value = null;
+            materialQuantity.value = 0;
+        } else {
+            errors.value.material = 'Ce matériau a déjà été ajouté.';
         }
     } else {
         if (!selectedMaterialId.value) {
@@ -151,35 +162,14 @@ const getMaterialName = (materialId) => {
     return material ? material.name : 'Inconnu';
 };
 
-// Watchers to clear errors when fields are corrected
-watch(projectData, (newValue, oldValue) => {
-    if (newValue.name !== oldValue.name) {
-        errors.value.name = '';
-    }
-    if (newValue.description !== oldValue.description) {
-        errors.value.description = '';
-    }
-    if (newValue.materials !== oldValue.materials) {
-        errors.value.materials = '';
-    }
-});
-
-watch(selectedMaterialId, () => {
-    errors.value.material = '';
-});
-
-watch(materialQuantity, () => {
-    errors.value.quantity = '';
-});
-
 const handleSubmit = async () => {
     if (validateFields()) {
         try {
-            await createProject(projectData.value);
-            successMessage.value = 'Projet créé avec succès !';
+            await updateProject(projectId, projectData.value);
+            successMessage.value = 'Projet mis à jour avec succès !';
             showSuccessMessage.value = true;
         } catch (error) {
-            errorMessage.value = 'Échec de la création du projet. Veuillez réessayer.';
+            errorMessage.value = 'Échec de la mise à jour du projet. Veuillez réessayer.';
             showErrorMessage.value = true;
         }
     }
