@@ -13,24 +13,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Build Vue.js frontend
+        run: |
+          cd Front-CarbonTrack
+          npm install
+          npm run build
+          cd ..
+
       - name: APT UPDATE and INSTALL SSHPASS
         run: |
           sudo apt update && sudo apt install -y sshpass
 
-      - name: Pull Latest Code
-        run: |
-          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
-            cd CarbonTrack && git pull origin master"
-
       - name: Deploy Frontend
         run: |
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
-            cd CarbonTrack/Front-CarbonTrack && npm install && npm run build"
+            cd CarbonTrack && git pull origin master &&
+            cd Front-CarbonTrack && npm install && npm run build"
 
-      # - name: Deploy Backend
-      #   run: |
-      #     sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
-      #       cd CarbonTrack/Back-CarbonTrack && npm install &&
-      #       npx prisma generate &&
-      #       npx prisma migrate deploy &&
-      #       nohup npm run start &"
+      - name: Deploy Backend to Render
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
