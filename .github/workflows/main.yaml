@@ -13,13 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build Vue.js frontend
-        run: |
-          cd Front-CarbonTrack
-          npm install
-          npm run build
-          cd ..
-
       - name: APT UPDATE and INSTALL SSHPASS
         run: |
           sudo apt update && sudo apt install -y sshpass
@@ -29,7 +22,3 @@ jobs:
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
             cd CarbonTrack && git pull origin master &&
             cd Front-CarbonTrack && npm install && npm run build"
-
-      - name: Deploy Backend to Render
-        run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
