@@ -32,4 +32,5 @@ jobs:
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
             cd CarbonTrack/Back-CarbonTrack && npm install &&
             npx prisma generate &&
-            npm run start"
+            npx prisma migrate deploy &&
+            nohup npm run start &"
