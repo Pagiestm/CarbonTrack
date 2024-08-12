@@ -19,7 +19,7 @@ jobs:
 
       - name: Pull Latest Code
         run: |
-          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
+          sshpass -e ssh -tt -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
             cd CarbonTrack && git pull origin master"
 
       - name: Deploy Frontend
