@@ -13,7 +13,7 @@
                     </button>
                 </router-link>
             </div>
-            <p v-if="state.loading" class="mt-4 text-gray-600">Loading...</p>
+            <p v-if="state.loading" class="mt-4 text-gray-600">Chargement des données...</p>
             <p v-if="!state.loading && filteredMaterials.length === 0" class="mt-4 text-gray-600">Aucun matériau disponible.</p>
             <p v-if="state.errorMessage" class="mt-4 text-red-600">{{ state.errorMessage }}</p>
             <div v-if="!state.loading && filteredMaterials.length > 0" class="mt-6">

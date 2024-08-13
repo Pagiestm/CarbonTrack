@@ -3,7 +3,7 @@
     <div class="container mx-auto mt-10 p-6 min-h-screen">
         <div class="text-center">
             <h1 class="text-3xl font-bold text-indigo-600">Edit Profile</h1>
-            <p v-if="loading" class="mt-4 text-gray-600">Loading...</p>
+            <p v-if="loading" class="mt-4 text-gray-600">Chargement des données...</p>
             <form v-else @submit.prevent="submitUpdateUserProfile" class="mt-6">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>

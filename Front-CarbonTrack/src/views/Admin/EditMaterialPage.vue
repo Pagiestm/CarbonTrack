@@ -2,7 +2,8 @@
     <section class="w-full py-24 lg:py-32 overflow-hidden flex items-center justify-center">
         <div class="container max-w-xl bg-white p-6 shadow-md rounded-lg">
             <h2 class="text-3xl font-bold text-center text-primary underline mb-6">Modifier le Matériau</h2>
-            <form @submit.prevent="handleSubmit" class="space-y-4">
+            <div v-if="loading" class="text-center text-primary">Chargement des données...</div>
+            <form v-else @submit.prevent="handleSubmit" class="space-y-4">
                 <div>
                     <label for="name" class="block text-sm font-medium text-primary mb-1 underline">Nom du Matériau :</label>
                     <input id="name" v-model="localMaterial.name" placeholder="Ex: Acier"
@@ -87,6 +88,7 @@ const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
 const errors = ref({});
+const loading = ref(true);
 
 onMounted(async () => {
     try {
@@ -95,6 +97,8 @@ onMounted(async () => {
         localMaterial.value = { ...material };
     } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
+    }finally {
+        loading.value = false;
     }
 });
 
