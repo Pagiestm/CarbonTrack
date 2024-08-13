@@ -40,7 +40,6 @@
                 <MaterialDistributionChart :data="formattedData" class="bg-primary rounded-lg shadow-lg mb-4"/>
                 <DataVisualization :data="formattedData" class="bg-primary rounded-lg shadow-lg"/>
             </div>
-            <div v-else class="text-center text-customGray">Projet non trouvé.</div>
         </div>
     </section>
     <Footer />
