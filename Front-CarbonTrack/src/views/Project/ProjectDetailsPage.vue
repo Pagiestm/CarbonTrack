@@ -1,6 +1,6 @@
 <template>
     <NavBar />
-    <section class="w-full py-24 lg:py-32 bg-secondary flex justify-center">
+    <section class="w-full py-24 lg:py-32 bg-secondary flex justify-center min-h-screen">
         <div class="container px-4 md:px-6 xl:flex xl:space-x-12 items-start">
             <div v-if="loading" class="text-center text-customGray">Chargement des détails du projet...</div>
             <div v-else-if="project" class="w-full xl:w-1/2 mb-8 xl:mb-0">

@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary">
+  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
     <div class="container mx-auto px-4">
       <header class="mb-12 text-center lg:text-left">
         <h1 class="text-5xl font-bold text-light">Mes projets</h1>

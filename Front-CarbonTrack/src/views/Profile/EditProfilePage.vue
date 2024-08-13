@@ -1,6 +1,6 @@
 <template>
     <NavBar />
-    <div class="container mx-auto mt-10 p-6">
+    <div class="container mx-auto mt-10 p-6 min-h-screen">
         <div class="text-center">
             <h1 class="text-3xl font-bold text-indigo-600">Edit Profile</h1>
             <p v-if="loading" class="mt-4 text-gray-600">Loading...</p>
@@ -28,12 +28,14 @@
             <p v-if="errorMessage" class="mt-4 text-red-600">{{ errorMessage }}</p>
         </div>
     </div>
+    <Footer />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getUserProfile, updateUserProfile } from '../../services/userService';
 import NavBar from '../../components/NavBar.vue';
+import Footer from '../../components/Footer.vue';
 
 const user = ref(null);
 const loading = ref(true);
