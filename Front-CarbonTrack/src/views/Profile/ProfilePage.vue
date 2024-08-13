@@ -22,17 +22,18 @@
                 </div>
                 <div v-if="user" class="grid gap-4 text-center lg:text-left">
                     <div>
-                        <div class="text-lg font-medium text-light underline mb-2 mt-4">Informations personnelles :</div>
+                        <div class="text-lg font-medium text-light underline mb-2 mt-4">Informations personnelles :
+                        </div>
                         <div class="text-light">
-                            Nom: {{ user.name }}<br>
-                            Email: {{ user.email }}<br>
-                            Rôle: {{ user.role }}
+                            Nom : {{ user.name }}<br>
+                            Email : {{ user.email }}<br>
+                            Inscrit le : {{ formatDate(user.createdAt) }}
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col gap-2 min-[400px]:flex-row justify-center lg:justify-start">
                     <router-link to="/profile/edit"
-                        class="inline-flex h-10 items-center justify-center rounded-md border border-primary text-light bg-secondary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-primary hover:text-light hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary">Modifier
+                        class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">Modifier
                         le profil</router-link>
                 </div>
             </div>
@@ -64,4 +65,9 @@ onMounted(async () => {
         loading.value = false;
     }
 });
+
+const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+};
 </script>

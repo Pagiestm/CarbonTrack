@@ -1,45 +1,64 @@
 <template>
     <NavBar />
-    <div class="container mx-auto mt-10 p-6 min-h-screen">
-        <div class="text-center">
-            <h1 class="text-3xl font-bold text-indigo-600">Edit Profile</h1>
-            <p v-if="loading" class="mt-4 text-gray-600">Chargement des données...</p>
-            <form v-else @submit.prevent="submitUpdateUserProfile" class="mt-6">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
-                    <input v-model="user.name"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="name" type="text" placeholder="Name">
+    <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen flex items-center justify-center">
+        <div class="container mx-auto px-4">
+            <header class="mb-12 text-center">
+                <h1 class="text-5xl font-bold text-white">Modifier le Profil</h1>
+                <p class="text-lg text-gray-300 mt-4">
+                    Modifiez les informations ci-dessous pour mettre à jour votre profil.
+                </p>
+            </header>
+            <div v-if="loading" class="text-center text-white">Chargement des données...</div>
+            <form v-else @submit.prevent="submitUpdateUserProfile" class="bg-primary p-8 rounded-lg shadow-lg mx-auto max-w-lg">
+                <div class="mb-6">
+                    <label for="name" class="block text-white mb-2">Nom</label>
+                    <input v-model="user.name" type="text" id="name"
+                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                        required />
+                    <FormError :message="errors.name" />
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-                    <input v-model="user.email"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email" type="email" placeholder="Email">
+                <div class="mb-6">
+                    <label for="email" class="block text-white mb-2">Email</label>
+                    <input v-model="user.email" type="email" id="email"
+                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
+                        required />
+                    <FormError :message="errors.email" />
                 </div>
-                <div class="flex items-center justify-between">
-                    <button
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit">
-                        Update Profile
+                <div class="flex justify-center">
+                    <button type="submit"
+                        class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                        Mettre à jour le profil
                     </button>
                 </div>
+                <FormError :message="errors.submit" />
             </form>
-            <p v-if="errorMessage" class="mt-4 text-red-600">{{ errorMessage }}</p>
+            <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
+                @close="handleCloseSuccessMessage" />
+            <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
+                @close="handleCloseErrorMessage" />
         </div>
-    </div>
+    </section>
     <Footer />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { getUserProfile, updateUserProfile } from '../../services/userService';
 import NavBar from '../../components/NavBar.vue';
 import Footer from '../../components/Footer.vue';
+import FormError from '../../components/Alert/FormError.vue';
+import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
+import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
 
-const user = ref(null);
+const user = ref({ name: '', email: '' });
 const loading = ref(true);
 const errorMessage = ref('');
+const successMessage = ref('');
+const showErrorMessage = ref(false);
+const showSuccessMessage = ref(false);
+const errors = ref({});
+const router = useRouter();
 
 onMounted(async () => {
     try {
@@ -47,21 +66,49 @@ onMounted(async () => {
     } catch (error) {
         console.error('Failed to fetch user profile:', error);
         errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+        showErrorMessage.value = true;
     } finally {
         loading.value = false;
     }
 });
 
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+const validateForm = () => {
+    errors.value = {};
+    if (!user.value.name) errors.value.name = 'Le nom est requis.';
+    if (!user.value.email) {
+        errors.value.email = 'L\'email est requis.';
+    } else if (!validateEmail(user.value.email)) {
+        errors.value.email = 'Le format de l\'email est invalide.';
+    }
+    return Object.keys(errors.value).length === 0;
+};
+
 const submitUpdateUserProfile = async () => {
+    if (!validateForm()) return;
+
     try {
-        user.value = await updateUserProfile({
-            name: user.value.name,
-            email: user.value.email,
-        });
-        errorMessage.value = 'Profile updated successfully';
+        loading.value = true;
+        await updateUserProfile(user.value);
+        errorMessage.value = '';
+        successMessage.value = 'Profil mis à jour avec succès';
+        showSuccessMessage.value = true;
     } catch (error) {
         console.error('Failed to update user profile:', error);
-        errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+        errorMessage.value = 'Une erreur est survenue lors de la mise à jour, veuillez réessayer';
+        showErrorMessage.value = true;
+    } finally {
+        loading.value = false;
     }
+};
+
+const handleCloseSuccessMessage = () => {
+    showSuccessMessage.value = false;
+    router.push('/profile');
+};
+
+const handleCloseErrorMessage = () => {
+    showErrorMessage.value = false;
 };
 </script>
