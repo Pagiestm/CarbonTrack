@@ -1,0 +1,35 @@
+<mjml>
+  <mj-body background-color="#1a202c">
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="32px" color="#42B883" font-weight="bold" align="center">
+          Bienvenue sur CarbonTrack
+        </mj-text>
+        <mj-divider border-color="#42B883" border-width="2px" />
+        <mj-text font-size="18px" color="#ffffff" align="center">
+          Bonjour {{name}},
+        </mj-text>
+        <mj-text font-size="14px" color="#ffffff" align="center">
+          Merci de vous être inscrit sur notre plateforme. Nous sommes ravis de vous compter parmi nous.
+          <br /><br />
+          CarbonTrack vous aide à suivre et réduire votre empreinte carbone de manière efficace et intuitive.
+          <br /><br />
+          Cordialement,
+          <br /><br />
+          L'équipe CarbonTrack
+        </mj-text>
+        <mj-image width="600px" src="https://images.unsplash.com/photo-1505235687559-28b5f54645b7?q=80&w=3864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="CarbonTrack Banner" />
+        <mj-button background-color="#42B883" color="#ffffff" href="https://carbon-track-one.vercel.app" font-size="18px" padding="20px" align="center">
+          Visitez notre site
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="14px" color="#a0aec0" align="center">
+          © 2024 CarbonTrack. Tous droits réservés.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
