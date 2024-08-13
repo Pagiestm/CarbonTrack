@@ -25,7 +25,7 @@
         </div>
 
         <!-- Table view for desktop -->
-        <div class="hidden lg:flex flex-col flex-grow overflow-x-auto">
+        <div v-if="materials.length > 0" class="hidden lg:flex flex-col flex-grow overflow-x-auto">
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-primary text-white">
                     <tr>
@@ -63,6 +63,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div v-else class="hidden lg:flex flex-col flex-grow justify-center items-center">
+            <p class="text-gray-500">Aucun matériau disponible.</p>
         </div>
 
         <!-- Modal -->
