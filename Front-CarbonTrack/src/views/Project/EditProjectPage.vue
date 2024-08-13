@@ -8,7 +8,8 @@
                     Modifiez les informations ci-dessous pour mettre à jour le projet.
                 </p>
             </header>
-            <form @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
+            <div v-if="loading" class="text-center text-white">Chargement des données...</div>
+            <form v-else @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
                 <div class="mb-6">
                     <label for="name" class="block text-white mb-2">Nom du Projet</label>
                     <input v-model="projectData.name" type="text" id="name"
@@ -96,6 +97,7 @@ const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
 const router = useRouter();
+const loading = ref(true);
 
 onMounted(async () => {
     try {
@@ -114,6 +116,8 @@ onMounted(async () => {
         };
     } catch (error) {
         console.error('Erreur lors du chargement des données du projet ou des matériaux', error);
+    } finally {
+        loading.value = false;
     }
 });
 

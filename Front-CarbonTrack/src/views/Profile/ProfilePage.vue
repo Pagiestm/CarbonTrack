@@ -2,7 +2,8 @@
     <NavBar />
     <section class="w-full py-24 lg:py-32 bg-secondary flex justify-center items-center min-h-screen">
         <div class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12 justify-center items-center">
-            <div class="space-y-4 text-center lg:text-left">
+            <div v-if="loading" class="text-center text-light">Chargement des données...</div>
+            <div v-else class="space-y-4 text-center lg:text-left">
                 <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-customGreen mb-8">
                     Mon profil</h1>
                 <div v-if="user" class="flex flex-col items-center lg:flex-row lg:items-center gap-4">
@@ -49,18 +50,16 @@
 import { ref, onMounted } from 'vue';
 import { getUserProfile } from '../../services/userService';
 import NavBar from '../../components/NavBar.vue';
-import Footer from '../../components/Footer.vue'
+import Footer from '../../components/Footer.vue';
 
 const user = ref(null);
 const loading = ref(true);
-const errorMessage = ref('');
 
 onMounted(async () => {
     try {
-        const profile = await getUserProfile();
-        user.value = profile;
+        user.value = await getUserProfile();
     } catch (error) {
-        errorMessage.value = 'Failed to load profile';
+        console.error('Échec du chargement des données utilisateur', error);
     } finally {
         loading.value = false;
     }
