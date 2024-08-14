@@ -3,7 +3,7 @@
     <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
         <div class="container mx-auto px-4">
             <header class="mb-12 text-center lg:text-left">
-                <h1 class="text-5xl font-bold text-white">Mettre à jour le projet</h1>
+                <h1 class="text-5xl font-bold text-white">Mettre à Jour le Projet</h1>
                 <p class="text-lg text-gray-300 mt-4">
                     Modifiez les informations ci-dessous pour mettre à jour le projet.
                 </p>
@@ -24,25 +24,37 @@
                     <FormError :message="errors.description" />
                 </div>
                 <div class="mb-6">
-                    <label for="material" class="block text-white mb-2">Matériel</label>
-                    <select v-model="selectedMaterialId" id="material"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen">
-                        <option v-for="material in materials" :key="material.id" :value="material.id">
-                            {{ material.name }}
-                        </option>
-                    </select>
+                    <label class="block text-white mb-2">Sélectionner les Matériaux par Catégorie</label>
+                    <div v-if="isLoadingCategories" class="flex justify-center items-center">
+                        <span class="text-white">Chargement des catégories...</span>
+                    </div>
+                    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div v-for="category in categories" :key="category.id" class="mb-4">
+                            <h3 class="text-lg font-semibold text-customGreen mb-2">{{ category.name }}</h3>
+                            <div class="mb-2">
+                                <select v-model="selectedMaterialId[category.id]"
+                                    class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen">
+                                    <option disabled value="">Sélectionner un matériau</option>
+                                    <option v-for="material in category.Materials" :key="material.id"
+                                        :value="material.id">
+                                        {{ material.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex items-center mb-2 space-x-2">
+                                <input v-model.number="materialQuantities[category.id]" type="number" step="1" min="0"
+                                    placeholder="Quantité"
+                                    class="w-24 p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
+                                <button type="button" @click="addMaterial(category.id)"
+                                    class="py-2 px-4 bg-customGreen text-white rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                                    Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <FormError :message="errors.quantity" />
                     <FormError :message="errors.material" />
                 </div>
-                <div class="mb-6">
-                    <label for="quantity" class="block text-white mb-2">Quantité</label>
-                    <input v-model="materialQuantity" type="number" step="1" id="quantity"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
-                    <FormError :message="errors.quantity" />
-                </div>
-                <button type="button" @click="addMaterial"
-                    class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out mb-6">
-                    Ajouter Matériel
-                </button>
                 <ul class="mb-6">
                     <li v-for="(material, index) in projectData.materials" :key="index"
                         class="flex justify-between items-center mb-2 bg-gray-800 p-3 rounded">
@@ -71,10 +83,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getProjectById, updateProject } from '../../services/projectsService';
-import { getMaterials } from '../../services/materialsService';
+import { getCategoriesWithMaterials } from '../../services/categoriesService';
 import Footer from '../../components/Footer.vue';
 import NavBar from '../../components/NavBar.vue';
 import FormError from '../../components/Alert/FormError.vue';
@@ -82,42 +94,45 @@ import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
 
 const route = useRoute();
+const router = useRouter();
 const projectId = route.params.id;
+
 const projectData = ref({
     name: '',
     description: '',
     materials: []
 });
-const materials = ref([]);
-const selectedMaterialId = ref(null);
-const materialQuantity = ref(0);
+
+const categories = ref([]);
+const selectedMaterialId = ref({});
+const materialQuantities = ref({});
 const errors = ref({});
 const showSuccessMessage = ref(false);
 const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
-const router = useRouter();
+const isLoadingCategories = ref(true);
 const loading = ref(true);
 
 onMounted(async () => {
     try {
-        materials.value = await getMaterials();
-        const projectId = route.params.id;
-        const data = await getProjectById(projectId);
+        // Load categories with materials for selection
+        categories.value = await getCategoriesWithMaterials();
+        // Fetch the project details
+        const project = await getProjectById(projectId);
         projectData.value = {
-            name: data.name,
-            description: data.description,
-            totalFootprint: data.totalFootprint,
-            userId: data.userId,
-            materials: data.ProjectMaterial.map(item => ({
+            name: project.name,
+            description: project.description,
+            materials: project.ProjectMaterial.map(item => ({
                 materialId: item.materialId,
                 quantity: item.quantity
             }))
         };
     } catch (error) {
-        console.error('Erreur lors du chargement des données du projet ou des matériaux', error);
+        console.error('Erreur lors du chargement des données du projet ou des catégories', error);
     } finally {
         loading.value = false;
+        isLoadingCategories.value = false;
     }
 });
 
@@ -127,31 +142,32 @@ const validateFields = () => {
         errors.value.description = 'La description est requise.';
     }
     if (projectData.value.materials.length === 0) {
-        errors.value.materials = 'Veuillez ajouter au moins un matériel.';
+        errors.value.materials = 'Veuillez ajouter au moins un matériau.';
     }
     return Object.keys(errors.value).length === 0;
 };
 
-const addMaterial = () => {
-    if (selectedMaterialId.value && materialQuantity.value > 0) {
-        const existingMaterial = projectData.value.materials.find(
-            material => material.materialId === selectedMaterialId.value
-        );
+const addMaterial = (categoryId) => {
+    const materialId = selectedMaterialId.value[categoryId];
+    const quantity = materialQuantities.value[categoryId];
+
+    if (materialId && quantity > 0) {
+        const existingMaterial = projectData.value.materials.find(m => m.materialId === materialId);
         if (!existingMaterial) {
             projectData.value.materials.push({
-                materialId: selectedMaterialId.value,
-                quantity: materialQuantity.value
+                materialId: materialId,
+                quantity: quantity
             });
-            selectedMaterialId.value = null;
-            materialQuantity.value = 0;
+            selectedMaterialId.value[categoryId] = '';
+            materialQuantities.value[categoryId] = 0;
         } else {
             errors.value.material = 'Ce matériau a déjà été ajouté.';
         }
     } else {
-        if (!selectedMaterialId.value) {
-            errors.value.material = 'Veuillez sélectionner un matériel.';
+        if (!materialId) {
+            errors.value.material = 'Veuillez sélectionner un matériau.';
         }
-        if (materialQuantity.value <= 0) {
+        if (quantity <= 0) {
             errors.value.quantity = 'Veuillez entrer une quantité valide.';
         }
     }
@@ -162,9 +178,33 @@ const removeMaterial = (index) => {
 };
 
 const getMaterialName = (materialId) => {
-    const material = materials.value.find(m => m.id === materialId);
-    return material ? material.name : 'Inconnu';
+    for (const category of categories.value) {
+        const material = category.Materials.find(m => m.id === materialId);
+        if (material) return material.name;
+    }
+    return 'Inconnu';
 };
+
+// Watchers to clear errors when fields are corrected
+watch(projectData, (newValue, oldValue) => {
+    if (newValue.name !== oldValue.name) {
+        errors.value.name = '';
+    }
+    if (newValue.description !== oldValue.description) {
+        errors.value.description = '';
+    }
+    if (newValue.materials !== oldValue.materials) {
+        errors.value.materials = '';
+    }
+});
+
+watch(selectedMaterialId, () => {
+    errors.value.material = '';
+});
+
+watch(materialQuantities, () => {
+    errors.value.quantity = '';
+});
 
 const handleSubmit = async () => {
     if (validateFields()) {
