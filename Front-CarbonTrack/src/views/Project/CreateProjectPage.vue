@@ -24,7 +24,10 @@
                 </div>
                 <div class="mb-6">
                     <label class="block text-white mb-2">Sélectionner les Matériaux par Catégorie</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div v-if="isLoadingCategories" class="flex justify-center items-center">
+                        <span class="text-white">Chargement des catégories...</span>
+                    </div>
+                    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div v-for="category in categories" :key="category.id" class="mb-4">
                             <h3 class="text-lg font-semibold text-customGreen mb-2">{{ category.name }}</h3>
                             <div class="mb-2">
@@ -105,6 +108,7 @@ const showSuccessMessage = ref(false);
 const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
+const isLoadingCategories = ref(true);
 const router = useRouter();
 
 onMounted(async () => {
@@ -113,6 +117,8 @@ onMounted(async () => {
         console.log('Categories with materials:', categories.value);
     } catch (error) {
         console.error('Échec du chargement des catégories et matériaux', error);
+    } finally {
+        isLoadingCategories.value = false;
     }
 });
 
