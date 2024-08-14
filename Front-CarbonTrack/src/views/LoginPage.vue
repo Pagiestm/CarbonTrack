@@ -22,7 +22,10 @@
                             class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <button type="submit"
-                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-sm hover:bg-customGreen-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">Connexion</button>
+                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-sm hover:bg-customGreen-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">
+                        <span v-if="!isLoading">Connexion</span>
+                        <span v-else>Chargement...</span>
+                    </button>
                 </form>
                 <div class="mt-6 text-center">
                     <p class="text-customGray">Vous n'avez pas de compte ? <a href="/register" class="text-light hover:underline">Inscrivez-vous</a></p>
@@ -55,10 +58,12 @@ const formState = ref({
 });
 
 const errorMessage = ref('');
+const isLoading = ref(false);
 
 const router = useRouter();
 
 const login = async () => {
+    isLoading.value = true;
     try {
         const { token } = await loginUser({
             email: formState.value.email,
@@ -68,6 +73,8 @@ const login = async () => {
         router.push('/');
     } catch (error) {
         errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+    } finally {
+        isLoading.value = false;
     }
 };
 </script>
