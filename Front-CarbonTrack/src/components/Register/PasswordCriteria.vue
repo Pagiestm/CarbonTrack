@@ -1,10 +1,10 @@
 <template>
     <ul class="text-sm mt-1">
-        <li :class="{'text-green-500': criteria.length, 'text-red-500': !criteria.length}">At least 8 characters</li>
-        <li :class="{'text-green-500': criteria.uppercase, 'text-red-500': !criteria.uppercase}">At least one uppercase letter</li>
-        <li :class="{'text-green-500': criteria.lowercase, 'text-red-500': !criteria.lowercase}">At least one lowercase letter</li>
-        <li :class="{'text-green-500': criteria.number, 'text-red-500': !criteria.number}">At least one number</li>
-        <li :class="{'text-green-500': criteria.symbol, 'text-red-500': !criteria.symbol}">At least one symbol</li>
+        <li :class="{ 'text-customGreen': criteria.length, 'text-red-500': !criteria.length }">Au moins 8 caractères</li>
+        <li :class="{ 'text-customGreen': criteria.uppercase, 'text-red-500': !criteria.uppercase }">Au moins une lettre majuscule</li>
+        <li :class="{ 'text-customGreen': criteria.lowercase, 'text-red-500': !criteria.lowercase }">Au moins une lettre minuscule</li>
+        <li :class="{ 'text-customGreen': criteria.number, 'text-red-500': !criteria.number }">Au moins un chiffre</li>
+        <li :class="{ 'text-customGreen': criteria.symbol, 'text-red-500': !criteria.symbol }">Au moins un symbole</li>
     </ul>
 </template>
 
