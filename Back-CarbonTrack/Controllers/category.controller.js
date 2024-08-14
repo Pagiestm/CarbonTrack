@@ -15,6 +15,17 @@ class CategoryController {
         };
     }
 
+    getCategoriesWithMaterials() {
+        return async (req, res) => {
+            try {
+                const categoriesWithMaterials = await categoryService.getCategoriesWithMaterials();
+                res.status(200).json(categoriesWithMaterials);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        };
+    }
+
     syncCategoryWebhook() {
         return async (req, res) => {
             const { event, entry, model } = req.body;

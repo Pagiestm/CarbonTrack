@@ -19,3 +19,19 @@ export const getCategories = async () => {
         throw new Error(error.response?.data?.error || 'Failed to fetch categories');
     }
 };
+
+export const getCategoriesWithMaterials = async () => {
+    const tokenData = getToken();
+    if (!tokenData) throw new Error('Token not found');
+
+    const { token } = tokenData;
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/categories/categories-with-materials`, {
+            headers: getHeaders(token)
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to fetch categories with materials');
+    }
+};

@@ -12,6 +12,23 @@ export class CategoryService {
         }
     }
 
+    async getCategoriesWithMaterials() {
+        try {
+            return await prisma.category.findMany({
+                where: {
+                    Materials: {
+                        some: {},
+                    },
+                },
+                include: {
+                    Materials: true,
+                },
+            });
+        } catch (error) {
+            throw new Error('Error fetching categories with materials: ' + error.message);
+        }
+    }
+
     async syncCategory(event, entry) {
         try {
             if (event === 'entry.create' || event === 'entry.update') {
