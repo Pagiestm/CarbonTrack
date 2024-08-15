@@ -36,8 +36,7 @@
                     <!-- Close Button -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -92,6 +91,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getToken, isAdmin as checkAdmin } from '../helpers/token.js';
 
 const isAuthenticated = ref(false);
 const isAdmin = ref(false);
@@ -102,10 +102,14 @@ const toggleMenu = () => {
 };
 
 onMounted(() => {
-    const authToken = localStorage.getItem('authToken');
-    const role = localStorage.getItem('role');
-    isAuthenticated.value = !!authToken;
-    isAdmin.value = role === 'ADMIN';
+    const tokenData = getToken();
+    if (tokenData) {
+        isAuthenticated.value = !!tokenData.token;
+        isAdmin.value = checkAdmin();
+    } else {
+        isAuthenticated.value = false;
+        isAdmin.value = false;
+    }
 });
 
 const router = useRouter();
@@ -119,3 +123,4 @@ const logout = () => {
     router.push('/login');
 };
 </script>
+
