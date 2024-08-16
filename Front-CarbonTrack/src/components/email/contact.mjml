@@ -1,0 +1,31 @@
+<mjml>
+  <mj-body background-color="#1a202c">
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="32px" color="#42B883" font-weight="bold" align="center">
+          Nouveau message 
+        </mj-text>
+        <mj-divider border-color="#42B883" border-width="2px" />
+        <mj-text font-size="18px" color="#ffffff" align="center">
+          Bonjour équipe CarbonTrack,
+        </mj-text>
+        <mj-text font-size="16px" color="#ffffff" align="left">
+          Vous avez reçu un nouveau message de {{name}}
+        </mj-text>
+        <mj-text font-size="16px" color="#ffffff" align="left">
+          <strong>Email:</strong> {{email}}
+        </mj-text>
+        <mj-text font-size="16px" color="#ffffff" align="left">
+          {{message}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="14px" color="#a0aec0" align="center">
+          © 2024 CarbonTrack. Tous droits réservés.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
