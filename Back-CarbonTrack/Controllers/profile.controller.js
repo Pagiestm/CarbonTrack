@@ -30,6 +30,25 @@ class ProfileController {
                 return res.status(400).json({ error: 'Invalid user ID' });
             }
             const profileData = req.body;
+
+            // Validation des données de mise à jour
+            const allowedFields = ['name', 'email'];
+            const invalidFields = Object.keys(profileData).filter(
+                key => !allowedFields.includes(key)
+            );
+
+            if (invalidFields.length > 0) {
+                return res.status(400).json({ error: `Invalid fields: ${invalidFields.join(', ')}` });
+            }
+
+            // Vérification du format de l'email
+            if (profileData.email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(profileData.email)) {
+                    return res.status(400).json({ error: 'Invalid email format' });
+                }
+            }
+
             try {
                 const user = await profileService.updateProfile(userId, profileData);
                 if (!user) {

@@ -28,9 +28,14 @@ export class ProfileService {
 
     async updateProfile(userId, profileData) {
         try {
+            const { name, email } = profileData;
+            const updateData = {};
+            if (name) updateData.name = name;
+            if (email) updateData.email = email;
+
             const user = await prisma.user.update({
                 where: { id: parseInt(userId, 10) },
-                data: profileData,
+                data: updateData,
             });
             return user;
         } catch (error) {
