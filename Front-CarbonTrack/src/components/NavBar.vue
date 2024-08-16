@@ -102,19 +102,25 @@ const toggleMenu = () => {
 };
 
 onMounted(() => {
+    console.log('onMounted called');
     const tokenData = getToken();
+    console.log('Token data:', tokenData);
     if (tokenData) {
         isAuthenticated.value = !!tokenData.token;
         isAdmin.value = checkAdmin();
+        console.log('User is authenticated:', isAuthenticated.value);
+        console.log('User is admin:', isAdmin.value);
     } else {
         isAuthenticated.value = false;
         isAdmin.value = false;
+        console.log('User is not authenticated');
     }
 });
 
 const router = useRouter();
 
 const logout = () => {
+    console.log('Logout called');
     localStorage.removeItem('authToken');
     localStorage.removeItem('role');
     isAuthenticated.value = false;
@@ -123,4 +129,3 @@ const logout = () => {
     router.push('/login');
 };
 </script>
-
