@@ -20,5 +20,5 @@ jobs:
       - name: Deploy Frontend
         run: |
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
-            cd CarbonTrack && git pull origin master &&
+            cd CarbonTrack && git pull &&
             cd Front-CarbonTrack && npm install && npm run build"
