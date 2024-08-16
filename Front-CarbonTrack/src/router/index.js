@@ -3,6 +3,7 @@ import HomePage from '../views/Home/HomePage.vue';
 import LoginForm from '../views/LoginPage.vue';
 import NotFound from '../views/NotFound.vue';
 import RegisterForm from '../views/RegisterPage.vue';
+import ContactPage from '../views/ContactPage.vue';
 import ProfilePage from '../views/Profile/ProfilePage.vue';
 import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 import AdminPage from '../views/Admin/AdminPage.vue';
@@ -18,6 +19,7 @@ const routes = [
     { path: '/', name: 'Home', component: HomePage },
     { path: '/login', name: 'Login', component: LoginForm },
     { path: '/register', name: 'Register', component: RegisterForm },
+    { path: '/contact', component: ContactPage },
     { path: '/profile', name: 'Profile', component: ProfilePage, meta: { requiresAuth: true } },
     { path: '/profile/edit', name: 'EditProfile', component: EditProfilePage, meta: { requiresAuth: true } },
     { path: '/projects', name: 'UserProjects', component: ProjectPage, meta: { requiresAuth: true } },
