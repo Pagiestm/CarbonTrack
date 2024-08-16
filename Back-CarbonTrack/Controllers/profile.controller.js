@@ -7,9 +7,9 @@ class ProfileController {
     
     getProfileById() {
         return async (req, res) => {
-            const userId = parseInt(req.userId, 10);
-            if (isNaN(userId)) {
-                return res.status(400).json({ error: 'Invalid user ID' });
+            const userId = req.userId;
+            if (!userId) {
+                return res.status(400).json({ error: 'User not authenticated' });
             }
             try {
                 const user = await profileService.getProfile(userId);
@@ -25,9 +25,9 @@ class ProfileController {
 
     updateProfileById() {
         return async (req, res) => {
-            const userId = parseInt(req.userId, 10);
-            if (isNaN(userId)) {
-                return res.status(400).json({ error: 'Invalid user ID' });
+            const userId = req.userId;
+            if (!userId) {
+                return res.status(400).json({ error: 'User not authenticated' });
             }
             const profileData = req.body;
 

@@ -90,7 +90,14 @@ const submitUpdateUserProfile = async () => {
 
     try {
         loading.value = true;
-        await updateUserProfile(user.value);
+
+        // Filtre les champs nécessaires
+        const userData = {
+            name: user.value.name,
+            email: user.value.email
+        };
+
+        await updateUserProfile(userData);
         errorMessage.value = '';
         successMessage.value = 'Profil mis à jour avec succès';
         showSuccessMessage.value = true;

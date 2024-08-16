@@ -27,8 +27,8 @@ export const router = express.Router();
  *           type: string
  *           description: User name
  *       example:
- *         email: user@example.com
- *         password: secret
+ *         email: test@gmail.com
+ *         password: Azerty123*
  *         name: John Doe
  */
 

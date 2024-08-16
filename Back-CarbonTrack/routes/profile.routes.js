@@ -6,19 +6,12 @@ const router = express.Router();
 
 /**
  * @swagger
- * /profile/{id}:
+ * /profile:
  *   get:
- *     summary: Get user profile by ID
+ *     summary: Get user profile
  *     tags: [Profile]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: User ID
  *     responses:
  *       200:
  *         description: User profile retrieved successfully
@@ -44,23 +37,16 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.get('/:id', authMiddleware, profileController.getProfileById());
+router.get('/', authMiddleware, profileController.getProfileById());
 
 /**
  * @swagger
- * /profile/{id}:
+ * /profile:
  *   put:
- *     summary: Update user profile by ID
+ *     summary: Update user profile
  *     tags: [Profile]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: User ID
  *     requestBody:
  *       required: true
  *       content:
@@ -97,6 +83,6 @@ router.get('/:id', authMiddleware, profileController.getProfileById());
  *       400:
  *         description: Bad request
  */
-router.put('/:id', authMiddleware, profileController.updateProfileById());
+router.put('/', authMiddleware, profileController.updateProfileById());
 
 export { router };
