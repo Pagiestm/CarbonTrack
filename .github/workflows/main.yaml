@@ -17,6 +17,14 @@ jobs:
         run: |
           sudo apt update && sudo apt install -y sshpass
 
+      - name: Install Node.js v16.20.2
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+          . ~/.nvm/nvm.sh
+          nvm install v16.20.2
+          nvm use v16.20.2
+          node -v  # Vérifier la version de Node.js installée
+
       - name: Deploy Frontend
         run: |
           sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} "
