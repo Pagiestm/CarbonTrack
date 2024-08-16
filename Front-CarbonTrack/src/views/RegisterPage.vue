@@ -1,5 +1,4 @@
 <template>
-    <NavBar />
     <div class="min-h-screen flex items-center justify-center bg-secondary px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl xl:w-full xl:grid xl:grid-cols-6 gap-8 p-8">
             <div class="max-w-sm w-full lg:col-span-2 flex flex-col justify-center">
@@ -62,15 +61,12 @@
             </div>
         </div>
     </div>
-    <Footer />
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { registerUser } from '../services/userService';
-import NavBar from '../components/NavBar.vue';
-import Footer from '../components/Footer.vue';
 import PasswordCriteria from '../components/Register/PasswordCriteria.vue';
 import ErrorMessage from '../components/Alert/ErrorMessage.vue';
 import SuccessMessage from '../components/Alert/SuccessMessage.vue';
