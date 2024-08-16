@@ -91,7 +91,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getToken, isAdmin as checkAdmin } from '../helpers/token.js';
 
 const isAuthenticated = ref(false);
 const isAdmin = ref(false);
@@ -102,14 +101,10 @@ const toggleMenu = () => {
 };
 
 onMounted(() => {
-    const tokenData = getToken();
-    if (tokenData) {
-        isAuthenticated.value = !!tokenData.token;
-        isAdmin.value = checkAdmin();
-    } else {
-        isAuthenticated.value = false;
-        isAdmin.value = false;
-    }
+    const authToken = localStorage.getItem('authToken');
+    const role = localStorage.getItem('role');
+    isAuthenticated.value = !!authToken;
+    isAdmin.value = role === 'ADMIN';
 });
 
 const router = useRouter();
