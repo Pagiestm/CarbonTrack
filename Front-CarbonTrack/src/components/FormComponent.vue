@@ -9,9 +9,10 @@
                 class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"></textarea>
             <FormError :message="errors[field.name]" />
         </div>
-        <button type="submit"
+        <button type="submit" :disabled="isLoading"
             class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-            Envoyer
+            <span v-if="isLoading">Chargement...</span>
+            <span v-else>Envoyer</span>
         </button>
     </form>
 </template>
@@ -36,6 +37,10 @@ const props = defineProps({
     initialData: {
         type: Object,
         default: () => ({}),
+    },
+    isLoading: {
+        type: Boolean,
+        default: false,
     },
 });
 

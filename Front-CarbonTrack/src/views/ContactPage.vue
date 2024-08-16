@@ -8,7 +8,7 @@
                     Remplissez les informations ci-dessous pour nous contacter.
                 </p>
             </header>
-            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" :initialData="initialData" />
+            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" :initialData="initialData" :isLoading="isLoading" />
             <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
                 @close="handleCloseSuccessMessage" />
             <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
@@ -41,6 +41,7 @@ const showErrorMessage = ref(false);
 const errorMessage = ref('');
 const formErrors = ref({});
 const initialData = ref({});
+const isLoading = ref(false);
 const router = useRouter();
 
 onMounted(async () => {
@@ -78,6 +79,7 @@ const validateFields = (formData) => {
 
 const handleSubmit = async (formData) => {
     if (validateFields(formData)) {
+        isLoading.value = true;
         try {
             await sendContactMessage(formData);
             successMessage.value = 'Message envoyé avec succès !';
@@ -85,6 +87,8 @@ const handleSubmit = async (formData) => {
         } catch (error) {
             errorMessage.value = 'Échec de l\'envoi du message.';
             showErrorMessage.value = true;
+        } finally {
+            isLoading.value = false;
         }
     }
 };
