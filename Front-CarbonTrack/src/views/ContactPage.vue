@@ -8,7 +8,7 @@
                     Remplissez les informations ci-dessous pour nous contacter.
                 </p>
             </header>
-            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" />
+            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" :initialData="initialData" />
             <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
                 @close="handleCloseSuccessMessage" />
             <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import FormComponent from '../components/FormComponent.vue';
 import NavBar from '../components/NavBar.vue';
@@ -27,6 +27,7 @@ import Footer from '../components/Footer.vue';
 import SuccessMessage from '../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../components/Alert/ErrorMessage.vue';
 import { sendContactMessage } from '../services/contactService';
+import { getUserProfile } from '../services/userService';
 
 const fields = ref([
     { name: 'name', label: 'Nom', type: 'text', required: true },
@@ -39,7 +40,20 @@ const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
 const formErrors = ref({});
+const initialData = ref({});
 const router = useRouter();
+
+onMounted(async () => {
+    try {
+        const userInfo = await getUserProfile();
+        initialData.value = {
+            name: userInfo.name,
+            email: userInfo.email,
+        };
+    } catch (error) {
+        console.error('Erreur lors de la récupération des informations utilisateur', error);
+    }
+});
 
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

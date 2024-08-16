@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import FormError from '../components/Alert/FormError.vue';
 
 const props = defineProps({
@@ -33,11 +33,23 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    initialData: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const formData = ref(
     props.fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {})
 );
+
+watch(() => props.initialData, (newData) => {
+    Object.keys(newData).forEach(key => {
+        if (formData.value.hasOwnProperty(key)) {
+            formData.value[key] = newData[key];
+        }
+    });
+}, { immediate: true });
 
 const handleSubmit = () => {
     props.onSubmit(formData.value);
