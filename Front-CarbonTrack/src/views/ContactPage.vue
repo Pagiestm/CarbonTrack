@@ -8,11 +8,16 @@
                     Remplissez les informations ci-dessous pour nous contacter.
                 </p>
             </header>
-            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" :initialData="initialData" :isLoading="isLoading" />
-            <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
-                @close="handleCloseSuccessMessage" />
-            <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
-                @close="handleCloseErrorMessage" />
+            <div v-if="isLoading" class="text-center text-white">
+                Chargement des données...
+            </div>
+            <div v-else>
+                <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" :initialData="initialData" :isLoading="isLoading" />
+                <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
+                    @close="handleCloseSuccessMessage" />
+                <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
+                    @close="handleCloseErrorMessage" />
+            </div>
         </div>
     </section>
     <Footer />
@@ -45,6 +50,7 @@ const isLoading = ref(false);
 const router = useRouter();
 
 onMounted(async () => {
+    isLoading.value = true;
     try {
         const userInfo = await getUserProfile();
         initialData.value = {
@@ -53,6 +59,8 @@ onMounted(async () => {
         };
     } catch (error) {
         console.error('Erreur lors de la récupération des informations utilisateur', error);
+    } finally {
+        isLoading.value = false;
     }
 });
 
