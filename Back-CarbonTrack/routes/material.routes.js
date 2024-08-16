@@ -57,7 +57,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Materials
- *   description: Material management
+ *   description: Hardware management (Only for admins)
  */
 
 /**

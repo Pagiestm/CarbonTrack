@@ -57,7 +57,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Categories
- *   description: Category management
+ *   description: Category management (Only for admins)
  */
 
 /**
