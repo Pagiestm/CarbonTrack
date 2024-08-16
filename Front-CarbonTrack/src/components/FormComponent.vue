@@ -7,6 +7,7 @@
                 class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
             <textarea v-else :name="field.name" v-model="formData[field.name]" :required="field.required"
                 class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"></textarea>
+            <FormError :message="errors[field.name]" />
         </div>
         <button type="submit"
             class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
@@ -17,6 +18,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import FormError from '../components/Alert/FormError.vue';
 
 const props = defineProps({
     fields: {
@@ -26,6 +28,10 @@ const props = defineProps({
     onSubmit: {
         type: Function,
         required: true,
+    },
+    errors: {
+        type: Object,
+        default: () => ({}),
     },
 });
 

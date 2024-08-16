@@ -1,4 +1,3 @@
-<!-- src/pages/ContactPage.vue -->
 <template>
     <NavBar />
     <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
@@ -9,7 +8,7 @@
                     Remplissez les informations ci-dessous pour nous contacter.
                 </p>
             </header>
-            <FormComponent :fields="fields" :onSubmit="handleSubmit" />
+            <FormComponent :fields="fields" :onSubmit="handleSubmit" :errors="formErrors" />
             <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
                 @close="handleCloseSuccessMessage" />
             <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
@@ -39,16 +38,40 @@ const showSuccessMessage = ref(false);
 const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
+const formErrors = ref({});
 const router = useRouter();
 
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const validateFields = (formData) => {
+    formErrors.value = {};
+    if (!formData.name) {
+        formErrors.value.name = 'Le nom est requis.';
+    }
+    if (!formData.email) {
+        formErrors.value.email = 'L\'email est requis.';
+    } else if (!validateEmail(formData.email)) {
+        formErrors.value.email = 'Le format de l\'email est invalide.';
+    }
+    if (!formData.message) {
+        formErrors.value.message = 'Le message est requis.';
+    }
+    return Object.keys(formErrors.value).length === 0;
+};
+
 const handleSubmit = async (formData) => {
-    try {
-        await sendContactMessage(formData);
-        successMessage.value = 'Message envoyé avec succès !';
-        showSuccessMessage.value = true;
-    } catch (error) {
-        errorMessage.value = 'Échec de l\'envoi du message.';
-        showErrorMessage.value = true;
+    if (validateFields(formData)) {
+        try {
+            await sendContactMessage(formData);
+            successMessage.value = 'Message envoyé avec succès !';
+            showSuccessMessage.value = true;
+        } catch (error) {
+            errorMessage.value = 'Échec de l\'envoi du message.';
+            showErrorMessage.value = true;
+        }
     }
 };
 
