@@ -41,4 +41,24 @@ export class CategoryService {
             throw new Error('Error creating category: ' + error.message);
         }
     }
+
+    async updateCategory(id, name) {
+        try {
+            const category = await prisma.category.findUnique({
+                where: { id: id }
+            });
+
+            if (!category) {
+                return null;
+            }
+
+            const updatedCategory = await prisma.category.update({
+                where: { id: id },
+                data: { name: name }
+            });
+            return updatedCategory;
+        } catch (error) {
+            throw new Error('Error updating category: ' + error.message);
+        }
+    }
 }

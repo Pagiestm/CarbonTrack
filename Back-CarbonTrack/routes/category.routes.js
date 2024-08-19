@@ -126,4 +126,40 @@ router.get('/categories-with-materials', authMiddleware, categoryController.getC
  */
 router.post('/', authMiddleware, adminMiddleware, categoryController.createCategory());
 
+/**
+ * @swagger
+ * /categories/{id}:
+ *   put:
+ *     summary: Update an existing category
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the category
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The new name of the category
+ *                 example: "Updated Category"
+ *     responses:
+ *       200:
+ *         description: The updated category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       500:
+ *         description: Server error
+ */
+router.put('/:id', authMiddleware, adminMiddleware, categoryController.updateCategory());
+
 export { router };
