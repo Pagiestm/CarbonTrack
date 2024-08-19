@@ -1,6 +1,7 @@
 import express from 'express';
 import { categoryController } from '../Controllers/category.controller.js';
 import { authMiddleware } from '../Middlewares/auth.middleware.js';
+import { adminMiddleware } from '../Middlewares/admin.middleware.js';
 
 const router = express.Router();
 
@@ -95,5 +96,34 @@ router.get('/', authMiddleware, categoryController.getAllCategories());
  *                 $ref: '#/components/schemas/CategoryWithMaterials'
  */
 router.get('/categories-with-materials', authMiddleware, categoryController.getCategoriesWithMaterials());
+
+/**
+ * @swagger
+ * /categories:
+ *   post:
+ *     summary: Create a new category
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the category
+ *                 example: "New Category"
+ *     responses:
+ *       201:
+ *         description: The created category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Category'
+ *       500:
+ *         description: Server error
+ */
+router.post('/', authMiddleware, adminMiddleware, categoryController.createCategory());
 
 export { router };

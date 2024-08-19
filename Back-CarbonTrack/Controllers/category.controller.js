@@ -26,20 +26,14 @@ class CategoryController {
         };
     }
 
-    syncCategoryWebhook() {
+    createCategory() {
         return async (req, res) => {
-            const { event, entry, model } = req.body;
-
-            console.log('Webhook received:', req.body);
+            const { name } = req.body;
 
             try {
-                if (model === 'category') {
-                    await categoryService.syncCategory(event, entry);
-                }
-
-                res.status(200).json({ message: 'Synchronized successfully' });
+                const newCategory = await categoryService.createCategory(name);
+                res.status(201).json(newCategory);
             } catch (error) {
-                console.error('Error synchronizing:', error);
                 res.status(500).json({ error: error.message });
             }
         };
