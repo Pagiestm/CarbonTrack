@@ -61,4 +61,24 @@ export class CategoryService {
             throw new Error('Error updating category: ' + error.message);
         }
     }
+
+    async deleteCategory(id) {
+        try {
+            const category = await prisma.category.findUnique({
+                where: { id: id }
+            });
+
+            if (!category) {
+                return null;
+            }
+
+            await prisma.category.delete({
+                where: { id: id }
+            });
+
+            return category;
+        } catch (error) {
+            throw new Error('Error deleting category: ' + error.message);
+        }
+    }
 }

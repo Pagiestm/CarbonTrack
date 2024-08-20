@@ -162,4 +162,27 @@ router.post('/', authMiddleware, adminMiddleware, categoryController.createCateg
  */
 router.put('/:id', authMiddleware, adminMiddleware, categoryController.updateCategory());
 
+/**
+ * @swagger
+ * /categories/{id}:
+ *   delete:
+ *     summary: Delete an existing category
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the category
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Server error
+ */
+router.delete('/:id', authMiddleware, adminMiddleware, categoryController.deleteCategory());
+
 export { router };
