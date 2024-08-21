@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getCategories, createCategory, updateCategory, deleteCategory as apiDeleteCategory } from '../../services/categoriesService.js';
+import { getCategories, updateCategory, deleteCategory as apiDeleteCategory } from '../../services/categoriesService.js';
 import CategoriesTable from '../../components/Admin/Categories/CategoriesTable.vue';
 import SearchBar from '../../components/SearchBar.vue';
 import Pagination from '../../components/Pagination.vue';

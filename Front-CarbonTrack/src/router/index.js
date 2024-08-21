@@ -16,6 +16,7 @@ import CreateProjectPage from '../views/Project/CreateProjectPage.vue';
 import EditProjectPage from '../views/Project/EditProjectPage.vue'; 
 import CategoriesPage from '../views/Admin/CategoriesPage.vue';
 import CreateCategoryPage from '../views/Admin/CreateCategoryPage.vue';
+import EditCategoryPage from '../views/Admin/EditCategoryPage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -55,6 +56,11 @@ const routes = [
                 name: 'CreateCategoryPage',
                 component: CreateCategoryPage
             },
+            {
+                path: '/categories/edit/:id',
+                name: 'EditCategoryPage',
+                component: EditCategoryPage
+            }
         ],
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },

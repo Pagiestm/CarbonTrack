@@ -12,6 +12,16 @@ export class CategoryService {
         }
     }
 
+    async getCategoryById(id) {
+        try {
+            return await prisma.category.findUnique({
+                where: { id: id }
+            });
+        } catch (error) {
+            throw new Error('Error fetching category by ID: ' + error.message);
+        }
+    }
+
     async getCategoriesWithMaterials() {
         try {
             return await prisma.category.findMany({
@@ -39,23 +49,15 @@ export class CategoryService {
         }
     }
 
-    async updateCategory(id, name) {
+    async updateCategory(id, data) {
         try {
-            const category = await prisma.category.findUnique({
-                where: { id: id }
+            const category = await prisma.category.update({
+                where: { id: parseInt(id, 10) },
+                data,
             });
-
-            if (!category) {
-                return null;
-            }
-
-            const updatedCategory = await prisma.category.update({
-                where: { id: id },
-                data: { name: name }
-            });
-            return updatedCategory;
+            return category;
         } catch (error) {
-            throw new Error('Error updating category: ' + error.message);
+            throw new Error(error.message);
         }
     }
 

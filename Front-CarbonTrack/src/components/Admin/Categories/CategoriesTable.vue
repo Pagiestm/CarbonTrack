@@ -6,9 +6,11 @@
                 <div class="flex flex-col">
                     <h2 class="text-lg font-bold">{{ category.name }}</h2>
                     <div class="flex justify-center space-x-2 mt-4">
-                        <button @click="editCategory(category)" class="text-blue-500">
-                            <i class="fas fa-edit fa-lg"></i>
-                        </button>
+                        <router-link :to="{ name: 'EditCategoryPage', params: { id: category.id } }">
+                            <button class="text-blue-500">
+                                <i class="fas fa-edit fa-lg"></i>
+                            </button>
+                        </router-link>
                         <button @click="openModal(category)" class="text-red-500">
                             <i class="fas fa-trash-alt fa-lg"></i>
                         </button>
@@ -31,9 +33,11 @@
                         <td class="border px-4 py-2 text-center">{{ category.name }}</td>
                         <td class="border px-4 py-2 text-center">
                             <div class="flex justify-center space-x-2">
-                                <button @click="editCategory(category)" class="text-blue-500 px-2 py-2">
-                                    <i class="fas fa-edit fa-lg"></i>
-                                </button>
+                                <router-link :to="{ name: 'EditCategoryPage', params: { id: category.id } }">
+                                    <button class="text-blue-500 px-2 py-2">
+                                        <i class="fas fa-edit fa-lg"></i>
+                                    </button>
+                                </router-link>
                                 <button @click="openModal(category)" class="text-red-500 px-2 py-2 ml-2">
                                     <i class="fas fa-trash-alt fa-lg"></i>
                                 </button>
