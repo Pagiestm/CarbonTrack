@@ -14,6 +14,7 @@ import ProjectPage from '../views/Project/ProjectPage.vue';
 import ProjectDetailsPage from '../views/Project/ProjectDetailsPage.vue';
 import CreateProjectPage from '../views/Project/CreateProjectPage.vue';
 import EditProjectPage from '../views/Project/EditProjectPage.vue'; 
+import CategoriesPage from '../views/Admin/CategoriesPage.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -42,6 +43,11 @@ const routes = [
                 path: '/materials/edit/:id',
                 name: 'EditMaterialPage',
                 component: EditMaterialPage
+            },
+            {
+                path: 'categories',
+                name: 'Categories',
+                component: CategoriesPage,
             },
         ],
     },

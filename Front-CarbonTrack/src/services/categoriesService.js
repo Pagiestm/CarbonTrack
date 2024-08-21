@@ -35,3 +35,51 @@ export const getCategoriesWithMaterials = async () => {
         throw new Error(error.response?.data?.error || 'Failed to fetch categories with materials');
     }
 };
+
+export const createCategory = async (name) => {
+    const tokenData = getToken();
+    if (!tokenData) throw new Error('Token not found');
+
+    const { token } = tokenData;
+
+    try {
+        const response = await axios.post(`${API_BASE_URL}/categories`, { name }, {
+            headers: getHeaders(token)
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to create category');
+    }
+};
+
+export const updateCategory = async (id, name) => {
+    const tokenData = getToken();
+    if (!tokenData) throw new Error('Token not found');
+
+    const { token } = tokenData;
+
+    try {
+        const response = await axios.put(`${API_BASE_URL}/categories/${id}`, { name }, {
+            headers: getHeaders(token)
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to update category');
+    }
+};
+
+export const deleteCategory = async (id) => {
+    const tokenData = getToken();
+    if (!tokenData) throw new Error('Token not found');
+
+    const { token } = tokenData;
+
+    try {
+        const response = await axios.delete(`${API_BASE_URL}/categories/${id}`, {
+            headers: getHeaders(token)
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to delete category');
+    }
+};
