@@ -28,10 +28,8 @@ class CategoryController {
 
     createCategory() {
         return async (req, res) => {
-            const { name } = req.body;
-
             try {
-                const newCategory = await categoryService.createCategory(name);
+                const newCategory = await categoryService.createCategory(req.body);
                 res.status(201).json(newCategory);
             } catch (error) {
                 res.status(500).json({ error: error.message });

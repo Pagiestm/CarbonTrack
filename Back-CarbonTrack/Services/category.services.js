@@ -29,14 +29,11 @@ export class CategoryService {
         }
     }
 
-    async createCategory(name) {
+    async createCategory(data) {
         try {
-            const newCategory = await prisma.category.create({
-                data: {
-                    name: name
-                }
+            return await prisma.category.create({
+                data
             });
-            return newCategory;
         } catch (error) {
             throw new Error('Error creating category: ' + error.message);
         }

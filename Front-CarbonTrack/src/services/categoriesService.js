@@ -36,14 +36,14 @@ export const getCategoriesWithMaterials = async () => {
     }
 };
 
-export const createCategory = async (name) => {
+export const createCategory = async (data) => {
     const tokenData = getToken();
     if (!tokenData) throw new Error('Token not found');
 
     const { token } = tokenData;
 
     try {
-        const response = await axios.post(`${API_BASE_URL}/categories`, { name }, {
+        const response = await axios.post(`${API_BASE_URL}/categories`, data, {
             headers: getHeaders(token)
         });
         return response.data;
