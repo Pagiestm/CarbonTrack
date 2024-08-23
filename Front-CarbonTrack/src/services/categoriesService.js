@@ -20,22 +20,6 @@ export const getCategories = async () => {
     }
 };
 
-export const getCategoryById = async (id) => {
-    const tokenData = getToken();
-    if (!tokenData) throw new Error('Token not found');
-
-    const { token } = tokenData;
-
-    try {
-        const response = await axios.get(`${API_BASE_URL}/categories/${id}`, {
-            headers: getHeaders(token)
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.error || 'Failed to fetch category by ID');
-    }
-};
-
 export const getCategoriesWithMaterials = async () => {
     const tokenData = getToken();
     if (!tokenData) throw new Error('Token not found');

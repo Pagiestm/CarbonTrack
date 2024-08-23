@@ -81,31 +81,6 @@ router.get('/', authMiddleware, categoryController.getAllCategories());
 
 /**
  * @swagger
- * /categories/{id}:
- *   get:
- *     summary: Retrieve a category by ID
- *     tags: [Categories]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The category ID
- *     responses:
- *       200:
- *         description: A single category
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Category'
- *       404:
- *         description: Category not found
- */
-router.get('/:id', authMiddleware, categoryController.getCategoryById());
-
-/**
- * @swagger
  * /categories/categories-with-materials:
  *   get:
  *     summary: Retrieve a list of categories with their associated materials

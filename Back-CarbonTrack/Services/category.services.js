@@ -12,16 +12,6 @@ export class CategoryService {
         }
     }
 
-    async getCategoryById(id) {
-        try {
-            return await prisma.category.findUnique({
-                where: { id: id }
-            });
-        } catch (error) {
-            throw new Error('Error fetching category by ID: ' + error.message);
-        }
-    }
-
     async getCategoriesWithMaterials() {
         try {
             return await prisma.category.findMany({

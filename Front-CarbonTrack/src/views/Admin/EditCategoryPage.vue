@@ -25,7 +25,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { updateCategory, getCategoryById } from '../../services/categoriesService.js';
+import { updateCategory, getCategoriesWithMaterials } from '../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
@@ -48,8 +48,13 @@ const loading = ref(true);
 
 onMounted(async () => {
     try {
-        const category = await getCategoryById(categoryId);
-        localCategory.value = { ...category };
+        const categories = await getCategoriesWithMaterials();
+        const category = categories.find(cat => cat.id === parseInt(categoryId, 10));
+        if (category) {
+            localCategory.value = { ...category };
+        } else {
+            throw new Error('Category not found');
+        }
     } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
     } finally {
@@ -65,13 +70,14 @@ const validateForm = () => {
 
 const handleSubmit = async () => {
     if (!validateForm()) return;
+
     try {
-        await updateCategory(categoryId, localCategory.value);
-        successMessage.value = 'La catégorie a été mise à jour avec succès!';
+        await updateCategory(categoryId, { name: localCategory.value.name });
         showSuccessMessage.value = true;
+        successMessage.value = 'Catégorie mise à jour avec succès';
     } catch (error) {
-        errorMessage.value = 'Erreur lors de la mise à jour de la catégorie. Veuillez réessayer.';
         showErrorMessage.value = true;
+        errorMessage.value = 'Erreur lors de la mise à jour de la catégorie';
     }
 };
 
