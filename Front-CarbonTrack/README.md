@@ -1,34 +1,42 @@
-# CarbonTrack
+# Documentation Frontend de CarbonTrack
 
-This template should help get you started developing with Vue 3 in Vite.
+Cette documentation va vous permettre de démarrer le projet avec Vue 3 dans Vite.
 
-## Recommended IDE Setup
+## Configuration IDE Recommandée
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (et désactiver Vetur).
 
-## Customize configuration
+## Personnaliser la configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Voir la [Référence de Configuration Vite](https://vitejs.dev/config/).
 
-## Project Setup
+## Configuration du Projet
+
+Pour installer les dépendances du projet, exécutez la commande suivante :
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compiler et Recharger à Chaud pour le Développement
+
+Pour démarrer le serveur de développement avec rechargement à chaud, utilisez la commande suivante :
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Compiler et Minifier pour la Production
+
+Pour compiler le projet et le minifier pour la production, utilisez la commande suivante :
 
 ```sh
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Linter avec [ESLint](https://eslint.org/)
+
+Pour analyser le code et trouver des problèmes potentiels avec ESLint, utilisez la commande suivante :
 
 ```sh
 npm run lint

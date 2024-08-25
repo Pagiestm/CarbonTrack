@@ -30,7 +30,7 @@ const routes = [
     { path: '/projects/create', name: 'CreateProjectPage', component: CreateProjectPage, meta: { requiresAuth: true } },
     { path: '/projects/edit/:id', name: 'EditProjectPage', component: EditProjectPage, meta: { requiresAuth: true } },
     {
-        path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAdmin: true }, children: [
+        path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAuth: true, requiresAdmin: true }, children: [
             {
                 path: 'materials',
                 name: 'Materials',
