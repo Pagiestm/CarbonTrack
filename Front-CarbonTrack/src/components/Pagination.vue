@@ -49,7 +49,10 @@ watch(
     () => props.totalItems,
     (newTotalItems) => {
         totalPages.value = Math.ceil(newTotalItems / props.itemsPerPage);
-    }
+        currentPage.value = 1;
+        emit('pageChange', currentPage.value);
+    },
+    { immediate: true }
 );
 </script>
 
