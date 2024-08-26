@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { updateCategory, getCategoriesWithMaterials } from '../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
@@ -89,4 +89,11 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watcher to clear errors when the category name is corrected
+watch(() => localCategory.value.name, (newValue) => {
+    if (newValue) {
+        errors.value.name = '';
+    }
+});
 </script>

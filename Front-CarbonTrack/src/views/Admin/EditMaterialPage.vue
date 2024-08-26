@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { updateMaterial, getMaterialById } from '../../services/materialsService.js';
 import { getCategories } from '../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
@@ -97,7 +97,7 @@ onMounted(async () => {
         localMaterial.value = { ...material };
     } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
-    }finally {
+    } finally {
         loading.value = false;
     }
 });
@@ -141,4 +141,41 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watchers to clear errors when fields are corrected
+watch(() => localMaterial.value.name, (newValue) => {
+    if (newValue) {
+        errors.value.name = '';
+    }
+});
+
+watch(() => localMaterial.value.supplier, (newValue) => {
+    if (newValue) {
+        errors.value.supplier = '';
+    }
+});
+
+watch(() => localMaterial.value.carbonFootprint, (newValue) => {
+    if (newValue !== '' && newValue >= 0) {
+        errors.value.carbonFootprint = '';
+    }
+});
+
+watch(() => localMaterial.value.unit, (newValue) => {
+    if (newValue) {
+        errors.value.unit = '';
+    }
+});
+
+watch(() => localMaterial.value.pricePerUnit, (newValue) => {
+    if (newValue !== '' && newValue >= 0) {
+        errors.value.pricePerUnit = '';
+    }
+});
+
+watch(() => localMaterial.value.categoryId, (newValue) => {
+    if (newValue) {
+        errors.value.categoryId = '';
+    }
+});
 </script>

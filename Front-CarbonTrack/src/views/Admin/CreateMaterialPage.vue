@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { createMaterial } from '../../services/materialsService.js';
 import { getCategories } from '../../services/categoriesService.js';
@@ -130,4 +130,42 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watchers to clear errors when fields are corrected
+watch(() => newMaterial.value.name, () => {
+    if (newMaterial.value.name) {
+        errors.value.name = '';
+    }
+});
+
+watch(() => newMaterial.value.supplier, () => {
+    if (newMaterial.value.supplier) {
+        errors.value.supplier = '';
+    }
+});
+
+watch(() => newMaterial.value.carbonFootprint, (newValue) => {
+    if (newValue !== '' && newValue >= 0) {
+        errors.value.carbonFootprint = '';
+    }
+});
+
+watch(() => newMaterial.value.unit, () => {
+    if (newMaterial.value.unit) {
+        errors.value.unit = '';
+    }
+});
+
+watch(() => newMaterial.value.pricePerUnit, (newValue) => {
+    if (newValue !== '' && newValue >= 0) {
+        errors.value.pricePerUnit = '';
+    }
+});
+
+watch(() => newMaterial.value.categoryId, () => {
+    if (newMaterial.value.categoryId) {
+        errors.value.categoryId = '';
+    }
+});
+
 </script>

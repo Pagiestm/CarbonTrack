@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { createCategory } from '../../services/categoriesService.js';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
@@ -69,4 +69,11 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watcher to clear errors when the category name is corrected
+watch(() => newCategory.value.name, (newValue) => {
+    if (newValue) {
+        errors.value.name = '';
+    }
+});
 </script>
