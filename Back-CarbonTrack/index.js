@@ -2,6 +2,7 @@ import express from "express";
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.js';
 import { router as authRouter } from './routes/auth.routes.js';
+import { router as passwordResetRouter } from './routes/passwordReset.routes.js';
 import { router as profileRouter } from './routes/profile.routes.js';
 import { router as materialRoutes } from './routes/material.routes.js';
 import { router as categoryRoutes } from './routes/category.routes.js';
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/auth', authRouter);
+app.use('/password-reset', passwordResetRouter);
 app.use('/profile', profileRouter);
 app.use('/materials', materialRoutes);
 app.use('/categories', categoryRoutes);

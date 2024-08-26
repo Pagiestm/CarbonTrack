@@ -63,3 +63,8 @@ model ProjectMaterial {
   @@unique([projectId, materialId])
 }
 
+model InvalidToken {
+  id    Int    @id @default(autoincrement())
+  token String @unique
+  createdAt DateTime @default(now())
+}
