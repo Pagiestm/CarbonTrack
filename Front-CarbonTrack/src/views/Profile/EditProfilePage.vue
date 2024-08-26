@@ -13,15 +13,13 @@
                 <div class="mb-6">
                     <label for="name" class="block text-white mb-2">Nom</label>
                     <input v-model="user.name" type="text" id="name"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                        required />
+                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
                     <FormError :message="errors.name" />
                 </div>
                 <div class="mb-6">
                     <label for="email" class="block text-white mb-2">Email</label>
                     <input v-model="user.email" type="email" id="email"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                        required />
+                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
                     <FormError :message="errors.email" />
                 </div>
                 <div class="flex justify-center">
@@ -42,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { getUserProfile, updateUserProfile } from '../../services/userService';
 import NavBar from '../../components/NavBar.vue';
@@ -118,4 +116,18 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watchers to clear errors when fields are corrected
+watch(() => user.value.name, () => {
+    if (user.value.name) {
+        errors.value.name = '';
+    }
+});
+
+watch(() => user.value.email, () => {
+    if (validateEmail(user.value.email)) {
+        errors.value.email = '';
+    }
+});
+
 </script>

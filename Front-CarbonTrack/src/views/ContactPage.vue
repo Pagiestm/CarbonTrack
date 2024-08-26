@@ -16,22 +16,19 @@
                     <div class="mb-6">
                         <label for="name" class="block text-white mb-2">Nom</label>
                         <input v-model="formData.name" type="text" id="name"
-                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                            required />
+                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
                         <FormError :message="errors.name" />
                     </div>
                     <div class="mb-6">
                         <label for="email" class="block text-white mb-2">Email</label>
                         <input v-model="formData.email" type="email" id="email"
-                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                            required />
+                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
                         <FormError :message="errors.email" />
                     </div>
                     <div class="mb-6">
                         <label for="message" class="block text-white mb-2">Message</label>
                         <textarea v-model="formData.message" id="message"
-                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                            required></textarea>
+                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"></textarea>
                         <FormError :message="errors.message" />
                     </div>
                     <button type="submit" :disabled="isLoading"
@@ -133,4 +130,23 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+// Watchers to clear errors when fields are corrected
+watch(() => formData.value.name, () => {
+    if (formData.value.name) {
+        errors.value.name = '';
+    }
+});
+
+watch(() => formData.value.email, () => {
+    if (validateEmail(formData.value.email)) {
+        errors.value.email = '';
+    }
+});
+
+watch(() => formData.value.message, () => {
+    if (formData.value.message) {
+        errors.value.message = '';
+    }
+});
 </script>
