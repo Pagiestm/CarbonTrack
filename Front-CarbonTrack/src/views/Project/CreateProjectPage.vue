@@ -12,8 +12,7 @@
                 <div class="mb-6">
                     <label for="name" class="block text-white mb-2">Nom du Projet</label>
                     <input v-model="projectData.name" type="text" id="name"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"
-                        required />
+                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
                     <FormError :message="errors.name" />
                 </div>
                 <div class="mb-6">
@@ -122,8 +121,12 @@ onMounted(async () => {
     }
 });
 
+// Validation des champs
 const validateFields = () => {
     errors.value = {};
+    if (!projectData.value.name) {
+        errors.value.name = 'Le nom du projet est requis.';
+    }
     if (!projectData.value.description) {
         errors.value.description = 'La description est requise.';
     }
@@ -133,6 +136,7 @@ const validateFields = () => {
     return Object.keys(errors.value).length === 0;
 };
 
+// Ajouter un matériau
 const addMaterial = (categoryId) => {
     const materialId = selectedMaterialId.value[categoryId];
     const quantity = materialQuantities.value[categoryId];
@@ -146,6 +150,10 @@ const addMaterial = (categoryId) => {
             });
             selectedMaterialId.value[categoryId] = '';
             materialQuantities.value[categoryId] = 0;
+
+            // Effacer les erreurs si un matériau est ajouté correctement
+            errors.value.material = '';
+            errors.value.quantity = '';
         } else {
             errors.value.material = 'Ce matériau a déjà été ajouté.';
         }
@@ -159,10 +167,12 @@ const addMaterial = (categoryId) => {
     }
 };
 
+// Retirer un matériau
 const removeMaterial = (index) => {
     projectData.value.materials.splice(index, 1);
 };
 
+// Obtenir le nom du matériau
 const getMaterialName = (materialId) => {
     for (const category of categories.value) {
         const material = category.Materials.find(m => m.id === materialId);
@@ -171,27 +181,42 @@ const getMaterialName = (materialId) => {
     return 'Inconnu';
 };
 
-// Watchers to clear errors when fields are corrected
-watch(projectData, (newValue, oldValue) => {
-    if (newValue.name !== oldValue.name) {
+// Watchers pour effacer les erreurs lors de la correction des champs
+watch(() => projectData.value.name, (newValue) => {
+    if (newValue) {
         errors.value.name = '';
     }
-    if (newValue.description !== oldValue.description) {
+});
+
+watch(() => projectData.value.description, (newValue) => {
+    if (newValue) {
         errors.value.description = '';
     }
-    if (newValue.materials !== oldValue.materials) {
+});
+
+watch(() => selectedMaterialId.value, (newValue) => {
+    if (Object.values(newValue).some(id => id)) {
+        errors.value.material = '';
+    }
+});
+
+watch(materialQuantities, (newQuantities, oldQuantities) => {
+    // Parcourt chaque catégorie pour vérifier si une quantité a été corrigée
+    for (const categoryId in newQuantities) {
+        if (newQuantities[categoryId] > 0) {
+            errors.value.quantity = ''; // Efface l'erreur si une quantité valide est saisie
+            break;
+        }
+    }
+});
+
+watch(() => projectData.value.materials.length, () => {
+    if (projectData.value.materials.length > 0) {
         errors.value.materials = '';
     }
 });
 
-watch(selectedMaterialId, () => {
-    errors.value.material = '';
-});
-
-watch(materialQuantities, () => {
-    errors.value.quantity = '';
-});
-
+// Soumission du formulaire
 const handleSubmit = async () => {
     if (validateFields()) {
         try {
