@@ -18,9 +18,6 @@ const templatePath = path.resolve(__dirname, '../../Front-CarbonTrack/src/compon
 const source = fs.readFileSync(templatePath, 'utf-8');
 const template = handlebars.compile(source);
 
-// URL du frontend codée en dur
-const FRONTEND_URL = "http://localhost:3000";
-
 export class PasswordResetService {
   async requestPasswordReset(email) {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -30,8 +27,13 @@ export class PasswordResetService {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+    // Détermine l'URL de réinitialisation en fonction de l'environnement
+    const frontendUrl = process.env.NODE_ENV === 'development'
+      ? process.env.DEV_FRONTEND_URL
+      : process.env.PROD_FRONTEND_URL;
+
     // Prépare le contenu de l'email en utilisant le template HTML
-    const resetLink = `${FRONTEND_URL}/reset-password?token=${token}`;
+    const resetLink = `${frontendUrl}/reset-password?token=${token}`;
     const htmlContent = template({ name: user.name, resetLink });
 
     // Envoi de l'email de réinitialisation
@@ -41,10 +43,6 @@ export class PasswordResetService {
   }
 
   async resetPassword(token, newPassword, confirmPassword) {
-    // Ajoutez des logs pour vérifier les valeurs des mots de passe
-    console.log('newPassword:', newPassword);
-    console.log('confirmPassword:', confirmPassword);
-
     if (newPassword !== confirmPassword) {
       throw new Error('Passwords do not match');
     }
@@ -55,20 +53,21 @@ export class PasswordResetService {
       throw new Error('Token has already been used');
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (error) {
-      throw new Error('Invalid or expired token');
+    // Vérifiez et décodez le token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+    if (!user) {
+      throw new Error('User not found');
     }
 
+    // Hachez le nouveau mot de passe et mettez à jour l'utilisateur
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await prisma.user.update({
-      where: { id: decoded.userId },
+      where: { id: user.id },
       data: { password: hashedPassword },
     });
 
-    // Ajoutez le token à la liste des tokens invalidés
+    // Marquez le token comme utilisé
     await prisma.invalidToken.create({ data: { token } });
 
     return { message: 'Password has been reset' };

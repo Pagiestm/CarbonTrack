@@ -28,7 +28,7 @@
                 </form>
                 <div class="mt-6 text-center">
                     <p class="text-customGray">Vous n'avez pas de compte ? <a href="/register" class="text-light hover:underline">Inscrivez-vous</a></p>
-                    <p class="text-light mt-2"><a href="/forgot-password" class="text-light hover:underline">Mot de passe oublié ?</a></p>
+                    <p class="text-light mt-2"><a href="/password-reset/request" class="text-light hover:underline">Mot de passe oublié ?</a></p>
                 </div>
             </div>
             <div class="hidden xl:flex xl:items-center xl:justify-center xl:col-span-1">

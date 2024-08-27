@@ -17,6 +17,8 @@ import EditProjectPage from '../views/Project/EditProjectPage.vue';
 import CategoriesPage from '../views/Admin/CategoriesPage.vue';
 import CreateCategoryPage from '../views/Admin/CreateCategoryPage.vue';
 import EditCategoryPage from '../views/Admin/EditCategoryPage.vue';
+import RequestPasswordReset from '../views/PasswordReset/RequestPasswordReset.vue';
+import ResetPassword from '../views/PasswordReset/ResetPassword.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -29,6 +31,13 @@ const routes = [
     { path: '/projects/:id', name: 'ProjectDetailsPage', component: ProjectDetailsPage, props: true },
     { path: '/projects/create', name: 'CreateProjectPage', component: CreateProjectPage, meta: { requiresAuth: true } },
     { path: '/projects/edit/:id', name: 'EditProjectPage', component: EditProjectPage, meta: { requiresAuth: true } },
+    { path: '/password-reset/request', name: 'RequestPasswordReset', component: RequestPasswordReset },
+    {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: ResetPassword,
+        props: route => ({ token: route.query.token })
+    },
     {
         path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAuth: true, requiresAdmin: true }, children: [
             {
