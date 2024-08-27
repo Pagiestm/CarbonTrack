@@ -1,7 +1,10 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
 import { passwordResetController } from '../Controllers/passwordReset.controller.js';
 
 const router = express.Router();
+const prisma = new PrismaClient();
 
 /**
  * @swagger
@@ -72,5 +75,21 @@ router.post('/request-password-reset', passwordResetController.requestPasswordRe
  *         description: Bad Request
  */
 router.post('/reset-password', passwordResetController.resetPassword());
+
+// Endpoint pour vérifier la validité du token
+router.post('/check-token', async (req, res) => {
+    const { token } = req.body;
+    try {
+        const invalidToken = await prisma.invalidToken.findUnique({ where: { token } });
+        if (invalidToken) {
+            return res.status(400).json({ error: 'Token has already been used' });
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET);
+        res.status(200).json({ message: 'Token is valid' });
+    } catch (error) {
+        res.status(400).json({ error: 'Invalid or expired token' });
+    }
+});
 
 export { router };

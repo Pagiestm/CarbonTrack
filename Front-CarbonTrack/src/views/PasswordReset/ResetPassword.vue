@@ -42,16 +42,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import NavBar from '../../components/NavBar.vue';
 import Footer from '../../components/Footer.vue';
 import FormError from '../../components/Alert/FormError.vue';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
-import { resetPassword } from '../../services/passwordResetService';
+import { resetPassword, checkToken } from '../../services/passwordResetService';
 
 const route = useRoute();
+const router = useRouter();
 const token = route.query.token;
 
 const newPassword = ref('');
@@ -86,4 +87,16 @@ const handleCloseSuccessMessage = () => {
 const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
+
+const checkTokenValidity = async () => {
+    try {
+        await checkToken(token);
+    } catch (error) {
+        router.push('/404');
+    }
+};
+
+onMounted(() => {
+    checkTokenValidity();
+});
 </script>

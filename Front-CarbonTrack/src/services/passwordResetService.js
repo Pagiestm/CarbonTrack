@@ -23,3 +23,12 @@ export const resetPassword = async (token, newPassword, confirmPassword) => {
         throw new Error(error.response?.data?.error || 'Failed to reset password');
     }
 };
+
+export const checkToken = async (token) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/password-reset/check-token`, { token });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Invalid or expired token');
+    }
+};
