@@ -108,7 +108,7 @@ const validatePassword = () => {
     formState.value.passwordCriteria.uppercase = /[A-Z]/.test(value);
     formState.value.passwordCriteria.lowercase = /[a-z]/.test(value);
     formState.value.passwordCriteria.number = /\d/.test(value);
-    formState.value.passwordCriteria.symbol = /[@$!%*?&]/.test(value);
+    formState.value.passwordCriteria.symbol = /[!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=]/.test(value);
 };
 
 const register = async () => {
