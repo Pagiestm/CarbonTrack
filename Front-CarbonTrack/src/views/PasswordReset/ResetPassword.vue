@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import NavBar from '../../components/NavBar.vue';
 import Footer from '../../components/Footer.vue';
@@ -64,18 +64,36 @@ const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
 
-const handleSubmit = async () => {
-    isLoading.value = true;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=])[A-Za-z\d!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=]{8,}$/;
+
+const validateFields = () => {
     errors.value = {};
-    try {
-        await resetPassword(token, newPassword.value, confirmPassword.value);
-        showSuccessMessage.value = true;
-        successMessage.value = 'Mot de passe réinitialisé avec succès.';
-    } catch (error) {
-        showErrorMessage.value = true;
-        errorMessage.value = error.message;
-    } finally {
-        isLoading.value = false;
+    if (!newPassword.value) {
+        errors.value.newPassword = 'Le nouveau mot de passe est requis.';
+    } else if (!passwordRegex.test(newPassword.value)) {
+        errors.value.newPassword = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.';
+    }
+    if (!confirmPassword.value) {
+        errors.value.confirmPassword = 'La confirmation du mot de passe est requise.';
+    } else if (newPassword.value !== confirmPassword.value) {
+        errors.value.confirmPassword = 'Les mots de passe ne correspondent pas.';
+    }
+    return Object.keys(errors.value).length === 0;
+};
+
+const handleSubmit = async () => {
+    if (validateFields()) {
+        isLoading.value = true;
+        try {
+            await resetPassword(token, newPassword.value, confirmPassword.value);
+            showSuccessMessage.value = true;
+            successMessage.value = 'Mot de passe réinitialisé avec succès.';
+        } catch (error) {
+            showErrorMessage.value = true;
+            errorMessage.value = error.message;
+        } finally {
+            isLoading.value = false;
+        }
     }
 };
 
@@ -98,5 +116,18 @@ const checkTokenValidity = async () => {
 
 onMounted(() => {
     checkTokenValidity();
+});
+
+// Watchers to clear errors when fields are corrected
+watch(() => newPassword.value, () => {
+    if (passwordRegex.test(newPassword.value)) {
+        errors.value.newPassword = '';
+    }
+});
+
+watch(() => confirmPassword.value, () => {
+    if (newPassword.value === confirmPassword.value) {
+        errors.value.confirmPassword = '';
+    }
 });
 </script>
