@@ -38,6 +38,18 @@ export const getUserProfile = async () => {
   return response.data.user;
 };
 
+export const getAllUsers = async () => {
+  const tokenData = getToken();
+  if (!tokenData) throw new Error('Token not found');
+
+  const { token } = tokenData;
+
+  const response = await axios.get(`${API_BASE_URL}/profile/admin/users`, {
+    headers: getHeaders(token)
+  });
+  return response.data.users;
+};
+
 export const updateUserProfile = async (userData) => {
   const tokenData = getToken();
   if (!tokenData) throw new Error('Token not found');

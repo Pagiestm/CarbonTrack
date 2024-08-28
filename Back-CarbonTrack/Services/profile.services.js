@@ -26,6 +26,15 @@ export class ProfileService {
         }
     }
 
+    async getAllUsers() {
+        try {
+            const users = await prisma.user.findMany();
+            return users;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     async updateProfile(userId, profileData) {
         try {
             const { name, email } = profileData;

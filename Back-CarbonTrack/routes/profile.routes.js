@@ -1,7 +1,7 @@
 import express from 'express';
 import { profileController } from '../Controllers/profile.controller.js';
 import { authMiddleware } from '../Middlewares/auth.middleware.js';
-
+import { adminMiddleware } from '../Middlewares/admin.middleware.js';
 const router = express.Router();
 
 /**
@@ -38,6 +38,26 @@ const router = express.Router();
  *         description: Bad request
  */
 router.get('/', authMiddleware, profileController.getProfileById());
+
+/**
+ * @swagger
+ * /profile/admin/users:
+ *   get:
+ *     summary: Retrieve a list of all users for admins
+ *     tags: [Profile]
+ *     responses:
+ *       200:
+ *         description: A list of all users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Access denied
+ */
+router.get('/admin/users', authMiddleware, adminMiddleware, profileController.getAllUsers());
 
 /**
  * @swagger
