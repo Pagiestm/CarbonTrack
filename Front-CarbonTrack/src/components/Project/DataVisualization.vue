@@ -8,9 +8,9 @@
                 <li>Chaque barre représente un matériau différent.</li>
                 <li>La hauteur de la barre indique l'empreinte carbone totale.</li>
                 <li>Les couleurs varient en fonction de la quantité : <br>
-                    <br><span class="font-semibold">BLEU : </span> pour les matériaux à faible empreinte carbone (≤ 1 kg CO₂e/kg), 
-                    <br><span class="font-semibold">ORANGE : </span> pour les matériaux à empreinte carbone modérée (1 - 5 kg CO₂e/kg), 
-                    <br><span class="font-semibold">ROUGE : </span> pour les matériaux à forte empreinte carbone (> 5 kg CO₂e/kg).
+                    <br><span class="font-semibold">BLEU : </span> pour les matériaux à faible empreinte carbone (≤ 2 kg CO₂e/kg), 
+                    <br><span class="font-semibold">ORANGE : </span> pour les matériaux à empreinte carbone modérée (2 - 10 kg CO₂e/kg), 
+                    <br><span class="font-semibold">ROUGE : </span> pour les matériaux à forte empreinte carbone (> 10 kg CO₂e/kg).
                 </li>
             </ul>
         </div>
@@ -28,13 +28,13 @@ const props = defineProps({
 onMounted(() => {
     const ctx = document.getElementById('chart').getContext('2d');
     const backgroundColor = props.data.map(material =>
-        material.value <= 1 ? 'rgba(75, 192, 192, 0.2)' : 
-            material.value <= 5 ? 'rgba(255, 159, 64, 0.2)' : 
+        material.value <= 2 ? 'rgba(75, 192, 192, 0.2)' : 
+            material.value <= 10 ? 'rgba(255, 159, 64, 0.2)' : 
                 'rgba(255, 99, 132, 0.2)'  
     );
     const borderColor = props.data.map(material =>
-        material.value <= 1 ? 'rgba(75, 192, 192, 1)' :
-            material.value <= 5 ? 'rgba(255, 159, 64, 1)' :
+        material.value <= 2 ? 'rgba(75, 192, 192, 1)' :
+            material.value <= 10 ? 'rgba(255, 159, 64, 1)' :
                 'rgba(255, 99, 132, 1)'
     );
 
