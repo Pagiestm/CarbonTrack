@@ -36,6 +36,22 @@ export const getProjectById = async (id) => {
     }
 };
 
+export const getAllProjectsForAdmin = async () => {
+    const tokenData = getToken();
+    if (!tokenData) throw new Error('Token not found');
+
+    const { token } = tokenData;
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/projects/admin/projects`, {
+            headers: getHeaders(token)
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to fetch projects for admin');
+    }
+};
+
 export const createProject = async (projectData) => {
     const tokenData = getToken();
     if (!tokenData) throw new Error('Token not found');

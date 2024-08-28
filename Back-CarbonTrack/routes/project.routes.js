@@ -1,6 +1,7 @@
 import express from 'express';
 import ProjectController from '../Controllers/project.controller.js';
 import { authMiddleware } from '../Middlewares/auth.middleware.js';
+import { adminMiddleware } from '../Middlewares/admin.middleware.js';
 
 const router = express.Router();
 
@@ -92,6 +93,26 @@ router.get('/', authMiddleware, ProjectController.getAllProjects());
  *               $ref: '#/components/schemas/Project'
  */
 router.get('/:id', authMiddleware, ProjectController.getProjectById());
+
+/**
+ * @swagger
+ * /projects/admin/projects:
+ *   get:
+ *     summary: Retrieve a list of all projects for admins
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: A list of all projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       403:
+ *         description: Access denied
+ */
+router.get('/admin/projects', authMiddleware, adminMiddleware, ProjectController.getAllProjectsForAdmin());
 
 /**
  * @swagger

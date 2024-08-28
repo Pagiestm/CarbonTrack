@@ -37,6 +37,14 @@ export class ProjectService {
         }
     }
 
+    async getAllProjectsForAdmin() {
+        try {
+            return await prisma.project.findMany();
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     async createProject(data, userId) {
         try {
             const { name, description, materials } = data;

@@ -36,6 +36,21 @@ class ProjectController {
         };
     }
 
+    getAllProjectsForAdmin() {
+        return async (req, res) => {
+            const userId = parseInt(req.userId, 10);
+            if (isNaN(userId)) {
+                return res.status(400).json({ error: 'Invalid user ID' });
+            }
+            try {
+                const projects = await projectService.getAllProjectsForAdmin(userId);
+                res.json(projects);
+            } catch (error) {
+                res.status(403).json({ error: error.message });
+            }
+        };
+    }
+
     createProject() {
         return async (req, res) => {
             const userId = parseInt(req.userId, 10);
