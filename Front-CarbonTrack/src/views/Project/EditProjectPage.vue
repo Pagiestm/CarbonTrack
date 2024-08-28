@@ -127,6 +127,7 @@ onMounted(async () => {
                 quantity: item.quantity
             }))
         };
+        document.title = `CarbonTrack - Modifier ${project.name}`;
     } catch (error) {
         console.error('Erreur lors du chargement des données du projet ou des catégories', error);
     } finally {

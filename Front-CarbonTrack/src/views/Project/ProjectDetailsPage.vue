@@ -47,7 +47,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { getProjectById } from '../../services/projectsService';
 import DataVisualization from '../../components/Project/DataVisualization.vue';
 import MaterialDistributionChart from '../../components/Project/MaterialDistributionChart.vue';
@@ -55,6 +55,7 @@ import NavBar from '../../components/NavBar.vue';
 import Footer from '../../components/Footer.vue';
 
 const route = useRoute();
+const router = useRouter();
 const projectId = route.params.id;
 const project = ref(null);
 const loading = ref(true);
@@ -70,8 +71,10 @@ onMounted(async () => {
             value: pm.material.carbonFootprint * pm.quantity
         }));
         console.log('Formatted data for DataVisualization:', formattedData.value);
+        document.title = `CarbonTrack - ${project.value.name}`;
     } catch (error) {
         console.error('Échec du chargement des détails du projet', error);
+        router.push({ name: 'NotFound' });
     } finally {
         loading.value = false;
     }
