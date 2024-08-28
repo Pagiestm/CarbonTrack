@@ -1,9 +1,11 @@
 <template>
-    <div class="data-visualization p-6">
-        <h2 class="text-2xl font-semibold mb-4 text-customGreen">Projets créés par mois pour l'année actuelle</h2>
-        <canvas id="projectsChart" class="h-12"></canvas>
-        <div class="legend mt-4">
-            <p class="text-sm text-light mb-2">Ce graphique montre le nombre de projets créés chaque mois pour l'année actuelle.</p>
+    <div class="card bg-white shadow-md rounded-lg p-6">
+        <div class="data-visualization">
+            <h2 class="text-2xl font-semibold mb-4 text-customGreen">Projets créés par mois pour l'année actuelle</h2>
+            <canvas ref="projectsChart" class="h-12"></canvas>
+            <div class="legend mt-4">
+                <p class="text-sm mb-2">Ce graphique montre le nombre de projets créés chaque mois pour l'année actuelle.</p>
+            </div>
         </div>
     </div>
 </template>
@@ -14,6 +16,8 @@ import { Chart } from 'chart.js/auto';
 import { getAllProjectsForAdmin } from '../../services/projectsService';
 
 const projectsData = ref([]);
+const chartInstance = ref(null);
+const projectsChart = ref(null);
 
 const fetchProjects = async () => {
     try {
@@ -52,8 +56,8 @@ const transformDataForChart = (projects) => {
 onMounted(async () => {
     await fetchProjects();
     const chartData = transformDataForChart(projectsData.value);
-    const ctx = document.getElementById('projectsChart').getContext('2d');
-    new Chart(ctx, {
+    const ctx = projectsChart.value.getContext('2d');
+    chartInstance.value = new Chart(ctx, {
         type: 'bar',
         data: chartData,
         options: {
@@ -67,10 +71,3 @@ onMounted(async () => {
     });
 });
 </script>
-
-<style scoped>
-.data-visualization {
-    max-width: 800px;
-    margin: 0 auto;
-}
-</style>

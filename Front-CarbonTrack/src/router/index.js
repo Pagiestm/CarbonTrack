@@ -7,6 +7,7 @@ import ContactPage from '../views/ContactPage.vue';
 import ProfilePage from '../views/Profile/ProfilePage.vue';
 import EditProfilePage from '../views/Profile/EditProfilePage.vue';
 import AdminPage from '../views/Admin/AdminPage.vue';
+import Dashboard from '../views/Admin/Dashboard.vue';
 import Materials from '../views/Admin/MaterialsPage.vue';
 import CreateMaterialPage from '../views/Admin/CreateMaterialPage.vue';
 import EditMaterialPage from '../views/Admin/EditMaterialPage.vue';
@@ -40,7 +41,13 @@ const routes = [
         props: route => ({ token: route.query.token })
     },
     {
-        path: '/admin', name: 'Admin', component: AdminPage, meta: { title: "CarbonTrack - Administration", requiresAuth: true, requiresAdmin: true }, children: [
+        path: '/admin', name: 'Admin', component: AdminPage, meta: { title: "CarbonTrack - Administration", requiresAuth: true, requiresAdmin: true }, redirect: { name: 'Dashboard' }, children: [
+            {
+                path: 'dashboard',
+                name: 'Dashboard',
+                component: Dashboard,
+                meta: { title: "CarbonTrack - Admin - Dashboard" },
+            },
             {
                 path: 'materials',
                 name: 'Materials',
