@@ -60,14 +60,11 @@ class AuthController {
         return async (req, res) => {
             const { code } = req.query;
             try {
-                console.log('Received code:', code);
                 const { token, user } = await authService.googleAuthCallback(code);
-                console.log('Received token and user:', token, user);
                 // Utiliser les variables d'environnement pour l'URL de redirection
                 const redirectUrl = process.env.DEV_FRONTEND_URL;
                 res.redirect(`${redirectUrl}?token=${token}`);
             } catch (error) {
-                console.error('Error during Google auth callback:', error);
                 const redirectUrl = process.env.DEV_FRONTEND_URL;
                 res.redirect(`${redirectUrl}`);
             }
