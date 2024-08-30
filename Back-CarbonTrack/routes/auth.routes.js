@@ -62,6 +62,8 @@ export const router = express.Router();
  *         description: Bad Request
  */
 
+router.post('/register', authController.register());
+
 /**
  * @swagger
  * /auth/login:
@@ -97,8 +99,9 @@ export const router = express.Router();
  *       400:
  *         description: Invalid credentials
  */
-
-router.post('/register', authController.register());
 router.post('/login', authController.login());
+
+router.get('/google', authController.googleAuth());
+router.get('/google/callback', authController.googleAuthCallback());
 
 export default router;

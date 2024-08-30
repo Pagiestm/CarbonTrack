@@ -61,8 +61,15 @@ const router = useRouter();
 onMounted(async () => {
     try {
         user.value = await getUserProfile();
+
+        // Vérifie si l'utilisateur est connecté via Google
+        if (user.value.googleId) {
+            // Redirige vers la route NotFound
+            router.push({ name: 'NotFound' });
+            return;
+        }
     } catch (error) {
-        console.error('Failed to fetch user profile:', error);
+        console.error('Échec du chargement du profil utilisateur :', error);
         errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
         showErrorMessage.value = true;
     } finally {
@@ -76,9 +83,9 @@ const validateForm = () => {
     errors.value = {};
     if (!user.value.name) errors.value.name = 'Le nom est requis.';
     if (!user.value.email) {
-        errors.value.email = 'L\'email est requis.';
+        errors.value.email = "L'email est requis.";
     } else if (!validateEmail(user.value.email)) {
-        errors.value.email = 'Le format de l\'email est invalide.';
+        errors.value.email = "Le format de l'email est invalide.";
     }
     return Object.keys(errors.value).length === 0;
 };
@@ -89,7 +96,6 @@ const submitUpdateUserProfile = async () => {
     try {
         loading.value = true;
 
-        // Filtre les champs nécessaires
         const userData = {
             name: user.value.name,
             email: user.value.email
@@ -100,7 +106,7 @@ const submitUpdateUserProfile = async () => {
         successMessage.value = 'Profil mis à jour avec succès';
         showSuccessMessage.value = true;
     } catch (error) {
-        console.error('Failed to update user profile:', error);
+        console.error('Échec de la mise à jour du profil utilisateur :', error);
         errorMessage.value = 'Une erreur est survenue lors de la mise à jour, veuillez réessayer';
         showErrorMessage.value = true;
     } finally {
@@ -117,7 +123,7 @@ const handleCloseErrorMessage = () => {
     showErrorMessage.value = false;
 };
 
-// Watchers to clear errors when fields are corrected
+// Watchers pour effacer les erreurs lorsque les champs sont corrigés
 watch(() => user.value.name, () => {
     if (user.value.name) {
         errors.value.name = '';
@@ -129,5 +135,6 @@ watch(() => user.value.email, () => {
         errors.value.email = '';
     }
 });
-
 </script>
+
+

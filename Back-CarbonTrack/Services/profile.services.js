@@ -15,6 +15,7 @@ export class ProfileService {
                     name: true,
                     role: true,
                     createdAt: true,
+                    googleId: true,
                 },
             });
             if (!user) {

@@ -91,6 +91,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getToken, isAdmin as checkIsAdmin } from '../helpers/token';
 
 const isAuthenticated = ref(false);
 const isAdmin = ref(false);
@@ -99,13 +100,6 @@ const menuOpen = ref(false);
 const toggleMenu = () => {
     menuOpen.value = !menuOpen.value;
 };
-
-onMounted(() => {
-    const authToken = localStorage.getItem('authToken');
-    const role = localStorage.getItem('role');
-    isAuthenticated.value = !!authToken;
-    isAdmin.value = role === 'ADMIN';
-});
 
 const router = useRouter();
 
@@ -117,5 +111,21 @@ const logout = () => {
     menuOpen.value = false;
     router.push('/login');
 };
-</script>
 
+onMounted(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        localStorage.setItem('authToken', token);
+        const { decodedToken } = getToken();
+        localStorage.setItem('role', decodedToken.role);
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    const authToken = localStorage.getItem('authToken');
+    const role = localStorage.getItem('role');
+    isAuthenticated.value = !!authToken;
+    isAdmin.value = checkIsAdmin();
+});
+</script>

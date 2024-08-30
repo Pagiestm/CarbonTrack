@@ -10,8 +10,7 @@
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-light">Email</label>
-                        <input type="email" id="email" v-model="formState.email" required
-                            placeholder="you@example.com"
+                        <input type="email" id="email" v-model="formState.email" required placeholder="you@example.com"
                             class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <div>
@@ -26,9 +25,15 @@
                         <span v-else>Chargement...</span>
                     </button>
                 </form>
+                <button @click="loginWithGoogle"
+                    class="w-full mt-4 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Connexion avec Google
+                </button>
                 <div class="mt-6 text-center">
-                    <p class="text-customGray">Vous n'avez pas de compte ? <a href="/register" class="text-light hover:underline">Inscrivez-vous</a></p>
-                    <p class="text-light mt-2"><a href="/password-reset/request" class="text-light hover:underline">Mot de passe oublié ?</a></p>
+                    <p class="text-customGray">Vous n'avez pas de compte ? <a href="/register"
+                            class="text-light hover:underline">Inscrivez-vous</a></p>
+                    <p class="text-light mt-2"><a href="/password-reset/request" class="text-light hover:underline">Mot
+                            de passe oublié ?</a></p>
                 </div>
             </div>
             <div class="hidden xl:flex xl:items-center xl:justify-center xl:col-span-1">
@@ -36,7 +41,8 @@
             </div>
             <div class="hidden xl:flex xl:items-center xl:justify-center xl:col-span-3">
                 <div class="text-center">
-                    <img src="https://images.pexels.com/photos/532192/pexels-photo-532192.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Description de l'image" class="mb-4 mx-auto rounded-lg w-full h-auto" />
+                    <img src="https://images.pexels.com/photos/532192/pexels-photo-532192.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="Description de l'image" class="mb-4 mx-auto rounded-lg w-full h-auto" />
                 </div>
             </div>
         </div>
@@ -44,9 +50,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { loginUser } from '../services/userService';
+import { loginUser, googleAuth } from '../services/userService';
 
 const formState = ref({
     email: '',
@@ -73,4 +79,23 @@ const login = async () => {
         isLoading.value = false;
     }
 };
+
+const loginWithGoogle = async () => {
+  try {
+    await googleAuth();
+  } catch (error) {
+    errorMessage.value = 'Google authentication failed';
+  }
+};
+
+// Vérifie si le token est présent dans l'URL
+onMounted(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        localStorage.setItem('authToken', token);
+        router.push('/');
+    }
+});
 </script>

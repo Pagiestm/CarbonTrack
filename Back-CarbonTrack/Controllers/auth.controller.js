@@ -3,7 +3,7 @@ import { AuthService } from '../Services/auth.services.js';
 const authService = new AuthService();
 
 class AuthController {
-    
+
     register() {
         return async (req, res) => {
             const { email, password, name } = req.body;
@@ -41,6 +41,32 @@ class AuthController {
                 res.status(200).json({ token, user });
             } catch (error) {
                 res.status(400).json({ error: error.message });
+            }
+        };
+    }
+
+    googleAuth() {
+        return async (req, res) => {
+            try {
+                const url = await authService.googleAuth();
+                res.redirect(url);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        };
+    }
+
+    googleAuthCallback() {
+        return async (req, res) => {
+            const { code } = req.query;
+            try {
+                const { token, user } = await authService.googleAuthCallback(code);
+                // Utiliser les variables d'environnement pour l'URL de redirection
+                const redirectUrl = process.env.DEV_FRONTEND_URL || 'http://localhost:5173';
+                res.redirect(`${redirectUrl}?token=${token}`);
+            } catch (error) {
+                const redirectUrl = process.env.DEV_FRONTEND_URL || 'http://localhost:5173';
+                res.redirect(`${redirectUrl}`);
             }
         };
     }

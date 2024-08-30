@@ -27,6 +27,10 @@ export const getHeaders = (token) => ({
 });
 
 export const isAdmin = () => {
-    const { decodedToken } = getToken();
-    return decodedToken && decodedToken.role && decodedToken.role.includes('ADMIN');
+    const tokenData = getToken();
+    if (!tokenData) {
+        return false;
+    }
+    const { decodedToken } = tokenData;
+    return decodedToken.role === 'ADMIN';
 };

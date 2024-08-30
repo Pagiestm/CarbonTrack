@@ -31,10 +31,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-2 min-[400px]:flex-row justify-center lg:justify-start">
+                <!-- Affiche le bouton de modification du profil uniquement si l'utilisateur n'est pas un utilisateur Google -->
+                <div v-if="!isGoogleUser"
+                    class="flex flex-col gap-2 min-[400px]:flex-row justify-center lg:justify-start">
                     <router-link to="/profile/edit"
-                        class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">Modifier
-                        le profil</router-link>
+                        class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                        Modifier le profil
+                    </router-link>
                 </div>
             </div>
             <div
@@ -55,10 +58,14 @@ import Footer from '../../components/Footer.vue';
 
 const user = ref(null);
 const loading = ref(true);
+const isGoogleUser = ref(false);
 
 onMounted(async () => {
     try {
         user.value = await getUserProfile();
+        if (user.value && user.value.googleId) {
+            isGoogleUser.value = true;
+        }
     } catch (error) {
         console.error('Échec du chargement des données utilisateur', error);
     } finally {

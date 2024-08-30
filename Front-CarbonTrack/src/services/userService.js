@@ -61,3 +61,11 @@ export const updateUserProfile = async (userData) => {
   });
   return response.data.user;
 };
+
+export const googleAuth = async () => {
+  try {
+    window.location.href = (`${API_BASE_URL}/auth/google`);
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Google authentication failed');
+  }
+};
