@@ -62,10 +62,10 @@ class AuthController {
             try {
                 const { token, user } = await authService.googleAuthCallback(code);
                 // Utiliser les variables d'environnement pour l'URL de redirection
-                const redirectUrl = process.env.DEV_FRONTEND_URL || 'https://carbon-track-one.vercel.app';
+                const redirectUrl = process.env.DEV_FRONTEND_URL;
                 res.redirect(`${redirectUrl}?token=${token}`);
             } catch (error) {
-                const redirectUrl = process.env.DEV_FRONTEND_URL || 'https://carbon-track-one.vercel.app';
+                const redirectUrl = process.env.DEV_FRONTEND_URL;
                 res.redirect(`${redirectUrl}`);
             }
         };

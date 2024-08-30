@@ -8,13 +8,6 @@ import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-
-// Vérifie si le fichier .env.local existe
-const envPath = fs.existsSync('.env.local') ? '.env.local' : '.env';
-
-// Charge les variables d'environnement à partir du fichier approprié
-dotenv.config({ path: envPath });
 
 const prisma = new PrismaClient();
 
