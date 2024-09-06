@@ -22,7 +22,7 @@ import RequestPasswordReset from '../views/PasswordReset/RequestPasswordReset.vu
 import ResetPassword from '../views/PasswordReset/ResetPassword.vue';
 
 const routes = [
-    { path: '/', name: 'Home', component: HomePage, meta: { title: "CarbonTrack - Accueil" } },
+    { path: '/', name: 'Home', component: HomePage, meta: { title: "CarbonTrack" } },
     { path: '/login', name: 'Login', component: LoginForm, meta: { title: "CarbonTrack - Authentification" } },
     { path: '/register', name: 'Register', component: RegisterForm, meta: { title: "CarbonTrack - Inscription" } },
     { path: '/contact', component: ContactPage, meta: { title: "CarbonTrack - Contact" } },
