@@ -25,7 +25,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { updateCategory, getCategoriesWithMaterials } from '../../services/categoriesService.js';
+import { updateCategory, getCategories } from '../../services/categoriesService.js';
 import { useRoute, useRouter } from 'vue-router';
 import SuccessMessage from '../../components/Alert/SuccessMessage.vue';
 import ErrorMessage from '../../components/Alert/ErrorMessage.vue';
@@ -48,10 +48,10 @@ const loading = ref(true);
 
 onMounted(async () => {
     try {
-        const categories = await getCategoriesWithMaterials();
+        const categories = await getCategories();
         const category = categories.find(cat => cat.id === parseInt(categoryId, 10));
         if (category) {
-            localCategory.value = { ...category };
+            localCategory.value = { name: category.name };
         } else {
             throw new Error('Category not found');
         }

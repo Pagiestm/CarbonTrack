@@ -46,7 +46,7 @@ npx prisma migrate dev
 Pour démarrer le serveur, utilisez la commande suivante :
 
 ```sh
-npm run start
+npm run dev
 ```
 
 Le serveur sera démarré sur le port 3000 par défaut.
