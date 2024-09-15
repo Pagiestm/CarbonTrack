@@ -96,10 +96,18 @@ export class AuthService {
       headers: { Authorization: `Bearer ${access_token}` },
     });
 
-    const { email, name, id: googleId} = userInfoResponse.data;
+    const { email, name, id: googleId } = userInfoResponse.data;
 
-    // Vérifie si l'utilisateur existe déjà dans votre base de données
-    let user = await prisma.user.findUnique({ where: { email } });
+    // Vérifie si l'utilisateur existe déjà dans votre base de données par email ou par Google ID
+    let user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email },
+          { googleId }
+        ]
+      }
+    });
+
     if (!user) {
       // Créez un nouvel utilisateur si nécessaire
       user = await prisma.user.create({
@@ -117,6 +125,14 @@ export class AuthService {
 
       // Envoi de l'email de confirmation
       await sendEmail(user.email, 'Confirmation d\'inscription', htmlContent, true);
+    } else {
+      // Met à jour l'utilisateur existant avec l'ID Google si nécessaire
+      if (!user.googleId) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { googleId }
+        });
+      }
     }
 
     // Génére un jeton JWT pour l'utilisateur
