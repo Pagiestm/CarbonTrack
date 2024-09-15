@@ -13,12 +13,10 @@ export const getToken = () => {
     // Vérifie si le token a expiré
     const currentTime = Math.floor(Date.now() / 1000);
     if (decodedToken.exp < currentTime) {
-        // Redirige l'utilisateur vers la page de connexion
-        window.location.href = '/login';
-        return null;
+        return { token: null, decodedToken: null, expired: true };
     }
 
-    return { token, decodedToken };
+    return { token, decodedToken, expired: false };
 };
 
 export const getHeaders = (token) => ({
@@ -28,7 +26,7 @@ export const getHeaders = (token) => ({
 
 export const isAdmin = () => {
     const tokenData = getToken();
-    if (!tokenData) {
+    if (!tokenData || tokenData.expired) {
         return false;
     }
     const { decodedToken } = tokenData;

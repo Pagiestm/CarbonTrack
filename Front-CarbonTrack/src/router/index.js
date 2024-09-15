@@ -20,6 +20,7 @@ import CreateCategoryPage from '../views/Admin/CreateCategoryPage.vue';
 import EditCategoryPage from '../views/Admin/EditCategoryPage.vue';
 import RequestPasswordReset from '../views/PasswordReset/RequestPasswordReset.vue';
 import ResetPassword from '../views/PasswordReset/ResetPassword.vue';
+import { getToken } from '../helpers/token';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage, meta: { title: "CarbonTrack" } },
@@ -55,13 +56,13 @@ const routes = [
                 meta: { title: "CarbonTrack - Admin - Matériaux" },
             },
             {
-                path: '/materials/create',
+                path: 'materials/create',
                 name: 'CreateMaterialPage',
                 component: CreateMaterialPage,
                 meta: { title: "CarbonTrack - Admin - Ajouter un matériau" },
             },
             {
-                path: '/materials/edit/:id',
+                path: 'materials/edit/:id',
                 name: 'EditMaterialPage',
                 component: EditMaterialPage,
                 meta: { title: "CarbonTrack - Admin - Modifier un matériau" },
@@ -73,13 +74,13 @@ const routes = [
                 meta: { title: "CarbonTrack - Admin - Catégories" },
             },
             {
-                path: '/categories/create',
+                path: 'categories/create',
                 name: 'CreateCategoryPage',
                 component: CreateCategoryPage,
                 meta: { title: "CarbonTrack - Admin - Ajouter une catégorie" },
             },
             {
-                path: '/categories/edit/:id',
+                path: 'categories/edit/:id',
                 name: 'EditCategoryPage',
                 component: EditCategoryPage,
                 meta: { title: "CarbonTrack - Admin - Modifier une catégorie" },
@@ -100,29 +101,19 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = !!localStorage.getItem('authToken');
-    const role = localStorage.getItem('role');
+    const tokenData = getToken();
+    const isAuthenticated = tokenData && !tokenData.expired;
+    const isAdmin = tokenData && tokenData.decodedToken && tokenData.decodedToken.role === 'ADMIN';
 
     const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-    switch (true) {
-        case requiresAdmin:
-            if (isAuthenticated && role === 'ADMIN') {
-                next();
-            } else {
-                next({ name: 'NotFound' });
-            }
-            break;
-        case requiresAuth:
-            if (isAuthenticated) {
-                next();
-            } else {
-                next('/login');
-            }
-            break;
-        default:
-            next();
+    if (requiresAdmin && (!isAuthenticated || !isAdmin)) {
+        next({ name: 'NotFound' });
+    } else if (requiresAuth && !isAuthenticated) {
+        next({ name: 'Login' });
+    } else {
+        next();
     }
 });
 
