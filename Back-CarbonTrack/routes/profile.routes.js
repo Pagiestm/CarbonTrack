@@ -105,4 +105,29 @@ router.get('/admin/users', authMiddleware, adminMiddleware, profileController.ge
  */
 router.put('/', authMiddleware, profileController.updateProfileById());
 
+/**
+ * @swagger
+ * /profile:
+ *   delete:
+ *     summary: Delete user account and related projects
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Account and related projects deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       400:
+ *         description: Bad request
+ */
+router.delete('/', authMiddleware, profileController.deleteAccount());
+
 export { router };

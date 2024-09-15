@@ -4,7 +4,7 @@ import { ProfileService } from '../Services/profile.services.js';
 const profileService = new ProfileService();
 
 class ProfileController {
-    
+
     getProfileById() {
         return async (req, res) => {
             const userId = req.userId;
@@ -66,6 +66,22 @@ class ProfileController {
                     return res.status(404).json({ error: 'User not found' });
                 }
                 res.status(200).json({ user });
+            } catch (error) {
+                res.status(400).json({ error: error.message });
+            }
+        };
+    }
+
+    deleteAccount() {
+        return async (req, res) => {
+            const userId = req.userId;
+            if (!userId) {
+                return res.status(400).json({ error: 'User not authenticated' });
+            }
+
+            try {
+                await profileService.deleteUserAndProjects(userId);
+                res.status(200).json({ message: 'Account and related projects deleted successfully' });
             } catch (error) {
                 res.status(400).json({ error: error.message });
             }

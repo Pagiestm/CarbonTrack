@@ -52,4 +52,27 @@ export class ProfileService {
             throw new Error(error.message);
         }
     }
+
+    async deleteUserAndProjects(userId) {
+        return prisma.$transaction(async (prisma) => {
+            // Supprimer les ProjectMaterial associés aux projets de l'utilisateur
+            await prisma.projectMaterial.deleteMany({
+                where: {
+                    project: {
+                        userId: userId
+                    }
+                }
+            });
+
+            // Supprimer les projets de l'utilisateur
+            await prisma.project.deleteMany({
+                where: { userId }
+            });
+
+            // Supprimer l'utilisateur
+            await prisma.user.delete({
+                where: { id: userId }
+            });
+        });
+    }
 }
