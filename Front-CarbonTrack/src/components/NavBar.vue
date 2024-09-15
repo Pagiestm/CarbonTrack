@@ -123,9 +123,13 @@ onMounted(() => {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    const authToken = localStorage.getItem('authToken');
-    const role = localStorage.getItem('role');
-    isAuthenticated.value = !!authToken;
-    isAdmin.value = checkIsAdmin();
+    const tokenData = getToken();
+    if (tokenData && !tokenData.expired) {
+        isAuthenticated.value = true;
+        isAdmin.value = checkIsAdmin();
+    } else {
+        isAuthenticated.value = false;
+        isAdmin.value = false;
+    }
 });
 </script>
