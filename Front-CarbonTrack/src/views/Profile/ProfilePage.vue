@@ -38,7 +38,14 @@
                         class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
                         Modifier le profil
                     </router-link>
+                    <button @click="showDeleteModal = true"
+                        class="py-2 px-4 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                        Supprimer le compte
+                    </button>
                 </div>
+                <DeleteConfirmationModal :show="showDeleteModal" title="Confirmer la suppression"
+                    message="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+                    @confirm="deleteAccount" @cancel="showDeleteModal = false" />
             </div>
             <div
                 class="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square">
@@ -52,13 +59,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getUserProfile } from '../../services/userService';
+import { useRouter } from 'vue-router';
+import { getUserProfile, deleteUserAccount } from '../../services/userService';
+import DeleteConfirmationModal from '../../components/Alert/DeleteConfirmationModal.vue';
 import NavBar from '../../components/NavBar.vue';
 import Footer from '../../components/Footer.vue';
 
 const user = ref(null);
 const loading = ref(true);
 const isGoogleUser = ref(false);
+const showDeleteModal = ref(false);
+const router = useRouter();
 
 onMounted(async () => {
     try {
@@ -77,4 +88,19 @@ const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
 };
+
+const deleteAccount = async () => {
+    try {
+        await deleteUserAccount();
+        // Supprime le token après la suppression du compte
+        localStorage.removeItem('authToken');
+        router.push('/login');
+    } catch (error) {
+        console.error('Erreur lors de la suppression du compte:', error);
+        alert('Une erreur est survenue lors de la suppression de votre compte.');
+    } finally {
+        showDeleteModal.value = false;
+    }
+};
+
 </script>

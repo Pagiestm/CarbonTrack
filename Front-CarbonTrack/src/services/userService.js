@@ -62,6 +62,18 @@ export const updateUserProfile = async (userData) => {
   return response.data.user;
 };
 
+export const deleteUserAccount = async () => {
+  const tokenData = getToken();
+  if (!tokenData) throw new Error('Token not found');
+
+  const { token } = tokenData;
+
+  const response = await axios.delete(`${API_BASE_URL}/profile`, {
+    headers: getHeaders(token)
+  });
+  return response.data.message;
+};
+
 export const googleAuth = async () => {
   try {
     window.location.href = (`${API_BASE_URL}/auth/google`);
