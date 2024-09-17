@@ -56,13 +56,13 @@ const routes = [
                 meta: { title: "CarbonTrack - Admin - Matériaux" },
             },
             {
-                path: 'materials/create',
+                path: '/materials/create',
                 name: 'CreateMaterialPage',
                 component: CreateMaterialPage,
                 meta: { title: "CarbonTrack - Admin - Ajouter un matériau" },
             },
             {
-                path: 'materials/edit/:id',
+                path: '/materials/edit/:id',
                 name: 'EditMaterialPage',
                 component: EditMaterialPage,
                 meta: { title: "CarbonTrack - Admin - Modifier un matériau" },
@@ -74,13 +74,13 @@ const routes = [
                 meta: { title: "CarbonTrack - Admin - Catégories" },
             },
             {
-                path: 'categories/create',
+                path: '/categories/create',
                 name: 'CreateCategoryPage',
                 component: CreateCategoryPage,
                 meta: { title: "CarbonTrack - Admin - Ajouter une catégorie" },
             },
             {
-                path: 'categories/edit/:id',
+                path: '/categories/edit/:id',
                 name: 'EditCategoryPage',
                 component: EditCategoryPage,
                 meta: { title: "CarbonTrack - Admin - Modifier une catégorie" },
