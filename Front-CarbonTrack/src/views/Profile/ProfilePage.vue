@@ -38,11 +38,11 @@
                         class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
                         Modifier le profil
                     </router-link>
-                    <button @click="showDeleteModal = true"
-                        class="py-2 px-4 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-                        Supprimer le compte
-                    </button>
                 </div>
+                <button @click="showDeleteModal = true"
+                    class="py-2 px-4 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+                    Supprimer le compte
+                </button>
                 <DeleteConfirmationModal :show="showDeleteModal" title="Confirmer la suppression"
                     message="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
                     @confirm="deleteAccount" @cancel="showDeleteModal = false" />
