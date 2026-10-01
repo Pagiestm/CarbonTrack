@@ -25,7 +25,7 @@ création :
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`   | identifiants OAuth de la console Google Cloud                     |
 | `EMAIL_USER`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | compte d'envoi des emails                     |
 
-`JWT_SECRET` est généré par Render. `PROD_FRONTEND_URL` et
+`JWT_SECRET` est généré par Render. `FRONTEND_URL` et
 `GOOGLE_REDIRECT_URI` sont fixés dans le fichier.
 
 Au démarrage, l'API joue `prisma migrate deploy` puis écoute sur le port fourni

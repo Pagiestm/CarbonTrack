@@ -32,7 +32,7 @@ services:
         sync: false # URL PostgreSQL, avec ?sslmode=require
       - key: JWT_SECRET
         generateValue: true
-      - key: PROD_FRONTEND_URL
+      - key: FRONTEND_URL
         value: https://carbontrack.theotimepagies.com
       # Connexion Google : l'URI de redirection doit être déclarée telle quelle
       # dans la console Google Cloud.

@@ -2,29 +2,33 @@
   "name": "@carbontrack/api",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "node --watch --env-file-if-exists=.env --env-file-if-exists=.env.local src/server.js",
+    "start": "node --env-file-if-exists=.env --env-file-if-exists=.env.local src/server.js",
     "build": "prisma generate",
-    "start:prod": "prisma migrate deploy && node index.js"
+    "start:prod": "prisma migrate deploy && node src/server.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
-    "axios": "^1.7.5",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "handlebars": "^4.7.8",
-    "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.14",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "handlebars": "^4.7.9",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.0.13",
     "prisma": "^5.22.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.6.5"
+  },
+  "engines": {
+    "node": ">=22.18"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "supertest": "^7.3.0",
+    "vitest": "^5.0.3"
   }
 }
