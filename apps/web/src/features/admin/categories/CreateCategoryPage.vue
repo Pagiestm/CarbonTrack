@@ -6,7 +6,7 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-primary mb-1 underline">Nom de la Catégorie :</label>
                     <input id="name" v-model="newCategory.name" placeholder="Ex: Métaux"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.name" />
                 </div>
                 <div class="flex justify-center">
@@ -55,7 +55,7 @@ const handleSubmit = async () => {
         await createCategory(newCategory.value);
         successMessage.value = 'La catégorie a été créée avec succès!';
         showSuccessMessage.value = true;
-    } catch (error) {
+    } catch {
         errorMessage.value = 'Erreur lors de la création de la catégorie. Veuillez réessayer.';
         showErrorMessage.value = true;
     }

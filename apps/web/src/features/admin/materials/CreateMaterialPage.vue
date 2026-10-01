@@ -6,39 +6,39 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-primary mb-1 underline">Nom du Matériau : </label>
                     <input id="name" v-model="newMaterial.name" placeholder="Ex: Acier"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.name" />
                 </div>
                 <div>
                     <label for="supplier" class="block text-sm font-medium text-primary mb-1 underline">Fournisseur :</label>
                     <input id="supplier" v-model="newMaterial.supplier" placeholder="Ex: Fournisseur XYZ"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.supplier" />
                 </div>
                 <div>
                     <label for="carbonFootprint" class="block text-sm font-medium text-primary mb-1 underline">Empreinte Carbone :</label>
                     <input id="carbonFootprint" v-model.number="newMaterial.carbonFootprint" type="number" step="0.01" min="0"
                         placeholder="Ex: 123.45"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.carbonFootprint" />
                 </div>
                 <div>
                     <label for="unit" class="block text-sm font-medium text-primary mb-1 underline">Unité :</label>
                     <input id="unit" v-model="newMaterial.unit" placeholder="Ex: kg"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.unit" />
                 </div>
                 <div>
                     <label for="pricePerUnit" class="block text-sm font-medium text-primary mb-1 underline">Prix par Unité :</label>
                     <input id="pricePerUnit" v-model.number="newMaterial.pricePerUnit" type="number" step="0.01" min="0"
                         placeholder="Ex: 50.00"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none" />
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden" />
                     <FormError :message="errors.pricePerUnit" />
                 </div>
                 <div>
                     <label for="categoryId" class="block text-sm font-medium text-primary mb-1 underline">Catégorie :</label>
                     <select id="categoryId" v-model="newMaterial.categoryId"
-                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-none">
+                        class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden">
                         <option value="">Choisir une Catégorie</option>
                         <option v-for="category in categories" :key="category.id" :value="category.id">
                             {{ category.name }}
@@ -115,7 +115,7 @@ const handleSubmit = async () => {
         await createMaterial(newMaterial.value);
         successMessage.value = 'Le matériau a été créé avec succès!';
         showSuccessMessage.value = true;
-    } catch (error) {
+    } catch {
         errorMessage.value = 'Erreur lors de la création du matériau. Veuillez réessayer.';
         showErrorMessage.value = true;
     }

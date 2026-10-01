@@ -17,7 +17,7 @@
             </div>
             <div class="md:hidden">
                 <!-- Burger Button for Mobile -->
-                <button @click="toggleMenu" class="text-white focus:outline-none">
+                <button @click="toggleMenu" class="text-white focus:outline-hidden">
                     <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

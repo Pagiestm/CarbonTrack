@@ -4,8 +4,8 @@
             class="w-6 h-6 text-customGreen">
             <path :d="icon" />
         </svg>
-        <h3 class="text-lg font-bold text-gray-200 break-words">{{ title }}</h3>
-        <p class="text-gray-400 text-sm sm:text-base break-words">{{ description }}</p>
+        <h3 class="text-lg font-bold text-gray-200 wrap-break-word">{{ title }}</h3>
+        <p class="text-gray-400 text-sm sm:text-base wrap-break-word">{{ description }}</p>
     </div>
 </template>
 

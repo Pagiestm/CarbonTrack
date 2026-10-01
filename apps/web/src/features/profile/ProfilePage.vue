@@ -54,7 +54,7 @@
             </div>
         </div>
     </section>
-    <Footer />
+    <AppFooter />
 </template>
 
 <script setup>
@@ -64,7 +64,7 @@ import { getUserProfile, deleteUserAccount } from '@/api/users';
 import { clearSession } from '@/shared/auth/session';
 import DeleteConfirmationModal from '@/shared/components/alerts/DeleteConfirmationModal.vue';
 import NavBar from '@/shared/components/NavBar.vue';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 
 const user = ref(null);
 const loading = ref(true);

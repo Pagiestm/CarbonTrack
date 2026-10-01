@@ -1,3 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #1d1f2a;
+  --color-secondary: #111111;
+  --color-light: #eeeeee;
+  --color-customGreen: #42b883;
+  --color-customGray: #b4b4b4;
+}
+
+/*
+  Tailwind 4 colore les bordures en currentcolor par défaut, là où la v3
+  utilisait gray-200 : cette règle garde l'ancien rendu. Pour la retirer,
+  ajouter une couleur de bordure explicite partout où elle manque.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

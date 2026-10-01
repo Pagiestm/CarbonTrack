@@ -16,7 +16,7 @@
           <div class="mb-6">
             <label for="email" class="block text-white mb-2">Email</label>
             <input v-model="email" type="email" id="email"
-              class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
+              class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"/>
             <FormError :message="errors.email" />
           </div>
           <button type="submit" :disabled="isLoading"
@@ -32,13 +32,13 @@
       </div>
     </div>
   </section>
-  <Footer />
+  <AppFooter />
 </template>
 
 <script setup>
 import { ref, watch } from 'vue';
 import NavBar from '@/shared/components/NavBar.vue';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 import FormError from '@/shared/components/alerts/FormError.vue';
 import SuccessMessage from '@/shared/components/alerts/SuccessMessage.vue';
 import ErrorMessage from '@/shared/components/alerts/ErrorMessage.vue';
@@ -74,7 +74,7 @@ if (validateFields()) {
     await requestPasswordReset(email.value);
     successMessage.value = 'Email de réinitialisation envoyé avec succès !';
     showSuccessMessage.value = true;
-  } catch (error) {
+  } catch {
     errorMessage.value = 'Échec de l\'envoi de l\'email de réinitialisation.';
     showErrorMessage.value = true;
   } finally {

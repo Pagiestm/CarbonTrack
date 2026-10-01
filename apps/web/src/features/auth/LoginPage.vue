@@ -11,22 +11,22 @@
                     <div>
                         <label for="email" class="block text-sm font-medium text-light">Email</label>
                         <input type="email" id="email" v-model="formState.email" required placeholder="you@example.com"
-                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
+                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-light">Password</label>
                         <input type="password" id="password" v-model="formState.password" required
                             placeholder="••••••••"
-                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
+                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <button type="submit"
-                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-sm hover:bg-customGreen-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">
+                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-xs hover:bg-customGreen-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">
                         <span v-if="!isLoading">Connexion</span>
                         <span v-else>Chargement...</span>
                     </button>
                 </form>
                 <button @click="loginWithGoogle"
-                    class="w-full mt-4 px-4 py-2 bg-white text-gray-700 font-medium rounded-md shadow-sm border border-gray-300 flex items-center justify-center">
+                    class="w-full mt-4 px-4 py-2 bg-white text-gray-700 font-medium rounded-md shadow-xs border border-gray-300 flex items-center justify-center">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/480px-Google_%22G%22_logo.svg.png" alt="Google Logo" class="w-5 h-5 mr-2">
                     Connexion avec Google
                 </button>
@@ -75,7 +75,7 @@ const login = async () => {
         });
         saveSession(token);
         router.push('/');
-    } catch (error) {
+    } catch {
         errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
     } finally {
         isLoading.value = false;
@@ -85,7 +85,7 @@ const login = async () => {
 const loginWithGoogle = async () => {
   try {
     await googleAuth();
-  } catch (error) {
+  } catch {
     errorMessage.value = 'Google authentication failed';
   }
 };

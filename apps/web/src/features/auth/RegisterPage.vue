@@ -9,13 +9,13 @@
                         <label for="name" class="block text-sm font-medium text-light">Nom</label>
                         <input type="text" id="name" v-model="formState.name" required
                             placeholder="Votre nom"
-                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
+                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-light">Email</label>
                         <input type="email" id="email" v-model="formState.email" @input="validateEmail" required
                             placeholder="you@example.com"
-                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
+                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                     </div>
                     <div v-if="formState.emailError" class="text-red-500">
                         {{ formState.emailError }}
@@ -24,11 +24,11 @@
                         <label for="password" class="block text-sm font-medium text-light">Mot de passe</label>
                         <input type="password" id="password" v-model="formState.password" @input="validatePassword"
                             required placeholder="••••••••"
-                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
+                            class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary" />
                         <PasswordCriteria :criteria="formState.passwordCriteria" />
                     </div>
                     <button type="submit"
-                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-sm hover:bg-customGreen-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">
+                        class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-xs hover:bg-customGreen-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-customGreen">
                         <span v-if="!isLoading">S'inscrire</span>
                         <span v-else>Chargement...</span>
                     </button>
@@ -108,7 +108,7 @@ const validatePassword = () => {
     formState.value.passwordCriteria.uppercase = /[A-Z]/.test(value);
     formState.value.passwordCriteria.lowercase = /[a-z]/.test(value);
     formState.value.passwordCriteria.number = /\d/.test(value);
-    formState.value.passwordCriteria.symbol = /[!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=]/.test(value);
+    formState.value.passwordCriteria.symbol = /[!@#$%^&*(),.?":{}|<>;'[\]\\/`~_\-+=]/.test(value);
 };
 
 const register = async () => {
@@ -129,7 +129,7 @@ const register = async () => {
             });
             successMessage.value = 'Inscription réussie !';
             showSuccessMessage.value = true;
-        } catch (error) {
+        } catch {
             errorMessage.value = 'Erreur lors de l\'inscription. Veuillez réessayer.';
             showErrorMessage.value = true;
         } finally {

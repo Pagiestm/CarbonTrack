@@ -22,7 +22,7 @@
           </div>
           <div class="flex justify-between items-center">
             <router-link :to="{ name: 'ProjectDetailsPage', params: { id: project.id } }">
-              <button class="bg-customGreen text-secondary py-2 px-4 rounded transition duration-300 flex items-center">
+              <button class="bg-customGreen text-secondary py-2 px-4 rounded-sm transition duration-300 flex items-center">
                 Voir les détails
                 <i class="fas fa-info-circle ml-2"></i>
               </button>

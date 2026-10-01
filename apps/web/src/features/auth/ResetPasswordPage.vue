@@ -16,13 +16,13 @@
                     <div class="mb-6">
                         <label for="newPassword" class="block text-white mb-2">Nouveau mot de passe</label>
                         <input v-model="newPassword" type="password" id="newPassword"
-                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
+                            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen" />
                         <FormError :message="errors.newPassword" />
                     </div>
                     <div class="mb-6">
                         <label for="confirmPassword" class="block text-white mb-2">Confirmer le mot de passe</label>
                         <input v-model="confirmPassword" type="password" id="confirmPassword"
-                            class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
+                            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen" />
                         <FormError :message="errors.confirmPassword" />
                     </div>
                     <button type="submit" :disabled="isLoading"
@@ -38,14 +38,14 @@
             </div>
         </div>
     </section>
-    <Footer />
+    <AppFooter />
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import NavBar from '@/shared/components/NavBar.vue';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 import FormError from '@/shared/components/alerts/FormError.vue';
 import SuccessMessage from '@/shared/components/alerts/SuccessMessage.vue';
 import ErrorMessage from '@/shared/components/alerts/ErrorMessage.vue';
@@ -64,7 +64,7 @@ const successMessage = ref('');
 const showErrorMessage = ref(false);
 const errorMessage = ref('');
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=])[A-Za-z\d!@#$%^&*(),.?":{}|<>;'\[\]\\\/`~_\-+=]{8,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>;'[\]\\/`~_\-+=])[A-Za-z\d!@#$%^&*(),.?":{}|<>;'[\]\\/`~_\-+=]{8,}$/;
 
 const validateFields = () => {
     errors.value = {};
@@ -109,7 +109,7 @@ const handleCloseErrorMessage = () => {
 const checkTokenValidity = async () => {
     try {
         await checkToken(token);
-    } catch (error) {
+    } catch {
         router.push('/404');
     }
 };

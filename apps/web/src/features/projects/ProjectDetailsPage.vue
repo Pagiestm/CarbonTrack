@@ -42,7 +42,7 @@
             </div>
         </div>
     </section>
-    <Footer />
+    <AppFooter />
 </template>
 
 <script setup>
@@ -52,7 +52,7 @@ import { getProjectById } from '@/api/projects';
 import DataVisualization from '@/features/projects/components/DataVisualization.vue';
 import MaterialDistributionChart from '@/features/projects/components/MaterialDistributionChart.vue';
 import NavBar from '@/shared/components/NavBar.vue';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 
 const route = useRoute();
 const router = useRouter();

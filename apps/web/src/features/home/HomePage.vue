@@ -6,7 +6,7 @@
       <FeaturesSection />
       <AdvantagesSection />
     </main>
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import NavBar from '@/shared/components/NavBar.vue';
 import MainSection from '@/features/home/components/MainSection.vue';
 import FeaturesSection from '@/features/home/components/FeaturesSection.vue'
 import AdvantagesSection from '@/features/home/components/AdvantagesSection.vue'
-import Footer from '@/shared/components/AppFooter.vue'
+import AppFooter from '@/shared/components/AppFooter.vue'
 
 export default {
   components: {
@@ -23,7 +23,7 @@ export default {
     MainSection,
     FeaturesSection,
     AdvantagesSection,
-    Footer
+    AppFooter
   }
 }
 </script>

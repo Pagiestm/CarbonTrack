@@ -20,7 +20,7 @@
         </div>
 
         <!-- Table view for desktop -->
-        <div class="hidden lg:flex flex-col flex-grow overflow-x-auto">
+        <div class="hidden lg:flex flex-col grow overflow-x-auto">
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-primary text-white">
                     <tr>

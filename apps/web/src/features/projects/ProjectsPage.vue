@@ -12,12 +12,12 @@
       <ProjectsList />
     </div>
   </section>
-  <Footer />
+  <AppFooter />
 </template>
 
 <script setup>
 import NavBar from '@/shared/components/NavBar.vue';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 import ProjectsList from '@/features/projects/components/ProjectsList.vue';
 import ProjectRecommendations from '@/features/projects/components/ProjectRecommendations.vue';
 </script>

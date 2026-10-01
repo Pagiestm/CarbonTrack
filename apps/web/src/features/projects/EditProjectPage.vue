@@ -13,13 +13,13 @@
                 <div class="mb-6">
                     <label for="name" class="block text-white mb-2">Nom du Projet</label>
                     <input v-model="projectData.name" type="text" id="name"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"/>
+                        class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"/>
                     <FormError :message="errors.name" />
                 </div>
                 <div class="mb-6">
                     <label for="description" class="block text-white mb-2">Description</label>
                     <textarea v-model="projectData.description" id="description"
-                        class="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen"></textarea>
+                        class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"></textarea>
                     <FormError :message="errors.description" />
                 </div>
                 <div class="mb-6">
@@ -32,7 +32,7 @@
                             <h3 class="text-lg font-semibold text-customGreen mb-2">{{ category.name }}</h3>
                             <div class="mb-2">
                                 <select v-model="selectedMaterialId[category.id]"
-                                    class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen">
+                                    class="w-full p-2 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen">
                                     <option disabled value="">Sélectionner un matériau</option>
                                     <option v-for="material in category.Materials" :key="material.id"
                                         :value="material.id">
@@ -43,7 +43,7 @@
                             <div class="flex items-center mb-2 space-x-2">
                                 <input v-model.number="materialQuantities[category.id]" type="number" step="1" min="0"
                                     placeholder="Quantité"
-                                    class="w-24 p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-customGreen" />
+                                    class="w-24 p-2 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen" />
                                 <button type="button" @click="addMaterial(category.id)"
                                     class="py-2 px-4 bg-customGreen text-white rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
                                     Ajouter
@@ -56,7 +56,7 @@
                 </div>
                 <ul class="mb-6">
                     <li v-for="(material, index) in projectData.materials" :key="index"
-                        class="flex justify-between items-center mb-2 bg-gray-800 p-3 rounded">
+                        class="flex justify-between items-center mb-2 bg-gray-800 p-3 rounded-sm">
                         <span class="text-light">{{ getMaterialName(material.materialId) }} - {{ material.quantity
                             }}</span>
                         <button type="button" @click="removeMaterial(index)"
@@ -78,7 +78,7 @@
                 @close="handleCloseErrorMessage" />
         </div>
     </section>
-    <Footer />
+    <AppFooter />
 </template>
 
 <script setup>
@@ -86,7 +86,7 @@ import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getProjectById, updateProject } from '@/api/projects';
 import { getCategoriesWithMaterials } from '@/api/catalog';
-import Footer from '@/shared/components/AppFooter.vue';
+import AppFooter from '@/shared/components/AppFooter.vue';
 import NavBar from '@/shared/components/NavBar.vue';
 import FormError from '@/shared/components/alerts/FormError.vue';
 import SuccessMessage from '@/shared/components/alerts/SuccessMessage.vue';
@@ -215,7 +215,7 @@ watch(() => selectedMaterialId.value, (newValue) => {
     }
 });
 
-watch(materialQuantities, (newQuantities, oldQuantities) => {
+watch(materialQuantities, (newQuantities) => {
     // Parcourt chaque catégorie pour vérifier si une quantité a été corrigée
     for (const categoryId in newQuantities) {
         if (newQuantities[categoryId] > 0) {
@@ -238,7 +238,7 @@ const handleSubmit = async () => {
             await updateProject(projectId, projectData.value);
             successMessage.value = 'Projet mis à jour avec succès !';
             showSuccessMessage.value = true;
-        } catch (error) {
+        } catch {
             errorMessage.value = 'Échec de la mise à jour du projet. Veuillez réessayer.';
             showErrorMessage.value = true;
         }

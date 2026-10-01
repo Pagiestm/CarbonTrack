@@ -3,7 +3,7 @@
         <div class="text-center">
             <h1 class="text-3xl font-bold text-primary underline mt-4">Catégories</h1>
             <div class="flex flex-col sm:flex-row justify-between items-center mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
-                <div class="flex-grow w-full sm:w-auto">
+                <div class="grow w-full sm:w-auto">
                     <SearchBar @search="handleSearch" />
                 </div>
                 <router-link to="/categories/create" class="w-full sm:w-auto">
@@ -63,7 +63,7 @@ const paginatedCategories = computed(() => {
 onMounted(async () => {
     try {
         state.value.categories = await getCategories();
-    } catch (error) {
+    } catch {
         state.value.errorMessage = 'Une erreur est survenue, veuillez réessayer';
     } finally {
         state.value.loading = false;
