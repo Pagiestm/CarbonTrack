@@ -15,5 +15,8 @@
     "build": "npm run build -w @carbontrack/web",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
+  },
+  "overrides": {
+    "mysql2": "^3.24.5"
   }
 }
