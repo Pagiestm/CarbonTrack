@@ -1,47 +1,57 @@
-# Documentation Frontend de CarbonTrack
+# Client CarbonTrack
 
-Cette documentation va vous permettre de démarrer le projet avec Vue 3 dans Vite.
+Application Vue 3 de CarbonTrack.
 
-## Configuration IDE Recommandée
+## Technologies
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (et désactiver Vetur).
+- **Vue 3.5** et **vue-router 5**
+- **Vite 8**
+- **Tailwind CSS 4** : le thème est dans `src/assets/tailwind.css` (`@theme`).
+- **Chart.js** pour les graphiques
+- **ESLint 10** (`eslint.config.js`)
 
-## Personnaliser la configuration
+## Architecture
 
-Voir la [Référence de Configuration Vite](https://vitejs.dev/config/).
+```
+src/
+├── app/                 point d'entrée (main.js), App.vue, routeur, page 404
+├── api/                 un fichier par module de l'API
+│   ├── http.js          client axios : ajoute le jeton, remonte le message d'erreur
+│   ├── auth.js          /auth, /password-reset
+│   ├── users.js         /profile
+│   ├── catalog.js       /categories, /materials
+│   ├── projects.js      /projects
+│   └── contact.js       /contact
+├── features/            pages et composants par domaine
+│   ├── home/
+│   ├── auth/            connexion, inscription, mot de passe oublié
+│   ├── contact/
+│   ├── profile/
+│   ├── projects/
+│   └── admin/           tableau de bord, catégories, matériaux
+├── shared/              commun à plusieurs domaines
+│   ├── auth/session.js  jeton de session (localStorage)
+│   └── components/      barre de navigation, pied de page, alertes…
+└── assets/
+```
 
-## Configuration du Projet
+Les imports passent par l'alias `@/` (par exemple `@/api/projects`). Toutes les pages, sauf l'accueil, sont chargées à la demande.
 
-Pour installer les dépendances du projet, exécutez la commande suivante :
+## Installation
+
+Depuis la racine du dépôt :
 
 ```sh
 npm install
+cp apps/web/.env.example apps/web/.env
 ```
 
-### Variables d'environnement
+`.env` ne contient que l'adresse de l'API : `http://localhost:3000` en développement. En production, Render fournit `VITE_API_BASE_URL=/api` au moment du build (voir `render.yaml`).
 
-Copiez `.env.example` en `.env` : il ne contient que l'adresse de l'API, `http://localhost:3000` en développement. En production, Render fournit `VITE_API_BASE_URL=/api` au moment de la construction (voir `render.yaml`).
+## Commandes
 
-### Compiler et Recharger à Chaud pour le Développement
-
-Pour démarrer le serveur de développement avec rechargement à chaud, utilisez la commande suivante :
-
-```sh
-npm run dev
-```
-
-### Compiler et Minifier pour la Production
-
-Pour compiler le projet et le minifier pour la production, utilisez la commande suivante :
-
-```sh
-npm run build
-```
-
-### Linter avec [ESLint](https://eslint.org/)
-
-Pour analyser le code et trouver des problèmes potentiels avec ESLint, utilisez la commande suivante :
-
-```sh
-npm run lint
-```
+| Commande (depuis la racine)            | Effet                                  |
+| -------------------------------------- | -------------------------------------- |
+| `npm run dev:web`                      | serveur de développement               |
+| `npm run build`                        | build de production dans `apps/web/dist` |
+| `npm run lint -w @carbontrack/web`     | ESLint                                 |

@@ -28,6 +28,12 @@ création :
 `JWT_SECRET` est généré par Render. `FRONTEND_URL` et
 `GOOGLE_REDIRECT_URI` sont fixés dans le fichier.
 
+Le dépôt est un monorepo npm : chaque service s'installe depuis la racine
+(`npm ci -w @carbontrack/api` ou `-w @carbontrack/web`), et un `buildFilter` ne
+redéploie que le service dont le dossier a changé. Node 24 est imposé par
+`.node-version` : le client Prisma généré est en TypeScript, et Node le
+charge sans compilation.
+
 Au démarrage, l'API joue `prisma migrate deploy` puis écoute sur le port fourni
 par Render ; `/health` sert de contrôle de vie.
 

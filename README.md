@@ -18,20 +18,20 @@ CarbonTrack est une application innovante destinée à aider les personnes à ca
 - **Page de gestion des matériaux (Admin)** : Liste des matériaux, formulaire pour leur gestion, détails incluant l'empreinte carbone.
 - **Page de gestion des catégories (Admin)** : Liste des catégories, formulaire pour leur gestion.
 
-## Architecture Technique
-### Backend (Node.js, Express, Prisma)
-- **Configuration du serveur** : API REST avec Express.
-- **Routes et contrôleurs** :
-  - Authentification : Inscription, connexion, déconnexion.
-  - Gestion des matériaux : CRUD pour les matériaux.
-  - Gestion des catégories : CRUD pour les catégories.
-  - Gestion des projets : CRUD, calcul de l'empreinte carbone.
+## Architecture
+Un monorepo npm (workspaces) qui sépare le client et l'API :
 
-### Frontend (Vue.js)
-- **Configuration du projet** : Création avec Vue CLI.
-- **Composants** : Composants réutilisables pour l'interface.
-- **Services API** : Interaction avec l'API backend.
-- **Routes frontend** : Navigation avec Vue Router.
+```
+apps/
+├── api/   API REST : Node.js 24, Express 5, Prisma 7, PostgreSQL
+└── web/   client : Vue 3, Vite 8, Tailwind CSS 4
+docs/      déploiement
+Documents/ modèle de données (Merise)
+```
+
+- **API** : un monolithe modulaire. Chaque domaine (`auth`, `users`, `catalog`, `projects`, `contact`) a ses routes, ses schémas de validation, son contrôleur et son service. Le code commun (base, erreurs, authentification, emails) est dans `shared/`. Voir [apps/api](./apps/api/README.md).
+- **Client** : organisé par fonctionnalités (`features/`). La couche `api/` reprend les modules de l'API, un fichier par module. Voir [apps/web](./apps/web/README.md).
+- Le client ne parle à l'API qu'en HTTP. Aucun code n'est partagé entre les deux applications.
 
 ## Points à Développer
 - **Gestion des utilisateurs** : Authentification avec JWT (Auth0 à voir).
@@ -43,9 +43,14 @@ CarbonTrack est une application innovante destinée à aider les personnes à ca
 Consultez le fichier complet des schémas de la base de données [ici](./Documents/Merise.md).
 
 ## Installation du projet
-Consultez l'installation du frontend [ici](./apps/web/README.md).
+```sh
+npm install                       # installe les deux applications
+npm run build -w @carbontrack/api # génère le client Prisma
+npm run dev:api                   # API sur http://localhost:3000
+npm run dev:web                   # client sur http://localhost:5173
+```
 
-Consultez l'installation du backend [ici](./apps/api/README.md).
+Avant le premier lancement, copier les `.env.example` en `.env` dans `apps/api` et `apps/web`. Le détail est dans le README de [l'API](./apps/api/README.md) et dans celui du [client](./apps/web/README.md).
 
 ## Déploiement
 Le site est en ligne sur [carbontrack.theotimepagies.com](https://carbontrack.theotimepagies.com), hébergé gratuitement sur Render à partir du fichier `render.yaml` : voir [docs/deploiement-render.md](./docs/deploiement-render.md).

@@ -1,62 +1,66 @@
-# Documentation Backend de CarbonTrack
+# API CarbonTrack
 
-## Introduction
+API REST de CarbonTrack : comptes, catalogue de matériaux, projets et calcul de l'empreinte carbone.
 
-CarbonTrack est une application destinée à aider les utilisateurs à calculer, suivre et réduire l'empreinte carbone des matériaux utilisés dans leurs projets de construction. Cette documentation couvre la configuration et l'utilisation du backend de l'application.
+## Technologies
 
-## Technologies Utilisées
+- **Node.js 24** : le client Prisma généré est en TypeScript, et Node le charge directement.
+- **Express 5** : un `throw` dans un handler asynchrone remonte jusqu'au gestionnaire d'erreurs.
+- **Prisma 7** sur **PostgreSQL**, via l'adaptateur `@prisma/adapter-pg`.
+- **zod** pour valider les entrées, **Swagger** pour la documentation.
+- **Vitest** et **Supertest** pour les tests.
 
-- **Node.js** : Environnement d'exécution JavaScript.
-- **Express** : Framework web pour Node.js.
-- **Prisma** : ORM pour interagir avec la base de données.
-- **PostgreSQL** : Système de gestion de base de données relationnelle.
-- **Swagger** : Outil pour générer et consulter la documentation de l'API.
+## Architecture
 
-## Installation et Configuration
+```
+src/
+├── server.js            démarrage et arrêt propre (SIGTERM)
+├── app.js               assemblage : middlewares, routes, gestion d'erreurs
+├── config/env.js        variables d'environnement, validées au démarrage
+├── docs/swagger.js      documentation lue dans les commentaires @swagger des routes
+├── modules/             un dossier par domaine
+│   ├── auth/            inscription, connexion, Google, mot de passe oublié
+│   ├── users/           profil (/profile) et liste des comptes (admin)
+│   ├── catalog/         catégories et matériaux
+│   ├── projects/        projets et calcul de l'empreinte (footprint.js)
+│   └── contact/         formulaire de contact
+├── shared/              code commun aux modules
+│   ├── db/prisma.js     client Prisma unique
+│   ├── http/            erreurs HTTP, validation, gestionnaire d'erreurs
+│   ├── auth/            jetons JWT, requireAuth / requireAdmin
+│   └── mail/            envoi d'emails et gabarits
+├── templates/email/     gabarits (.mjml source, .html compilé)
+└── generated/prisma/    client Prisma (généré, ignoré par git)
+```
 
-### Installation des Dépendances
+Chaque module découpe son code de la même façon :
 
-Pour installer les dépendances du projet, exécutez la commande suivante :
+| Fichier            | Rôle                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| `*.routes.js`      | chemins, middlewares, documentation Swagger                   |
+| `*.schemas.js`     | schémas zod des entrées                                       |
+| `*.controller.js`  | lit la requête validée (`req.valid`), répond                  |
+| `*.service.js`     | règles métier et accès à la base ; lève des `HttpError`       |
+
+Les erreurs ont toujours la forme `{ "error": "message", "details"?: [...] }`.
+
+## Installation
+
+Depuis la racine du dépôt :
 
 ```sh
 npm install
+cp apps/api/.env.example apps/api/.env   # puis renseigner les valeurs
+npm run build -w @carbontrack/api         # génère le client Prisma
+npx -w @carbontrack/api prisma migrate dev
 ```
 
-### Configuration de l'Environnement
+## Commandes
 
-Créez un fichier .env à la racine du projet et ajoutez-y la variable d'environnement suivante :
+| Commande (depuis la racine)              | Effet                                          |
+| ---------------------------------------- | ---------------------------------------------- |
+| `npm run dev:api`                        | serveur avec rechargement (`node --watch`)     |
+| `npm test -w @carbontrack/api`           | tests                                          |
+| `npm run build -w @carbontrack/api`      | génère le client Prisma                        |
 
-
-```sh
-DATABASE_URL="postgresql://postgres:root@localhost:5432/CarbonTrack"
-```
-
-Le backend utilise PostgreSQL comme base de données. Assurez-vous que PostgreSQL est installé et configuré sur votre machine.
-
-### Migration de la Base de Données
-
-Pour appliquer les migrations de la base de données, utilisez Prisma avec la commande suivante :
-
-```sh
-npx prisma migrate dev
-```
-
-### Démarrage du Serveur
-
-Pour démarrer le serveur, utilisez la commande suivante :
-
-```sh
-npm run dev
-```
-
-Le serveur sera démarré sur le port 3000 par défaut.
-
-### Documentation de l'API
-
-La documentation de l'API est disponible à l'adresse suivante :
-
-```sh
-http://localhost:3000/api-docs/
-```
-
-Swagger est utilisé pour générer et consulter la documentation de l'API.
+L'API écoute sur le port 3000. La documentation est sur <http://localhost:3000/api-docs/>.
