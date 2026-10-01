@@ -35,7 +35,7 @@ par Render ; `/health` sert de contrôle de vie.
 
 Dans la console Google Cloud, identifiants OAuth du projet, ajouter :
 
-- URI de redirection autorisée : `https://carbontrack-api.onrender.com/auth/google/callback`
+- URI de redirection autorisée : `https://carbontrack-api-3s89.onrender.com/auth/google/callback`
 - Origine JavaScript autorisée : `https://carbontrack.theotimepagies.com`
 
 Sans cela, Google refuse la connexion avec `redirect_uri_mismatch`.
@@ -52,7 +52,7 @@ quelques minutes après la propagation.
 
 L'instance gratuite s'endort après 15 minutes sans requête et met 30 à 60 s à
 se réveiller. Un moniteur UptimeRobot sur
-`https://carbontrack-api.onrender.com/health`, toutes les 5 minutes, l'évite.
+`https://carbontrack-api-3s89.onrender.com/health`, toutes les 5 minutes, l'évite.
 
 ## Limites à connaître
 

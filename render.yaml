@@ -34,7 +34,7 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: https://carbontrack-api.onrender.com/auth/google/callback
+        value: https://carbontrack-api-3s89.onrender.com/auth/google/callback
       # Emails (confirmation, mot de passe oublié, contact)
       - key: EMAIL_USER
         sync: false
@@ -61,7 +61,7 @@ services:
     routes:
       - type: rewrite
         source: /api/*
-        destination: https://carbontrack-api.onrender.com/*
+        destination: https://carbontrack-api-3s89.onrender.com/*
       - type: rewrite
         source: /*
         destination: /index.html
