@@ -18,6 +18,10 @@ Pour installer les dépendances du projet, exécutez la commande suivante :
 npm install
 ```
 
+### Variables d'environnement
+
+Copiez `.env.example` en `.env` : il ne contient que l'adresse de l'API, `http://localhost:3000` en développement. En production, Render fournit `VITE_API_BASE_URL=/api` au moment de la construction (voir `render.yaml`).
+
 ### Compiler et Recharger à Chaud pour le Développement
 
 Pour démarrer le serveur de développement avec rechargement à chaud, utilisez la commande suivante :
