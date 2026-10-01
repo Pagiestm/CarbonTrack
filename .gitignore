@@ -1,1 +1,10 @@
 node_modules
+dist
+coverage
+*.log
+.DS_Store
+
+# Secrets locaux
+.env
+.env.*
+!.env.example

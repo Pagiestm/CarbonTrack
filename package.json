@@ -1,0 +1,19 @@
+{
+  "name": "carbontrack",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev:api": "npm run dev -w @carbontrack/api",
+    "dev:web": "npm run dev -w @carbontrack/web",
+    "build": "npm run build -w @carbontrack/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  }
+}

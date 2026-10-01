@@ -1,8 +1,11 @@
 # Déploiement gratuit sur Render (Blueprint) : voir docs/deploiement-render.md
 #
-# - carbontrack-api : l'API Express + Prisma, depuis Back-CarbonTrack
-# - carbontrack     : le client Vue en site statique ; /api est réécrit vers
-#                     l'API pour rester sur la même origine
+# - carbontrack-api : l'API Express + Prisma, depuis apps/api
+# - carbontrack     : le client Vue en site statique, depuis apps/web ; /api
+#                     est réécrit vers l'API pour rester sur la même origine
+#
+# Le dépôt est un monorepo npm (workspaces) : les commandes partent de la
+# racine, qui porte le seul package-lock.json.
 #
 # La base PostgreSQL vit ailleurs (Neon ou l'instance Render existante) :
 # renseigner DATABASE_URL à la création.
@@ -13,9 +16,13 @@ services:
     runtime: node
     plan: free
     region: frankfurt
-    rootDir: Back-CarbonTrack
-    buildCommand: npm ci && npx prisma generate
-    startCommand: npx prisma migrate deploy && node index.js
+    buildCommand: npm ci -w @carbontrack/api && npm run build -w @carbontrack/api
+    startCommand: npm run start:prod -w @carbontrack/api
+    buildFilter:
+      paths:
+        - apps/api/**
+        - package.json
+        - package-lock.json
     healthCheckPath: /health
     autoDeployTrigger: commit
     envVars:
@@ -50,8 +57,13 @@ services:
   - name: carbontrack
     type: web
     runtime: static # servi par le CDN Render, pas de région à choisir
-    buildCommand: cd Front-CarbonTrack && npm ci && npm run build
-    staticPublishPath: ./Front-CarbonTrack/dist
+    buildCommand: npm ci -w @carbontrack/web && npm run build -w @carbontrack/web
+    staticPublishPath: ./apps/web/dist
+    buildFilter:
+      paths:
+        - apps/web/**
+        - package.json
+        - package-lock.json
     domains:
       - carbontrack.theotimepagies.com
     autoDeployTrigger: commit

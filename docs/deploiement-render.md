@@ -59,7 +59,6 @@ se réveiller. Un moniteur UptimeRobot sur
 - Render bloque les ports SMTP sortants 25, 465 et 587 sur les instances
   gratuites. Un compte SMTP sur un autre port (Mailtrap en 2525, par exemple)
   passe ; sinon il faut un envoi par API HTTP.
-- L'API lit le gabarit d'email dans `Front-CarbonTrack/src/components/email` :
-  le dépôt entier est cloné par Render, le chemin reste valable.
+- Les gabarits d'email vivent dans `apps/api/templates/email`, avec l'API.
 - Le plan gratuit compte 750 heures par mois et par compte : une API qui ne
   dort jamais en consomme environ 720, à partager avec les autres services.

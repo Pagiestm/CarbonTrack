@@ -43,9 +43,9 @@ CarbonTrack est une application innovante destinée à aider les personnes à ca
 Consultez le fichier complet des schémas de la base de données [ici](./Documents/Merise.md).
 
 ## Installation du projet
-Consultez l'installation du frontend [ici](./Front-CarbonTrack/README.md).
+Consultez l'installation du frontend [ici](./apps/web/README.md).
 
-Consultez l'installation du backend [ici](./Back-CarbonTrack/README.md).
+Consultez l'installation du backend [ici](./apps/api/README.md).
 
 ## Déploiement
 Le site est en ligne sur [carbontrack.theotimepagies.com](https://carbontrack.theotimepagies.com), hébergé gratuitement sur Render à partir du fichier `render.yaml` : voir [docs/deploiement-render.md](./docs/deploiement-render.md).
