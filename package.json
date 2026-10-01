@@ -7,7 +7,7 @@
     "apps/web"
   ],
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.18"
   },
   "scripts": {
     "dev:api": "npm run dev -w @carbontrack/api",
