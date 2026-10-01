@@ -1,4 +1,5 @@
 import { AuthService } from '../Services/auth.services.js';
+import { frontendUrl } from '../config/frontend.js';
 
 const authService = new AuthService();
 
@@ -61,12 +62,9 @@ class AuthController {
             const { code } = req.query;
             try {
                 const { token, user } = await authService.googleAuthCallback(code);
-                // Utiliser les variables d'environnement pour l'URL de redirection
-                const redirectUrl = process.env.DEV_FRONTEND_URL;
-                res.redirect(`${redirectUrl}?token=${token}`);
+                res.redirect(`${frontendUrl}?token=${token}`);
             } catch (error) {
-                const redirectUrl = process.env.DEV_FRONTEND_URL;
-                res.redirect(`${redirectUrl}`);
+                res.redirect(frontendUrl);
             }
         };
     }

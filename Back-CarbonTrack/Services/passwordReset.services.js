@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { sendEmail } from './email.services.js';
+import { frontendUrl } from '../config/frontend.js';
 import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
@@ -26,11 +27,6 @@ export class PasswordResetService {
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    // Détermine l'URL de réinitialisation en fonction de l'environnement
-    const frontendUrl = process.env.NODE_ENV === 'development'
-      ? process.env.DEV_FRONTEND_URL
-      : process.env.PROD_FRONTEND_URL;
 
     // Prépare le contenu de l'email en utilisant le template HTML
     const resetLink = `${frontendUrl}/reset-password?token=${token}`;

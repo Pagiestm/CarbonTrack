@@ -11,13 +11,14 @@ import { router as contactRouter } from './routes/contact.routes.js';
 import cors from 'cors';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT ?? 3000;
 
 app.use(cors());
 
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/auth', authRouter);
 app.use('/password-reset', passwordResetRouter);

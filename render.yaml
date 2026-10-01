@@ -1,0 +1,67 @@
+# Déploiement gratuit sur Render (Blueprint) : voir docs/deploiement-render.md
+#
+# - carbontrack-api : l'API Express + Prisma, depuis Back-CarbonTrack
+# - carbontrack     : le client Vue en site statique ; /api est réécrit vers
+#                     l'API pour rester sur la même origine
+#
+# La base PostgreSQL vit ailleurs (Neon ou l'instance Render existante) :
+# renseigner DATABASE_URL à la création.
+
+services:
+  - name: carbontrack-api
+    type: web
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: Back-CarbonTrack
+    buildCommand: npm ci && npx prisma generate
+    startCommand: npx prisma migrate deploy && node index.js
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false # URL PostgreSQL, avec ?sslmode=require
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PROD_FRONTEND_URL
+        value: https://carbontrack.theotimepagies.com
+      # Connexion Google : l'URI de redirection doit être déclarée telle quelle
+      # dans la console Google Cloud.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        value: https://carbontrack-api.onrender.com/auth/google/callback
+      # Emails (confirmation, mot de passe oublié, contact)
+      - key: EMAIL_USER
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+
+  - name: carbontrack
+    type: web
+    runtime: static # servi par le CDN Render, pas de région à choisir
+    buildCommand: cd Front-CarbonTrack && npm ci && npm run build
+    staticPublishPath: ./Front-CarbonTrack/dist
+    domains:
+      - carbontrack.theotimepagies.com
+    autoDeployTrigger: commit
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: /api
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://carbontrack-api.onrender.com/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
