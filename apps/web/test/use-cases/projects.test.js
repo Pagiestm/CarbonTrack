@@ -62,9 +62,12 @@ describe('CreateProject', () => {
     ).rejects.toThrow(/qu'une fois/);
   });
 
-  it("rejette au lieu de lever : l'appelant n'a qu'un comportement à gérer", () => {
+  it("rejette au lieu de lever : l'appelant n'a qu'un comportement à gérer", async () => {
     const cas = new CreateProject({ projectRepository: fauxDepot() });
-    expect(() => cas.execute({ name: 'P', materials: [] })).not.toThrow();
+    const promesse = cas.execute({ name: 'P', materials: [] });
+
+    expect(promesse).toBeInstanceOf(Promise);
+    await expect(promesse).rejects.toThrow();
   });
 });
 
