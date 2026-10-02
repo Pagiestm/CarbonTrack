@@ -3,7 +3,9 @@
     <PageHeader eyebrow="Administration" :title="title" />
 
     <AppCard>
-      <form class="space-y-5" novalidate @submit.prevent="enregistrer">
+      <FormSkeleton v-if="lecture" :fields="1" />
+
+      <form v-else class="space-y-5" novalidate @submit.prevent="enregistrer">
         <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
         <AppField
@@ -36,6 +38,7 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import FormSkeleton from '@/presentation/components/ui/FormSkeleton.vue';
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -51,6 +54,7 @@ const erreurs = useFormErrors(['name']);
 
 const nom = ref('');
 const chargement = ref(false);
+const lecture = ref(props.mode === 'edit');
 
 const valider = () => {
   erreurs.reinitialiser();
@@ -82,7 +86,11 @@ const enregistrer = async () => {
 
 onMounted(async () => {
   if (props.mode !== 'edit') return;
-  await catalog.charger();
-  nom.value = catalog.categories.find((c) => c.id === Number(route.params.id))?.name ?? '';
+  try {
+    await catalog.charger();
+    nom.value = catalog.categories.find((c) => c.id === Number(route.params.id))?.name ?? '';
+  } finally {
+    lecture.value = false;
+  }
 });
 </script>

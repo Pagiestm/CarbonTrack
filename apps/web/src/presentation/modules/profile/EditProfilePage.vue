@@ -4,7 +4,9 @@
       <PageHeader eyebrow="Mon compte" title="Modifier mon profil" />
 
       <AppCard>
-        <form class="space-y-5" novalidate @submit.prevent="enregistrer">
+        <FormSkeleton v-if="lecture" :fields="6" />
+
+        <form v-else class="space-y-5" novalidate @submit.prevent="enregistrer">
           <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
           <AppField
@@ -91,6 +93,7 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import FormSkeleton from '@/presentation/components/ui/FormSkeleton.vue';
 
 const router = useRouter();
 const toasts = useToasts();
@@ -105,6 +108,7 @@ const formulaire = reactive({
 const compteGoogle = ref(false);
 const erreurs = useFormErrors(['name', 'email', 'company', 'jobTitle', 'phone', 'city']);
 const chargement = ref(false);
+const lecture = ref(true);
 
 const enregistrer = async () => {
   erreurs.reinitialiser();
@@ -143,6 +147,8 @@ onMounted(async () => {
     compteGoogle.value = utilisateur.isGoogleAccount;
   } catch (e) {
     erreurs.depuisApi(e);
+  } finally {
+    lecture.value = false;
   }
 });
 </script>

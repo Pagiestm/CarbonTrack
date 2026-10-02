@@ -88,7 +88,7 @@
         <FootprintBadge :footprint="estimation" />
       </template>
 
-      <p v-if="catalog.chargement" class="text-sm text-ink-muted">Chargement du catalogue…</p>
+      <AppSkeleton v-if="catalog.chargement" :lines="3" height="h-10.5" />
 
       <MaterialPicker v-else v-model="formulaire.materials" :materials="catalog.materiaux" />
       <p v-if="erreurs.etat.parChamp.materials" class="mt-3 text-sm text-danger">
@@ -115,6 +115,7 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import AppSkeleton from '@/presentation/components/ui/AppSkeleton.vue';
 import FootprintBadge from '@/presentation/components/ui/FootprintBadge.vue';
 import MaterialPicker from '@/presentation/modules/projects/components/MaterialPicker.vue';
 

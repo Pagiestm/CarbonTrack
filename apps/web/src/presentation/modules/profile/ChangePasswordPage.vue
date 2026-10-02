@@ -3,7 +3,9 @@
     <div class="mx-auto max-w-xl">
       <PageHeader eyebrow="Mon compte" title="Changer de mot de passe" />
 
-      <AppCard v-if="compteGoogle">
+      <AppCard v-if="lecture"><FormSkeleton :fields="3" /></AppCard>
+
+      <AppCard v-else-if="compteGoogle">
         <AppAlert tone="info">
           Ce compte se connecte avec Google : il n'a pas de mot de passe à modifier ici.
         </AppAlert>
@@ -73,6 +75,7 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import FormSkeleton from '@/presentation/components/ui/FormSkeleton.vue';
 
 const router = useRouter();
 const toasts = useToasts();
@@ -82,6 +85,7 @@ const formulaire = reactive({ currentPassword: '', newPassword: '', confirmPassw
 const erreurs = useFormErrors(['currentPassword', 'newPassword', 'confirmPassword']);
 const chargement = ref(false);
 const compteGoogle = ref(false);
+const lecture = ref(true);
 
 const valider = () => {
   erreurs.reinitialiser();
@@ -121,6 +125,8 @@ onMounted(async () => {
     compteGoogle.value = (await useCases.users.getProfile.execute()).isGoogleAccount;
   } catch (e) {
     erreurs.etat.general = e.message;
+  } finally {
+    lecture.value = false;
   }
 });
 

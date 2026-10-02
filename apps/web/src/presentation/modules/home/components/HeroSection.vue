@@ -13,6 +13,11 @@
           <span class="size-1.5 rounded-full bg-accent" aria-hidden="true" />
           {{ materiauxReferences }}
         </p>
+        <div
+          v-else-if="chargementCompteur"
+          class="mb-6 h-6.5 w-44 animate-pulse rounded-full bg-surface-overlay"
+          aria-hidden="true"
+        />
 
         <h1
           class="text-4xl leading-[1.05] font-bold tracking-tight text-balance text-ink sm:text-5xl"
@@ -77,6 +82,7 @@ const session = useSessionStore();
 const apercu = new Footprint(12_400);
 
 const nbMateriaux = ref(0);
+const chargementCompteur = ref(true);
 const materiauxReferences = computed(() => {
   const n = nbMateriaux.value;
   if (!n) return '';
@@ -88,6 +94,8 @@ onMounted(async () => {
     nbMateriaux.value = await useCases.catalog.countMaterials.execute();
   } catch {
     nbMateriaux.value = 0;
+  } finally {
+    chargementCompteur.value = false;
   }
 });
 

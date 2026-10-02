@@ -3,7 +3,9 @@
     <PageHeader eyebrow="Administration" :title="title" />
 
     <AppCard>
-      <form class="space-y-5" novalidate @submit.prevent="enregistrer">
+      <FormSkeleton v-if="lecture" :fields="6" />
+
+      <form v-else class="space-y-5" novalidate @submit.prevent="enregistrer">
         <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
         <AppField
@@ -86,6 +88,7 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import FormSkeleton from '@/presentation/components/ui/FormSkeleton.vue';
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -115,6 +118,7 @@ const formulaire = reactive({
   pricePerUnit: '',
 });
 const chargement = ref(false);
+const lecture = ref(props.mode === 'edit' || !catalog.categories.length);
 
 const nombrePositif = (valeur) =>
   valeur !== '' && Number.isFinite(Number(valeur)) && Number(valeur) >= 0;
@@ -170,9 +174,9 @@ const enregistrer = async () => {
 };
 
 onMounted(async () => {
-  await catalog.charger();
-  if (props.mode !== 'edit') return;
   try {
+    await catalog.charger();
+    if (props.mode !== 'edit') return;
     const materiau = await useCases.catalog.getMaterial.execute(Number(route.params.id));
     Object.assign(formulaire, {
       name: materiau.name,
@@ -184,6 +188,8 @@ onMounted(async () => {
     });
   } catch (e) {
     erreurs.depuisApi(e);
+  } finally {
+    lecture.value = false;
   }
 });
 </script>

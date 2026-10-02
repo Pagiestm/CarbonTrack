@@ -64,6 +64,20 @@
       </div>
     </div>
 
+    <div v-else-if="chargement" class="grid gap-6 lg:grid-cols-[20rem_1fr]">
+      <AppCard>
+        <div class="flex flex-col items-center" aria-hidden="true">
+          <div class="size-20 animate-pulse rounded-full bg-surface-overlay" />
+          <div class="mt-4 w-full"><AppSkeleton :lines="3" /></div>
+        </div>
+      </AppCard>
+
+      <div class="space-y-6">
+        <AppCard><AppSkeleton :lines="8" height="h-6" /></AppCard>
+        <AppCard><AppSkeleton :lines="2" /></AppCard>
+      </div>
+    </div>
+
     <ConfirmDialog
       v-if="confirmation"
       title="Supprimer votre compte ?"
@@ -89,12 +103,14 @@ import AppCard from '@/presentation/components/ui/AppCard.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import ConfirmDialog from '@/presentation/components/ui/ConfirmDialog.vue';
+import AppSkeleton from '@/presentation/components/ui/AppSkeleton.vue';
 
 const router = useRouter();
 const toasts = useToasts();
 const session = useSessionStore();
 
 const utilisateur = ref(null);
+const chargement = ref(true);
 const erreur = ref('');
 const confirmation = ref(false);
 const suppression = ref(false);
@@ -140,6 +156,8 @@ onMounted(async () => {
     utilisateur.value = await useCases.users.getProfile.execute();
   } catch (e) {
     erreur.value = e.message;
+  } finally {
+    chargement.value = false;
   }
 });
 </script>

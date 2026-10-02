@@ -1,6 +1,11 @@
 <template>
   <AuthLayout title="Nouveau mot de passe" subtitle="Choisissez un mot de passe solide.">
-    <form class="space-y-5" novalidate @submit.prevent="enregistrer">
+    <div v-if="verification" class="space-y-5">
+      <FormSkeleton :fields="2" :actions="false" />
+      <AppSkeleton :lines="1" height="h-10" />
+    </div>
+
+    <form v-else class="space-y-5" novalidate @submit.prevent="enregistrer">
       <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
       <div>
@@ -50,6 +55,8 @@ import { usePasswordCriteria } from '@/presentation/modules/auth/components/useP
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import AppSkeleton from '@/presentation/components/ui/AppSkeleton.vue';
+import FormSkeleton from '@/presentation/components/ui/FormSkeleton.vue';
 import MaterialOfTheDay from '@/presentation/modules/auth/components/MaterialOfTheDay.vue';
 
 const route = useRoute();
@@ -61,6 +68,7 @@ const nouveau = ref('');
 const confirmation = ref('');
 const erreurs = useFormErrors(['newPassword', 'confirmPassword']);
 const chargement = ref(false);
+const verification = ref(true);
 const { criteres, evaluer, toutValide } = usePasswordCriteria();
 
 const enregistrer = async () => {
@@ -94,6 +102,7 @@ const enregistrer = async () => {
 onMounted(async () => {
   try {
     await useCases.auth.checkResetToken.execute(token);
+    verification.value = false;
   } catch {
     router.replace({ name: 'NotFound', params: { pathMatch: ['reset-password'] } });
   }
