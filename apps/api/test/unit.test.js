@@ -5,6 +5,7 @@ import { materialBody } from '../src/modules/catalog/catalog.schemas.js';
 import { updateProfileBody } from '../src/modules/users/users.schemas.js';
 import { email, password } from '../src/shared/http/schemas.js';
 import { loginBody, registerBody } from '../src/modules/auth/auth.schemas.js';
+import { loadTemplate } from '../src/shared/mail/mailer.js';
 import {
   signAccessToken,
   signResetToken,
@@ -111,5 +112,16 @@ describe('emails', () => {
 
   it('restent refusés quand le format est invalide', () => {
     expect(email.safeParse('PAS-UN-EMAIL').success).toBe(false);
+  });
+});
+
+describe("gabarits d'email", () => {
+  it("ne contiennent aucune adresse de site en dur : le lien suit l'environnement", () => {
+    const html = loadTemplate('registrationConfirmation')({
+      name: 'X',
+      siteUrl: 'http://localhost:5173',
+    });
+    expect(html).toContain('href="http://localhost:5173"');
+    expect(html).not.toContain('carbontrack.theotimepagies.com');
   });
 });
