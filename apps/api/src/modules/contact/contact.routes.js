@@ -37,4 +37,3 @@ export const contactRouter = Router();
  *         description: Error sending the message
  */
 contactRouter.post('/', validate({ body: contactBody }), contactController.send);
-

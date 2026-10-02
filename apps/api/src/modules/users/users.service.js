@@ -21,7 +21,11 @@ export async function updateProfile(userId, { name, email }) {
       throw conflict('Un compte existe déjà avec cet email');
     }
   }
-  return prisma.user.update({ where: { id: userId }, data: { name, email }, select: publicUserSelect });
+  return prisma.user.update({
+    where: { id: userId },
+    data: { name, email },
+    select: publicUserSelect,
+  });
 }
 
 // Supprime le compte et tout ce qui lui appartient.

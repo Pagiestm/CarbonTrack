@@ -9,7 +9,9 @@ const text = (label, max) =>
 
 // Les formulaires envoient parfois des nombres sous forme de texte ("12.50").
 const positiveNumber = (label) =>
-  z.coerce.number({ error: `${label} doit être un nombre` }).min(0, { error: `${label} doit être positif` });
+  z.coerce
+    .number({ error: `${label} doit être un nombre` })
+    .min(0, { error: `${label} doit être positif` });
 
 export const categoryBody = z.object({
   name: text('Le nom', 100),
@@ -21,7 +23,10 @@ export const materialBody = z.object({
   carbonFootprint: positiveNumber("L'empreinte carbone"),
   unit: text("L'unité", 50),
   pricePerUnit: positiveNumber('Le prix par unité'),
-  categoryId: z.coerce.number({ error: 'La catégorie est requise' }).int().positive({ error: 'La catégorie est requise' }),
+  categoryId: z.coerce
+    .number({ error: 'La catégorie est requise' })
+    .int()
+    .positive({ error: 'La catégorie est requise' }),
 });
 
 export const materialUpdateBody = materialBody.partial();

@@ -1,42 +1,64 @@
 <template>
-    <NavBar />
-    <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen flex items-center justify-center">
-        <div class="container mx-auto px-4">
-            <header class="mb-12 text-center">
-                <h1 class="text-5xl font-bold text-white">Modifier le Profil</h1>
-                <p class="text-lg text-gray-300 mt-4">
-                    Modifiez les informations ci-dessous pour mettre à jour votre profil.
-                </p>
-            </header>
-            <div v-if="loading" class="text-center text-white">Chargement des données...</div>
-            <form v-else @submit.prevent="submitUpdateUserProfile" class="bg-primary p-8 rounded-lg shadow-lg mx-auto max-w-lg">
-                <div class="mb-6">
-                    <label for="name" class="block text-white mb-2">Nom</label>
-                    <input v-model="user.name" type="text" id="name"
-                        class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"/>
-                    <FormError :message="errors.name" />
-                </div>
-                <div class="mb-6">
-                    <label for="email" class="block text-white mb-2">Email</label>
-                    <input v-model="user.email" type="email" id="email"
-                        class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"/>
-                    <FormError :message="errors.email" />
-                </div>
-                <div class="flex justify-center">
-                    <button type="submit"
-                        class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
-                        Mettre à jour le profil
-                    </button>
-                </div>
-                <FormError :message="errors.submit" />
-            </form>
-            <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
-                @close="handleCloseSuccessMessage" />
-            <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
-                @close="handleCloseErrorMessage" />
+  <NavBar />
+  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4">
+      <header class="mb-12 text-center">
+        <h1 class="text-5xl font-bold text-white">Modifier le Profil</h1>
+        <p class="text-lg text-gray-300 mt-4">
+          Modifiez les informations ci-dessous pour mettre à jour votre profil.
+        </p>
+      </header>
+      <div v-if="loading" class="text-center text-white">Chargement des données...</div>
+      <form
+        v-else
+        @submit.prevent="submitUpdateUserProfile"
+        class="bg-primary p-8 rounded-lg shadow-lg mx-auto max-w-lg"
+      >
+        <div class="mb-6">
+          <label for="name" class="block text-white mb-2">Nom</label>
+          <input
+            v-model="user.name"
+            type="text"
+            id="name"
+            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+          />
+          <FormError :message="errors.name" />
         </div>
-    </section>
-    <AppFooter />
+        <div class="mb-6">
+          <label for="email" class="block text-white mb-2">Email</label>
+          <input
+            v-model="user.email"
+            type="email"
+            id="email"
+            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+          />
+          <FormError :message="errors.email" />
+        </div>
+        <div class="flex justify-center">
+          <button
+            type="submit"
+            class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+          >
+            Mettre à jour le profil
+          </button>
+        </div>
+        <FormError :message="errors.submit" />
+      </form>
+      <SuccessMessage
+        v-if="showSuccessMessage"
+        :show="showSuccessMessage"
+        :message="successMessage"
+        @close="handleCloseSuccessMessage"
+      />
+      <ErrorMessage
+        v-if="showErrorMessage"
+        :show="showErrorMessage"
+        :message="errorMessage"
+        @close="handleCloseErrorMessage"
+      />
+    </div>
+  </section>
+  <AppFooter />
 </template>
 
 <script setup>
@@ -59,82 +81,86 @@ const errors = ref({});
 const router = useRouter();
 
 onMounted(async () => {
-    try {
-        user.value = await getUserProfile();
+  try {
+    user.value = await getUserProfile();
 
-        // Vérifie si l'utilisateur est connecté via Google
-        if (user.value.googleId) {
-            // Redirige vers la route NotFound
-            router.push({ name: 'NotFound' });
-            return;
-        }
-    } catch (error) {
-        console.error('Échec du chargement du profil utilisateur :', error);
-        errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
-        showErrorMessage.value = true;
-    } finally {
-        loading.value = false;
+    // Vérifie si l'utilisateur est connecté via Google
+    if (user.value.googleId) {
+      // Redirige vers la route NotFound
+      router.push({ name: 'NotFound' });
+      return;
     }
+  } catch (error) {
+    console.error('Échec du chargement du profil utilisateur :', error);
+    errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+    showErrorMessage.value = true;
+  } finally {
+    loading.value = false;
+  }
 });
 
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 const validateForm = () => {
-    errors.value = {};
-    if (!user.value.name) errors.value.name = 'Le nom est requis.';
-    if (!user.value.email) {
-        errors.value.email = "L'email est requis.";
-    } else if (!validateEmail(user.value.email)) {
-        errors.value.email = "Le format de l'email est invalide.";
-    }
-    return Object.keys(errors.value).length === 0;
+  errors.value = {};
+  if (!user.value.name) errors.value.name = 'Le nom est requis.';
+  if (!user.value.email) {
+    errors.value.email = "L'email est requis.";
+  } else if (!validateEmail(user.value.email)) {
+    errors.value.email = "Le format de l'email est invalide.";
+  }
+  return Object.keys(errors.value).length === 0;
 };
 
 const submitUpdateUserProfile = async () => {
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    try {
-        loading.value = true;
+  try {
+    loading.value = true;
 
-        const userData = {
-            name: user.value.name,
-            email: user.value.email
-        };
+    const userData = {
+      name: user.value.name,
+      email: user.value.email,
+    };
 
-        await updateUserProfile(userData);
-        errorMessage.value = '';
-        successMessage.value = 'Profil mis à jour avec succès';
-        showSuccessMessage.value = true;
-    } catch (error) {
-        console.error('Échec de la mise à jour du profil utilisateur :', error);
-        errorMessage.value = 'Une erreur est survenue lors de la mise à jour, veuillez réessayer';
-        showErrorMessage.value = true;
-    } finally {
-        loading.value = false;
-    }
+    await updateUserProfile(userData);
+    errorMessage.value = '';
+    successMessage.value = 'Profil mis à jour avec succès';
+    showSuccessMessage.value = true;
+  } catch (error) {
+    console.error('Échec de la mise à jour du profil utilisateur :', error);
+    errorMessage.value = 'Une erreur est survenue lors de la mise à jour, veuillez réessayer';
+    showErrorMessage.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleCloseSuccessMessage = () => {
-    showSuccessMessage.value = false;
-    router.push('/profile');
+  showSuccessMessage.value = false;
+  router.push('/profile');
 };
 
 const handleCloseErrorMessage = () => {
-    showErrorMessage.value = false;
+  showErrorMessage.value = false;
 };
 
 // Watchers pour effacer les erreurs lorsque les champs sont corrigés
-watch(() => user.value.name, () => {
+watch(
+  () => user.value.name,
+  () => {
     if (user.value.name) {
-        errors.value.name = '';
+      errors.value.name = '';
     }
-});
+  },
+);
 
-watch(() => user.value.email, () => {
+watch(
+  () => user.value.email,
+  () => {
     if (validateEmail(user.value.email)) {
-        errors.value.email = '';
+      errors.value.email = '';
     }
-});
+  },
+);
 </script>
-
-

@@ -35,7 +35,11 @@ export const passwordResetRouter = Router();
  *       400:
  *         description: Bad Request
  */
-passwordResetRouter.post('/request-password-reset', validate({ body: requestResetBody }), passwordResetController.request);
+passwordResetRouter.post(
+  '/request-password-reset',
+  validate({ body: requestResetBody }),
+  passwordResetController.request,
+);
 
 /**
  *@swagger
@@ -73,7 +77,11 @@ passwordResetRouter.post('/request-password-reset', validate({ body: requestRese
  *       400:
  *         description: Bad Request
  */
-passwordResetRouter.post('/reset-password', validate({ body: resetPasswordBody }), passwordResetController.reset);
+passwordResetRouter.post(
+  '/reset-password',
+  validate({ body: resetPasswordBody }),
+  passwordResetController.reset,
+);
 
 /**
  * @swagger
@@ -96,4 +104,8 @@ passwordResetRouter.post('/reset-password', validate({ body: resetPasswordBody }
  *       400:
  *         description: Token is invalid, expired or already used
  */
-passwordResetRouter.post('/check-token', validate({ body: tokenBody }), passwordResetController.checkToken);
+passwordResetRouter.post(
+  '/check-token',
+  validate({ body: tokenBody }),
+  passwordResetController.checkToken,
+);

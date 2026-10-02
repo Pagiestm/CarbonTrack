@@ -20,7 +20,11 @@ describe('API', () => {
   });
 
   it('un JSON mal formé renvoie 400', async () => {
-    await request(app).post('/auth/login').set('Content-Type', 'application/json').send('{bad').expect(400);
+    await request(app)
+      .post('/auth/login')
+      .set('Content-Type', 'application/json')
+      .send('{bad')
+      .expect(400);
   });
 
   describe('authentification', () => {
@@ -33,29 +37,46 @@ describe('API', () => {
     });
 
     it('un jeton de réinitialisation ne donne pas accès à l’API', async () => {
-      await request(app).get('/profile').set('Authorization', `Bearer ${signResetToken({ id: 1 })}`).expect(401);
+      await request(app)
+        .get('/profile')
+        .set('Authorization', `Bearer ${signResetToken({ id: 1 })}`)
+        .expect(401);
     });
 
     it('route admin avec un compte utilisateur : 403', async () => {
       for (const path of ['/profile/admin/users', '/projects/admin/projects']) {
         await request(app).get(path).set('Authorization', `Bearer ${userToken}`).expect(403);
       }
-      await request(app).post('/materials').set('Authorization', `Bearer ${userToken}`).send({}).expect(403);
+      await request(app)
+        .post('/materials')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send({})
+        .expect(403);
     });
   });
 
   describe('validation', () => {
     it('inscription avec un mot de passe faible : 400 avec le détail', async () => {
-      const res = await request(app).post('/auth/register').send({ email: 'a@b.fr', password: 'faible', name: 'A' }).expect(400);
+      const res = await request(app)
+        .post('/auth/register')
+        .send({ email: 'a@b.fr', password: 'faible', name: 'A' })
+        .expect(400);
       expect(res.body.details[0].field).toBe('password');
     });
 
     it('identifiant non numérique : 400', async () => {
-      await request(app).get('/materials/abc').set('Authorization', `Bearer ${userToken}`).expect(400);
+      await request(app)
+        .get('/materials/abc')
+        .set('Authorization', `Bearer ${userToken}`)
+        .expect(400);
     });
 
     it('matériau incomplet : 400', async () => {
-      await request(app).post('/materials').set('Authorization', `Bearer ${adminToken}`).send({ name: 'x' }).expect(400);
+      await request(app)
+        .post('/materials')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ name: 'x' })
+        .expect(400);
     });
 
     it('réinitialisation avec des mots de passe différents : 400', async () => {

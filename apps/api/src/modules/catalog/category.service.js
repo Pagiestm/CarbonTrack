@@ -27,7 +27,9 @@ export async function deleteCategory(id) {
   await findCategory(id);
   const used = await prisma.material.count({ where: { categoryId: id } });
   if (used) {
-    throw conflict(`Catégorie utilisée par ${used} matériau${used > 1 ? 'x' : ''} : supprimez-les ou déplacez-les d'abord`);
+    throw conflict(
+      `Catégorie utilisée par ${used} matériau${used > 1 ? 'x' : ''} : supprimez-les ou déplacez-les d'abord`,
+    );
   }
   await prisma.category.delete({ where: { id } });
 }

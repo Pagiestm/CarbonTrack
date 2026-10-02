@@ -8,9 +8,11 @@ export const getProjectById = async (id) => (await http.get(`/projects/${id}`)).
 
 export const getAllProjectsForAdmin = async () => (await http.get('/projects/admin/projects')).data;
 
-export const createProject = async (projectData) => (await http.post('/projects', projectData)).data;
+export const createProject = async (projectData) =>
+  (await http.post('/projects', projectData)).data;
 
-export const updateProject = async (id, projectData) => (await http.put(`/projects/${id}`, projectData)).data;
+export const updateProject = async (id, projectData) =>
+  (await http.put(`/projects/${id}`, projectData)).data;
 
 export const deleteProject = async (id) => {
   await http.delete(`/projects/${id}`);

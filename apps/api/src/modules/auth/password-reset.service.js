@@ -19,7 +19,9 @@ export async function requestPasswordReset(email) {
       html: resetTemplate({ name: user.name, resetLink }),
     });
   }
-  return { message: 'Si un compte existe pour cet email, un lien de réinitialisation vient d’être envoyé' };
+  return {
+    message: 'Si un compte existe pour cet email, un lien de réinitialisation vient d’être envoyé',
+  };
 }
 
 // Renvoie l'identifiant de l'utilisateur si le jeton est valide et inutilisé.

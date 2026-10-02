@@ -105,4 +105,3 @@ authRouter.post('/login', validate({ body: loginBody }), authController.login);
 
 authRouter.get('/google', authController.googleRedirect);
 authRouter.get('/google/callback', authController.googleCallback);
-
