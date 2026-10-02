@@ -31,7 +31,9 @@ export async function createProject(userId, { name, description, materials }) {
       description,
       totalFootprint,
       userId,
-      ProjectMaterial: { create: materials.map(({ materialId, quantity }) => ({ materialId, quantity })) },
+      ProjectMaterial: {
+        create: materials.map(({ materialId, quantity }) => ({ materialId, quantity })),
+      },
     },
     include: { ProjectMaterial: true },
   });
@@ -78,7 +80,10 @@ async function assertOwner(id, userId) {
 // Calcule l'empreinte à partir des matériaux en base ; refuse un matériau inconnu.
 async function footprintOf(lines) {
   const ids = lines.map((line) => line.materialId);
-  const found = await prisma.material.findMany({ where: { id: { in: ids } }, select: { id: true, carbonFootprint: true } });
+  const found = await prisma.material.findMany({
+    where: { id: { in: ids } },
+    select: { id: true, carbonFootprint: true },
+  });
   const byId = new Map(found.map((material) => [material.id, material]));
 
   const missing = ids.filter((id) => !byId.has(id));
@@ -86,5 +91,10 @@ async function footprintOf(lines) {
     throw badRequest(`Matériau introuvable : ${missing.join(', ')}`);
   }
 
-  return computeFootprint(lines.map((line) => ({ quantity: line.quantity, carbonFootprint: byId.get(line.materialId).carbonFootprint })));
+  return computeFootprint(
+    lines.map((line) => ({
+      quantity: line.quantity,
+      carbonFootprint: byId.get(line.materialId).carbonFootprint,
+    })),
+  );
 }

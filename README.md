@@ -1,57 +1,83 @@
-# CarbonTrack - Application de Calcul de l'Empreinte Carbone des Matériaux de Construction
+# CarbonTrack
 
-## Présentation
-CarbonTrack est une application innovante destinée à aider les personnes à calculer, suivre et réduire l'empreinte carbone des matériaux utilisés dans leurs projets de construction. Elle permet une gestion efficace des projets tout en favorisant des pratiques de construction durables.
+Application de calcul de l'empreinte carbone des matériaux de construction.
+Elle aide à calculer, suivre et réduire l'empreinte carbone des matériaux
+utilisés dans un projet de construction, et à gérer ces projets dans la durée.
 
-## Fonctionnalités Principales
-- **Base de données des matériaux** : Informations sur l'empreinte carbone des différents matériaux de construction.
-- **Calculateur de projet** : Interface pour sélectionner les matériaux en fonction de leurs catégories et calculer l'empreinte carbone totale de votre projet.
-- **Rapports et recommandations** : Génération de rapports détaillés avec des graphiques.
+En ligne sur **[carbontrack.theotimepagies.com](https://carbontrack.theotimepagies.com)**.
 
-## Pages de l'Application
-- **Page d'accueil** : Présentation de l'application et de ses fonctionnalités.
-- **Page de connexion et d'inscription** : Formulaires pour les utilisateurs existants et nouveaux.
-- **Page Projet** : Vue d'ensemble des projets, accès rapide aux projets récents.
-- **Page de création et de gestion de projet** : Formulaire de création de projet, sélection des matériaux, calcul de l'empreinte carbone.
-- **Page de visualisation des rapports de vos projets** : Rapports détaillés, graphiques, visualisations des données.
-- **Page de profil utilisateur** : Informations personnelles, modification.
-- **Page de gestion des matériaux (Admin)** : Liste des matériaux, formulaire pour leur gestion, détails incluant l'empreinte carbone.
-- **Page de gestion des catégories (Admin)** : Liste des catégories, formulaire pour leur gestion.
+## Fonctionnalités
 
-## Architecture
-Un monorepo npm (workspaces) qui sépare le client et l'API :
+- **Base de matériaux** : empreinte carbone, fournisseur, prix et unité, classés par catégorie.
+- **Calculateur de projet** : sélection des matériaux et des quantités, empreinte carbone totale.
+- **Rapports** : visualisation des résultats d'un projet sous forme de graphiques.
+- **Comptes** : inscription, connexion par mot de passe ou par Google, mot de passe oublié.
+- **Administration** : gestion des catégories, des matériaux et des utilisateurs.
+
+## Structure
+
+Un monorepo npm (workspaces) : deux applications indépendantes, qui ne
+communiquent qu'en HTTP.
 
 ```
-apps/
-├── api/   API REST : Node.js 24, Express 5, Prisma 7, PostgreSQL
-└── web/   client : Vue 3, Vite 8, Tailwind CSS 4
-docs/      déploiement
-Documents/ modèle de données (Merise)
+apps/api/    API REST : Node.js 24, Express 5, Prisma 7, PostgreSQL
+apps/web/    client : Vue 3, Vite 8, Tailwind CSS 4
+docs/        documentation : architecture, modèle de données, déploiement
 ```
 
-- **API** : un monolithe modulaire. Chaque domaine (`auth`, `users`, `catalog`, `projects`, `contact`) a ses routes, ses schémas de validation, son contrôleur et son service. Le code commun (base, erreurs, authentification, emails) est dans `shared/`. Voir [apps/api](./apps/api/README.md).
-- **Client** : organisé par fonctionnalités (`features/`). La couche `api/` reprend les modules de l'API, un fichier par module. Voir [apps/web](./apps/web/README.md).
-- Le client ne parle à l'API qu'en HTTP. Aucun code n'est partagé entre les deux applications.
+## Démarrer
 
-## Points à Développer
-- **Gestion des utilisateurs** : Authentification avec JWT (Auth0 à voir).
-- **UI/UX** : Design intuitif et convivial.
-- **Sécurité** : Protection des données des utilisateurs.
+### Avec Docker — rien à installer d'autre
 
-
-## Base de données
-Consultez le fichier complet des schémas de la base de données [ici](./Documents/Merise.md).
-
-## Installation du projet
 ```sh
-npm install                       # installe les deux applications
-npm run build -w @carbontrack/api # génère le client Prisma
-npm run dev:api                   # API sur http://localhost:3000
-npm run dev:web                   # client sur http://localhost:5173
+cp apps/api/.env.example apps/api/.env   # puis renseigner JWT_SECRET
+cp apps/web/.env.example apps/web/.env
+docker compose up --build
 ```
 
-Avant le premier lancement, copier les `.env.example` en `.env` dans `apps/api` et `apps/web`. Le détail est dans le README de [l'API](./apps/api/README.md) et dans celui du [client](./apps/web/README.md).
+| Service                            | Adresse                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------- |
+| client                             | <http://localhost:5173>                                                |
+| API                                | <http://localhost:3000> (Swagger sur `/api-docs/`)                     |
+| Adminer, pour parcourir la base    | <http://localhost:8081/?pgsql=db&db=CarbonTrack> (`postgres` / `root`) |
+| Mailpit, qui intercepte les emails | <http://localhost:8026>                                                |
 
-## Déploiement
-Le site est en ligne sur [carbontrack.theotimepagies.com](https://carbontrack.theotimepagies.com), hébergé gratuitement sur Render à partir du fichier `render.yaml` : voir [docs/deploiement-render.md](./docs/deploiement-render.md).
+La base, les migrations et le rechargement à chaud sont pris en charge. Le
+détail est dans [docs/deploiement/docker.md](./docs/deploiement/docker.md).
 
+### Sans Docker
+
+Il faut Node.js 24 et un PostgreSQL joignable.
+
+```sh
+npm install
+cp apps/api/.env.example apps/api/.env   # puis renseigner DATABASE_URL et JWT_SECRET
+cp apps/web/.env.example apps/web/.env
+npm run build -w @carbontrack/api        # génère le client Prisma
+npx -w @carbontrack/api prisma migrate dev
+
+npm run dev:api                          # API    http://localhost:3000
+npm run dev:web                          # client http://localhost:5173
+```
+
+## Commandes
+
+| Commande          | Effet                              |
+| ----------------- | ---------------------------------- |
+| `npm run dev:api` | API avec rechargement à chaud      |
+| `npm run dev:web` | client avec rechargement à chaud   |
+| `npm run build`   | build de production du client      |
+| `npm test`        | tests de toutes les applications   |
+| `npm run lint`    | ESLint sur toutes les applications |
+
+## Documentation
+
+| Document                                                   | Contenu                                   |
+| ---------------------------------------------------------- | ----------------------------------------- |
+| [docs/outillage.md](./docs/outillage.md)                   | ESLint, Prettier, Husky, commitlint       |
+| [docs/architecture.md](./docs/architecture.md)             | organisation du monorepo                  |
+| [docs/merise/](./docs/merise/README.md)                    | modèle de données : MCD, MLD, MPD         |
+| [docs/deploiement/docker.md](./docs/deploiement/docker.md) | Docker, en développement et en production |
+| [docs/deploiement/render.md](./docs/deploiement/render.md) | hébergement sur Render                    |
+| [apps/api/README.md](./apps/api/README.md)                 | l'API en détail                           |
+| [apps/web/README.md](./apps/web/README.md)                 | le client en détail                       |

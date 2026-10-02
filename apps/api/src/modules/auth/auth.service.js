@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { env } from '../../config/env.js';
 import { prisma } from '../../shared/db/prisma.js';
 import { badRequest, conflict } from '../../shared/http/errors.js';
 import { signAccessToken } from '../../shared/auth/tokens.js';
@@ -14,10 +15,10 @@ async function sendWelcomeEmail(user) {
     await sendMail({
       to: user.email,
       subject: "Confirmation d'inscription",
-      html: confirmationTemplate({ name: user.name }),
+      html: confirmationTemplate({ name: user.name, siteUrl: env.FRONTEND_URL }),
     });
   } catch (error) {
-    console.error("Email de confirmation non envoyé :", error.message);
+    console.error('Email de confirmation non envoyé :', error.message);
   }
 }
 
@@ -54,7 +55,9 @@ export async function loginWithGoogle(code) {
   let user = await prisma.user.findFirst({ where: { OR: [{ email }, { googleId }] } });
 
   if (!user) {
-    user = await prisma.user.create({ data: { email, name, password: '', role: 'USER', googleId } });
+    user = await prisma.user.create({
+      data: { email, name, password: '', role: 'USER', googleId },
+    });
     await sendWelcomeEmail(user);
   } else if (!user.googleId) {
     user = await prisma.user.update({ where: { id: user.id }, data: { googleId } });

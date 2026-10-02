@@ -13,6 +13,7 @@ API REST de CarbonTrack : comptes, catalogue de matériaux, projets et calcul de
 ## Architecture
 
 ```
+Dockerfile               image de l'API (cibles dev et runtime)
 src/
 ├── server.js            démarrage et arrêt propre (SIGTERM)
 ├── app.js               assemblage : middlewares, routes, gestion d'erreurs
@@ -35,18 +36,23 @@ src/
 
 Chaque module découpe son code de la même façon :
 
-| Fichier            | Rôle                                                          |
-| ------------------ | ------------------------------------------------------------- |
-| `*.routes.js`      | chemins, middlewares, documentation Swagger                   |
-| `*.schemas.js`     | schémas zod des entrées                                       |
-| `*.controller.js`  | lit la requête validée (`req.valid`), répond                  |
-| `*.service.js`     | règles métier et accès à la base ; lève des `HttpError`       |
+| Fichier           | Rôle                                                    |
+| ----------------- | ------------------------------------------------------- |
+| `*.routes.js`     | chemins, middlewares, documentation Swagger             |
+| `*.schemas.js`    | schémas zod des entrées                                 |
+| `*.controller.js` | lit la requête validée (`req.valid`), répond            |
+| `*.service.js`    | règles métier et accès à la base ; lève des `HttpError` |
 
 Les erreurs ont toujours la forme `{ "error": "message", "details"?: [...] }`.
 
 ## Installation
 
-Depuis la racine du dépôt :
+Le plus simple est la pile Docker, qui fournit aussi PostgreSQL et applique les
+migrations au démarrage — `docker compose up` depuis la racine, détails dans
+[docs/deploiement/docker.md](../../docs/deploiement/docker.md).
+
+Sans Docker, il faut Node.js 24 et un PostgreSQL joignable. Depuis la racine du
+dépôt :
 
 ```sh
 npm install
@@ -57,10 +63,14 @@ npx -w @carbontrack/api prisma migrate dev
 
 ## Commandes
 
-| Commande (depuis la racine)              | Effet                                          |
-| ---------------------------------------- | ---------------------------------------------- |
-| `npm run dev:api`                        | serveur avec rechargement (`node --watch`)     |
-| `npm test -w @carbontrack/api`           | tests                                          |
-| `npm run build -w @carbontrack/api`      | génère le client Prisma                        |
+| Commande (depuis la racine)         | Effet                                      |
+| ----------------------------------- | ------------------------------------------ |
+| `npm run dev:api`                   | serveur avec rechargement (`node --watch`) |
+| `npm test -w @carbontrack/api`      | tests                                      |
+| `npm run build -w @carbontrack/api` | génère le client Prisma                    |
+
+Dans la pile Docker, les mêmes commandes passent par le conteneur, qui seul
+voit la base : `docker compose exec api npx vitest run`,
+`docker compose exec api npx prisma migrate dev --name ma_migration`.
 
 L'API écoute sur le port 3000. La documentation est sur <http://localhost:3000/api-docs/>.

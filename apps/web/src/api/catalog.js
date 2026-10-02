@@ -4,7 +4,8 @@ import { http } from './http';
 
 export const getCategories = async () => (await http.get('/categories')).data;
 
-export const getCategoriesWithMaterials = async () => (await http.get('/categories/categories-with-materials')).data;
+export const getCategoriesWithMaterials = async () =>
+  (await http.get('/categories/categories-with-materials')).data;
 
 export const createCategory = async (data) => (await http.post('/categories', data)).data;
 

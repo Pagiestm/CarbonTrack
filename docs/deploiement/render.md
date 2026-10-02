@@ -2,11 +2,11 @@
 
 Hébergement gratuit, sans carte bancaire, à partir du `render.yaml` à la racine.
 
-| Brique         | Où                                             | Gratuit                                  |
-| -------------- | ---------------------------------------------- | ---------------------------------------- |
-| API Express    | Render, web service Node `carbontrack-api`     | 512 Mo, veille après 15 min sans requête |
-| Client Vue     | Render static site `carbontrack`               | illimité, ne dort jamais                 |
-| PostgreSQL     | Neon, ou l'instance Render déjà en place       | 0,5 Go                                   |
+| Brique      | Où                                         | Gratuit                                  |
+| ----------- | ------------------------------------------ | ---------------------------------------- |
+| API Express | Render, web service Node `carbontrack-api` | 512 Mo, veille après 15 min sans requête |
+| Client Vue  | Render static site `carbontrack`           | illimité, ne dort jamais                 |
+| PostgreSQL  | Neon, ou l'instance Render déjà en place   | 0,5 Go                                   |
 
 Le site répond sur `https://carbontrack.theotimepagies.com`. Les appels `/api/*`
 sont réécrits vers l'API par le CDN de Render : client et API partagent la
@@ -19,10 +19,10 @@ Dans le dashboard Render : **New** › **Blueprint**, choisir le dépôt
 deux services. Les variables marquées `sync: false` sont demandées à la
 création :
 
-| Variable                                     | Valeur                                                           |
-| -------------------------------------------- | ---------------------------------------------------------------- |
-| `DATABASE_URL`                               | URL PostgreSQL, avec `?sslmode=require`                          |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`   | identifiants OAuth de la console Google Cloud                     |
+| Variable                                                         | Valeur                                        |
+| ---------------------------------------------------------------- | --------------------------------------------- |
+| `DATABASE_URL`                                                   | URL PostgreSQL, avec `?sslmode=require`       |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`                       | identifiants OAuth de la console Google Cloud |
 | `EMAIL_USER`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | compte d'envoi des emails                     |
 
 `JWT_SECRET` est généré par Render. `FRONTEND_URL` et
@@ -65,6 +65,12 @@ se réveiller. Un moniteur UptimeRobot sur
 - Render bloque les ports SMTP sortants 25, 465 et 587 sur les instances
   gratuites. Un compte SMTP sur un autre port (Mailtrap en 2525, par exemple)
   passe ; sinon il faut un envoi par API HTTP.
-- Les gabarits d'email vivent dans `apps/api/templates/email`, avec l'API.
+- Les gabarits d'email vivent dans `apps/api/src/templates/email`, avec l'API.
 - Le plan gratuit compte 750 heures par mois et par compte : une API qui ne
   dort jamais en consomme environ 720, à partager avec les autres services.
+
+## Et Docker ?
+
+Render construit les deux services depuis les sources, sans passer par les
+images Docker du dépôt. Celles-ci servent au développement et à un hébergement
+autonome : voir [docker.md](./docker.md).

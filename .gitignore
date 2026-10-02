@@ -8,3 +8,6 @@ coverage
 .env
 .env.*
 !.env.example
+
+# Sauvegardes automatiques de Looping (docs/merise)
+*.lo1

@@ -14,7 +14,9 @@ export function notFoundHandler(req, res) {
 // eslint-disable-next-line no-unused-vars -- Express reconnaît un gestionnaire d'erreurs à ses quatre arguments
 export function errorHandler(err, req, res, next) {
   if (err instanceof HttpError) {
-    return res.status(err.status).json({ error: err.message, ...(err.details && { details: err.details }) });
+    return res
+      .status(err.status)
+      .json({ error: err.message, ...(err.details && { details: err.details }) });
   }
 
   if (err?.name === 'PrismaClientKnownRequestError' && prismaErrors[err.code]) {

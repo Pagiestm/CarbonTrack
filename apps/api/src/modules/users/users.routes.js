@@ -135,4 +135,3 @@ usersRouter.put('/', validate({ body: updateProfileBody }), usersController.upda
  *         description: Bad request
  */
 usersRouter.delete('/', usersController.deleteAccount);
-

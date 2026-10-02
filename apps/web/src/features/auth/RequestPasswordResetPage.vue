@@ -8,27 +8,40 @@
           Entrez votre adresse email pour recevoir un lien de réinitialisation de mot de passe.
         </p>
       </header>
-      <div v-if="isLoading" class="text-center text-white">
-        Envoi en cours...
-      </div>
+      <div v-if="isLoading" class="text-center text-white">Envoi en cours...</div>
       <div v-else>
         <form @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
           <div class="mb-6">
             <label for="email" class="block text-white mb-2">Email</label>
-            <input v-model="email" type="email" id="email"
-              class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"/>
+            <input
+              v-model="email"
+              type="email"
+              id="email"
+              class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+            />
             <FormError :message="errors.email" />
           </div>
-          <button type="submit" :disabled="isLoading"
-            class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
+          <button
+            type="submit"
+            :disabled="isLoading"
+            class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+          >
             <span v-if="isLoading">Envoi...</span>
             <span v-else>Envoyer</span>
           </button>
         </form>
-        <SuccessMessage v-if="showSuccessMessage" :show="showSuccessMessage" :message="successMessage"
-          @close="handleCloseSuccessMessage" />
-        <ErrorMessage v-if="showErrorMessage" :show="showErrorMessage" :message="errorMessage"
-          @close="handleCloseErrorMessage" />
+        <SuccessMessage
+          v-if="showSuccessMessage"
+          :show="showSuccessMessage"
+          :message="successMessage"
+          @close="handleCloseSuccessMessage"
+        />
+        <ErrorMessage
+          v-if="showErrorMessage"
+          :show="showErrorMessage"
+          :message="errorMessage"
+          @close="handleCloseErrorMessage"
+        />
       </div>
     </div>
   </section>
@@ -53,48 +66,51 @@ const showErrorMessage = ref(false);
 const errorMessage = ref('');
 
 const validateEmail = (email) => {
-const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-return re.test(String(email).toLowerCase());
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
 };
 
 const validateFields = () => {
-errors.value = {};
-if (!email.value) {
-  errors.value.email = 'L\'email est requis.';
-} else if (!validateEmail(email.value)) {
-  errors.value.email = 'Le format de l\'email est invalide.';
-}
-return Object.keys(errors.value).length === 0;
+  errors.value = {};
+  if (!email.value) {
+    errors.value.email = "L'email est requis.";
+  } else if (!validateEmail(email.value)) {
+    errors.value.email = "Le format de l'email est invalide.";
+  }
+  return Object.keys(errors.value).length === 0;
 };
 
 const handleSubmit = async () => {
-if (validateFields()) {
-  isLoading.value = true;
-  try {
-    await requestPasswordReset(email.value);
-    successMessage.value = 'Email de réinitialisation envoyé avec succès !';
-    showSuccessMessage.value = true;
-  } catch {
-    errorMessage.value = 'Échec de l\'envoi de l\'email de réinitialisation.';
-    showErrorMessage.value = true;
-  } finally {
-    isLoading.value = false;
+  if (validateFields()) {
+    isLoading.value = true;
+    try {
+      await requestPasswordReset(email.value);
+      successMessage.value = 'Email de réinitialisation envoyé avec succès !';
+      showSuccessMessage.value = true;
+    } catch {
+      errorMessage.value = "Échec de l'envoi de l'email de réinitialisation.";
+      showErrorMessage.value = true;
+    } finally {
+      isLoading.value = false;
+    }
   }
-}
 };
 
 const handleCloseSuccessMessage = () => {
-showSuccessMessage.value = false;
+  showSuccessMessage.value = false;
 };
 
 const handleCloseErrorMessage = () => {
-showErrorMessage.value = false;
+  showErrorMessage.value = false;
 };
 
 // Watchers to clear errors when fields are corrected
-watch(() => email.value, () => {
-if (validateEmail(email.value)) {
-  errors.value.email = '';
-}
-});
+watch(
+  () => email.value,
+  () => {
+    if (validateEmail(email.value)) {
+      errors.value.email = '';
+    }
+  },
+);
 </script>

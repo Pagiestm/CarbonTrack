@@ -19,7 +19,7 @@
           L'équipe CarbonTrack
         </mj-text>
         <mj-image width="600px" src="https://images.unsplash.com/photo-1505235687559-28b5f54645b7?q=80&w=3864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="CarbonTrack Banner" />
-        <mj-button background-color="#42B883" color="#ffffff" href="https://carbontrack.theotimepagies.com" font-size="18px" padding="20px" align="center">
+        <mj-button background-color="#42B883" color="#ffffff" href="{{siteUrl}}" font-size="18px" padding="20px" align="center">
           Visitez notre site
         </mj-button>
       </mj-column>

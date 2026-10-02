@@ -218,7 +218,11 @@ projectsRouter.post('/', validate({ body: projectBody }), projectsController.cre
  *             schema:
  *               $ref: '#/components/schemas/Project'
  */
-projectsRouter.put('/:id', validate({ params: idParams, body: projectBody }), projectsController.update);
+projectsRouter.put(
+  '/:id',
+  validate({ params: idParams, body: projectBody }),
+  projectsController.update,
+);
 
 /**
  * @swagger
@@ -238,4 +242,3 @@ projectsRouter.put('/:id', validate({ params: idParams, body: projectBody }), pr
  *         description: No content
  */
 projectsRouter.delete('/:id', validate({ params: idParams }), projectsController.remove);
-

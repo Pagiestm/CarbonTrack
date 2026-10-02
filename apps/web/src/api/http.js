@@ -20,7 +20,9 @@ http.interceptors.response.use(
   (response) => response,
   (error) => {
     const body = error.response?.data;
-    const apiError = new Error(body?.error ?? 'Impossible de joindre le serveur, veuillez réessayer');
+    const apiError = new Error(
+      body?.error ?? 'Impossible de joindre le serveur, veuillez réessayer',
+    );
     apiError.status = error.response?.status;
     apiError.details = body?.details;
     return Promise.reject(apiError);

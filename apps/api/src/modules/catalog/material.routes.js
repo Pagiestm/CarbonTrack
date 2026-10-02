@@ -154,7 +154,12 @@ materialRouter.post('/', requireAdmin, validate({ body: materialBody }), materia
  *             schema:
  *               $ref: '#/components/schemas/Material'
  */
-materialRouter.put('/:id', requireAdmin, validate({ params: idParams, body: materialUpdateBody }), materialController.update);
+materialRouter.put(
+  '/:id',
+  requireAdmin,
+  validate({ params: idParams, body: materialUpdateBody }),
+  materialController.update,
+);
 
 /**
  * @swagger
@@ -173,5 +178,9 @@ materialRouter.put('/:id', requireAdmin, validate({ params: idParams, body: mate
  *       204:
  *         description: No content
  */
-materialRouter.delete('/:id', requireAdmin, validate({ params: idParams }), materialController.remove);
-
+materialRouter.delete(
+  '/:id',
+  requireAdmin,
+  validate({ params: idParams }),
+  materialController.remove,
+);

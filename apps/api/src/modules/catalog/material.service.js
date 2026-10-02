@@ -30,13 +30,18 @@ export async function deleteMaterial(id) {
   await getMaterial(id);
   const used = await prisma.projectMaterial.count({ where: { materialId: id } });
   if (used) {
-    throw conflict(`Matériau utilisé dans ${used} projet${used > 1 ? 's' : ''} : impossible de le supprimer`);
+    throw conflict(
+      `Matériau utilisé dans ${used} projet${used > 1 ? 's' : ''} : impossible de le supprimer`,
+    );
   }
   await prisma.material.delete({ where: { id } });
 }
 
 async function assertCategoryExists(categoryId) {
-  const category = await prisma.category.findUnique({ where: { id: categoryId }, select: { id: true } });
+  const category = await prisma.category.findUnique({
+    where: { id: categoryId },
+    select: { id: true },
+  });
   if (!category) {
     throw badRequest('Catégorie introuvable');
   }

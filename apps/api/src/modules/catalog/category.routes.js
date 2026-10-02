@@ -164,7 +164,12 @@ categoryRouter.post('/', requireAdmin, validate({ body: categoryBody }), categor
  *       500:
  *         description: Server error
  */
-categoryRouter.put('/:id', requireAdmin, validate({ params: idParams, body: categoryBody }), categoryController.update);
+categoryRouter.put(
+  '/:id',
+  requireAdmin,
+  validate({ params: idParams, body: categoryBody }),
+  categoryController.update,
+);
 
 /**
  * @swagger
@@ -187,5 +192,9 @@ categoryRouter.put('/:id', requireAdmin, validate({ params: idParams, body: cate
  *       500:
  *         description: Server error
  */
-categoryRouter.delete('/:id', requireAdmin, validate({ params: idParams }), categoryController.remove);
-
+categoryRouter.delete(
+  '/:id',
+  requireAdmin,
+  validate({ params: idParams }),
+  categoryController.remove,
+);

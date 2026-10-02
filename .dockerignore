@@ -1,0 +1,28 @@
+# Le contexte de build est la racine du dépôt.
+
+**/node_modules
+**/dist
+**/coverage
+**/.git
+**/*.log
+**/.DS_Store
+
+# Secrets : les variables arrivent par l'environnement du conteneur.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Régénéré dans l'image.
+apps/api/src/generated
+
+# Sans objet dans une image.
+docs
+README.md
+render.yaml
+.github
+.vscode
+.husky
+eslint.config.js
+commitlint.config.js
+.prettierrc.json
+.prettierignore

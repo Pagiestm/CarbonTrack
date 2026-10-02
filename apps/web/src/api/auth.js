@@ -18,4 +18,5 @@ export const requestPasswordReset = async (email) =>
 export const resetPassword = async (token, newPassword, confirmPassword) =>
   (await http.post('/password-reset/reset-password', { token, newPassword, confirmPassword })).data;
 
-export const checkToken = async (token) => (await http.post('/password-reset/check-token', { token })).data;
+export const checkToken = async (token) =>
+  (await http.post('/password-reset/check-token', { token })).data;
