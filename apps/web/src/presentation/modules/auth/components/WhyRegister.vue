@@ -37,7 +37,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { Check } from 'lucide-vue-next';
 import { SERIE } from '@/presentation/components/ui/chart-theme.js';
@@ -56,4 +55,3 @@ const avantages = [
   'Un export CSV à joindre à un dossier ou à une demande de subvention',
 ];
 </script>
-

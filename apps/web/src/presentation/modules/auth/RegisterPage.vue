@@ -49,15 +49,11 @@
       </RouterLink>
     </template>
 
-
     <template #aside>
       <WhyRegister />
     </template>
-
   </AuthLayout>
-
 </template>
-
 
 <script setup>
 import { reactive, ref } from 'vue';
@@ -114,4 +110,3 @@ const inscrire = async () => {
   }
 };
 </script>
-

@@ -10,7 +10,6 @@
   </span>
 </template>
 
-
 <script setup>
 defineProps({
   tone: { type: String, default: 'neutral' },
@@ -24,4 +23,3 @@ const tons = {
   danger: 'border-danger/30 bg-danger-soft text-danger',
 };
 </script>
-

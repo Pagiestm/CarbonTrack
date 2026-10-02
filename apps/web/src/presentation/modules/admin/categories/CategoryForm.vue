@@ -24,7 +24,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -87,4 +86,3 @@ onMounted(async () => {
   nom.value = catalog.categories.find((c) => c.id === Number(route.params.id))?.name ?? '';
 });
 </script>
-

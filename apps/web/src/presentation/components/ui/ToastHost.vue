@@ -28,7 +28,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { CheckCircle2, Info, TriangleAlert, X } from 'lucide-vue-next';
 import { useToasts } from '@/presentation/composables/useToasts.js';
@@ -41,7 +40,6 @@ const tons = {
   info: { classes: 'border-line-strong bg-surface-raised text-ink', icone: Info },
 };
 </script>
-
 
 <style scoped>
 .toast-enter-active,
@@ -63,4 +61,3 @@ const tons = {
   }
 }
 </style>
-

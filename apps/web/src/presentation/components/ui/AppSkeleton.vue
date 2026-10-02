@@ -10,11 +10,9 @@
   </div>
 </template>
 
-
 <script setup>
 defineProps({
   lines: { type: Number, default: 3 },
   height: { type: String, default: 'h-4' },
 });
 </script>
-

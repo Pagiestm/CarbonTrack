@@ -15,7 +15,6 @@
   </div>
 </template>
 
-
 <script setup>
 defineProps({
   label: { type: String, required: true },
@@ -24,4 +23,3 @@ defineProps({
   icon: { type: [Object, Function], default: null },
 });
 </script>
-

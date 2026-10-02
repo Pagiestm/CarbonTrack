@@ -54,15 +54,11 @@
       </RouterLink>
     </template>
 
-
     <template #aside>
       <MaterialOfTheDay />
     </template>
-
   </AuthLayout>
-
 </template>
-
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
@@ -105,4 +101,3 @@ onMounted(() => {
   if (session.recupererJetonDeLUrl()) router.push(destination());
 });
 </script>
-

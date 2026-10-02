@@ -13,7 +13,6 @@
   </header>
 </template>
 
-
 <script setup>
 defineProps({
   title: { type: String, required: true },
@@ -21,4 +20,3 @@ defineProps({
   eyebrow: { type: String, default: '' },
 });
 </script>
-

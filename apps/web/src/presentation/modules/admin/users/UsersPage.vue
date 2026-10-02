@@ -76,9 +76,7 @@
         </table>
       </div>
     </template>
-
   </AdminList>
-
 
   <ConfirmDialog
     v-if="aSupprimer"
@@ -89,7 +87,6 @@
     @confirm="supprimer"
   />
 </template>
-
 
 <script setup>
 import { ref } from 'vue';
@@ -150,4 +147,3 @@ const supprimer = async () => {
   }
 };
 </script>
-

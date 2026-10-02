@@ -11,7 +11,6 @@
   </span>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 import { Footprint } from '@/domain/entities/Footprint.js';
@@ -27,4 +26,3 @@ const niveaux = {
 const styles = computed(() => niveaux[props.footprint.niveau].classes);
 const libelle = computed(() => niveaux[props.footprint.niveau].libelle);
 </script>
-

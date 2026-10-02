@@ -2,7 +2,6 @@
   <div :class="height"><canvas ref="canevas" /></div>
 </template>
 
-
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Chart } from 'chart.js/auto';
@@ -31,4 +30,3 @@ onMounted(dessiner);
 watch(() => [props.data, props.options], dessiner, { deep: true });
 onBeforeUnmount(() => graphique?.destroy());
 </script>
-

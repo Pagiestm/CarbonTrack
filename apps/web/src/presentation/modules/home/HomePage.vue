@@ -14,7 +14,6 @@
   </div>
 </template>
 
-
 <script setup>
 import NavBar from '@/presentation/components/NavBar.vue';
 import AppFooter from '@/presentation/components/AppFooter.vue';
@@ -26,4 +25,3 @@ import StepsSection from '@/presentation/modules/home/components/StepsSection.vu
 import FeaturesSection from '@/presentation/modules/home/components/FeaturesSection.vue';
 import CtaSection from '@/presentation/modules/home/components/CtaSection.vue';
 </script>
-

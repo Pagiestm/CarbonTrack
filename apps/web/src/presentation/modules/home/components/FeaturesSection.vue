@@ -22,7 +22,6 @@
   </section>
 </template>
 
-
 <script setup>
 import { ChartColumn, Database, Download, FolderKanban, Scale, ShieldCheck } from 'lucide-vue-next';
 
@@ -59,4 +58,3 @@ const atouts = [
   },
 ];
 </script>
-

@@ -58,7 +58,6 @@
   </AppShell>
 </template>
 
-
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -132,4 +131,3 @@ watch(
   },
 );
 </script>
-

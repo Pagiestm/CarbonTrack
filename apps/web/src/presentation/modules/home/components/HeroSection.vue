@@ -62,7 +62,6 @@
   </section>
 </template>
 
-
 <script setup>
 import { Footprint } from '@/domain/entities/Footprint.js';
 import { useSessionStore } from '@/presentation/stores/session.js';
@@ -80,4 +79,3 @@ const trame = {
   maskImage: 'radial-gradient(ellipse 80% 70% at 50% 0%, #000 35%, transparent 100%)',
 };
 </script>
-

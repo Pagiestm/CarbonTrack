@@ -16,11 +16,9 @@
   </section>
 </template>
 
-
 <script setup>
 import { useSessionStore } from '@/presentation/stores/session.js';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 
 const session = useSessionStore();
 </script>
-

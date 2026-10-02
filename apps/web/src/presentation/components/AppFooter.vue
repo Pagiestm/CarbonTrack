@@ -44,7 +44,6 @@
   </footer>
 </template>
 
-
 <script setup>
 import { RouterLink } from 'vue-router';
 import { Leaf, Mail } from 'lucide-vue-next';
@@ -59,4 +58,3 @@ const liens = [
 
 const annee = new Date().getFullYear();
 </script>
-

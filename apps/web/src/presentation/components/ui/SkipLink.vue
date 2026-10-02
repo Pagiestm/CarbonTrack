@@ -6,4 +6,3 @@
     Aller au contenu
   </a>
 </template>
-

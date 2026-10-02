@@ -44,7 +44,6 @@
   </RouterLink>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -59,4 +58,3 @@ const tonStatut = computed(
   () => ({ DRAFT: 'neutral', IN_PROGRESS: 'accent', DONE: 'success' })[props.project.status],
 );
 </script>
-

@@ -8,14 +8,11 @@
       <template #actions>
         <AppButton to="/categories/create" :icon="Plus">Ajouter</AppButton>
       </template>
-
     </PageHeader>
-
 
     <AppCard v-if="catalog.chargement" padding="p-4">
       <AppSkeleton :lines="6" height="h-6" />
     </AppCard>
-
 
     <EmptyState
       v-else-if="!catalog.categories.length"
@@ -30,13 +27,10 @@
           <div class="min-w-0">
             <h2 class="truncate font-semibold text-ink">{{ categorie.name }}</h2>
 
-
             <p class="mt-1 text-sm text-ink-muted">
               {{ categorie.nombre }} matériau{{ categorie.nombre > 1 ? 'x' : '' }}
             </p>
-
           </div>
-
 
           <div class="flex shrink-0 gap-1">
             <AppButton
@@ -54,13 +48,9 @@
               @click="aSupprimer = categorie"
             />
           </div>
-
         </div>
-
       </AppCard>
-
     </div>
-
 
     <ConfirmDialog
       v-if="aSupprimer"
@@ -71,9 +61,7 @@
       @confirm="supprimer"
     />
   </div>
-
 </template>
-
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
@@ -120,4 +108,3 @@ const supprimer = async () => {
 
 onMounted(() => catalog.charger({ force: true }));
 </script>
-

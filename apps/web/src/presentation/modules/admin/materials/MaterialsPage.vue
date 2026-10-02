@@ -13,7 +13,6 @@
       <AppButton to="/materials/create" :icon="Plus">Ajouter</AppButton>
     </template>
 
-
     <template #default="{ items }">
       <div class="overflow-x-auto rounded-card border border-line">
         <table class="w-full min-w-[46rem] text-sm">
@@ -21,46 +20,32 @@
             <tr>
               <th scope="col" class="px-4 py-3 font-medium text-ink-muted">Nom</th>
 
-
               <th scope="col" class="px-4 py-3 font-medium text-ink-muted">Catégorie</th>
-
 
               <th scope="col" class="px-4 py-3 font-medium text-ink-muted">Fournisseur</th>
 
-
               <th scope="col" class="px-4 py-3 text-right font-medium text-ink-muted">Empreinte</th>
-
 
               <th scope="col" class="px-4 py-3 text-right font-medium text-ink-muted">Prix</th>
 
-
               <th scope="col" class="px-4 py-3 text-right font-medium text-ink-muted">Actions</th>
-
             </tr>
-
           </thead>
-
 
           <tbody class="divide-y divide-line bg-surface-raised">
             <tr v-for="materiau in items" :key="materiau.id" class="hover:bg-surface-overlay">
               <td class="px-4 py-3 font-medium text-ink">{{ materiau.name }}</td>
 
-
               <td class="px-4 py-3">
                 <AppBadge>{{ materiau.category?.name ?? '—' }}</AppBadge>
-
               </td>
 
-
               <td class="px-4 py-3 text-ink-muted">{{ materiau.supplier }}</td>
-
 
               <td class="px-4 py-3 text-right tabular-nums text-ink">
                 {{ materiau.carbonFootprint.toLocaleString('fr-FR') }}
                 <span class="text-ink-subtle">kg/{{ materiau.unit }}</span>
-
               </td>
-
 
               <td class="px-4 py-3 text-right tabular-nums text-ink-muted">
                 {{
@@ -70,7 +55,6 @@
                   })
                 }}
               </td>
-
 
               <td class="px-4 py-3">
                 <div class="flex justify-end gap-1">
@@ -89,21 +73,13 @@
                     @click="aSupprimer = materiau"
                   />
                 </div>
-
               </td>
-
             </tr>
-
           </tbody>
-
         </table>
-
       </div>
-
     </template>
-
   </AdminList>
-
 
   <ConfirmDialog
     v-if="aSupprimer"
@@ -114,7 +90,6 @@
     @confirm="supprimer"
   />
 </template>
-
 
 <script setup>
 import { ref } from 'vue';
@@ -151,4 +126,3 @@ const supprimer = async () => {
   }
 };
 </script>
-

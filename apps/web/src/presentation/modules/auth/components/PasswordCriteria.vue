@@ -16,7 +16,6 @@
   </ul>
 </template>
 
-
 <script setup>
 import { Check, Circle } from 'lucide-vue-next';
 
@@ -30,4 +29,3 @@ const criteres = [
   { cle: 'symbol', libelle: 'Un symbole' },
 ];
 </script>
-

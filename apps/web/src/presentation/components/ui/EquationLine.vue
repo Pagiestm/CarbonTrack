@@ -10,7 +10,6 @@
   </div>
 </template>
 
-
 <script setup>
 defineProps({
   quantite: { type: String, required: true },
@@ -18,4 +17,3 @@ defineProps({
   resultat: { type: String, required: true },
 });
 </script>
-

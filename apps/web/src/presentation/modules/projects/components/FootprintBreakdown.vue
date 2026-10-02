@@ -35,7 +35,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Chart } from 'chart.js/auto';
@@ -79,4 +78,3 @@ onMounted(dessiner);
 watch(repartition, dessiner);
 onBeforeUnmount(() => graphique?.destroy());
 </script>
-

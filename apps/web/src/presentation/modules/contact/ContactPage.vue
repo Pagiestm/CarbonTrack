@@ -73,7 +73,6 @@
   </AppShell>
 </template>
 
-
 <script setup>
 import { reactive, ref } from 'vue';
 import { Mail, MailCheck, Send, Tag, User } from 'lucide-vue-next';
@@ -117,4 +116,3 @@ const envoyer = async () => {
   }
 };
 </script>
-

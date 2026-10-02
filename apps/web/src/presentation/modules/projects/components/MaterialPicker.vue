@@ -47,7 +47,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 import { Plus, Trash2 } from 'lucide-vue-next';
@@ -89,4 +88,3 @@ const retirer = (index) =>
     props.modelValue.filter((_, i) => i !== index),
   );
 </script>
-

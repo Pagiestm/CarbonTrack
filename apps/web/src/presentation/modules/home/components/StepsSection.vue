@@ -37,7 +37,6 @@
   </section>
 </template>
 
-
 <script setup>
 const etapes = [
   {
@@ -57,4 +56,3 @@ const etapes = [
   },
 ];
 </script>
-

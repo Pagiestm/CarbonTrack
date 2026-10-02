@@ -115,7 +115,6 @@
   </Teleport>
 </template>
 
-
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
@@ -196,7 +195,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
 <style scoped>
 .panneau-enter-active,
 .panneau-leave-active {
@@ -225,4 +223,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-

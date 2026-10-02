@@ -13,7 +13,6 @@
   </component>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -57,4 +56,3 @@ const classes = computed(() => [
   props.block && 'w-full',
 ]);
 </script>
-

@@ -48,11 +48,8 @@
         </table>
       </div>
     </template>
-
   </AdminList>
-
 </template>
-
 
 <script setup>
 import { FolderKanban } from 'lucide-vue-next';
@@ -69,4 +66,3 @@ const tonStatut = (projet) =>
 const formatDate = (date) =>
   new Date(date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 </script>
-

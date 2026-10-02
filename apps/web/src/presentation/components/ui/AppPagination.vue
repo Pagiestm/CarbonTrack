@@ -48,7 +48,6 @@
   </nav>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
@@ -77,4 +76,3 @@ const numeros = computed(() => {
   return avecEllipses;
 });
 </script>
-

@@ -78,7 +78,6 @@
   </AppShell>
 </template>
 
-
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -147,4 +146,3 @@ onMounted(async () => {
   }
 });
 </script>
-

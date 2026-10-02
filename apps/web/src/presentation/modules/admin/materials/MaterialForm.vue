@@ -74,7 +74,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -188,4 +187,3 @@ onMounted(async () => {
   }
 });
 </script>
-

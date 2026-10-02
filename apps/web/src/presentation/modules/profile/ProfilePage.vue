@@ -7,12 +7,9 @@
         </AppButton>
         <AppButton to="/profile/edit" variant="secondary" :icon="Pencil">Modifier</AppButton>
       </template>
-
     </PageHeader>
 
-
     <AppAlert v-if="erreur" class="mb-6">{{ erreur }}</AppAlert>
-
 
     <div v-if="utilisateur" class="grid gap-6 lg:grid-cols-[20rem_1fr]">
       <AppCard>
@@ -23,17 +20,13 @@
             {{ utilisateur.initials || '?' }}
           </div>
 
-
           <p class="mt-4 font-semibold text-ink">{{ utilisateur.name }}</p>
-
 
           <p v-if="utilisateur.subtitle" class="text-sm text-ink-muted">
             {{ utilisateur.subtitle }}
           </p>
 
-
           <p class="mt-1 text-sm text-ink-subtle">{{ utilisateur.email }}</p>
-
 
           <span
             v-if="utilisateur.isAdmin"
@@ -42,11 +35,8 @@
             <ShieldCheck class="size-3.5" aria-hidden="true" />
             Administrateur
           </span>
-
         </div>
-
       </AppCard>
-
 
       <div class="space-y-6">
         <AppCard title="Informations">
@@ -58,15 +48,10 @@
             >
               <dt class="text-ink-muted">{{ champ.libelle }}</dt>
 
-
               <dd class="text-ink">{{ champ.valeur }}</dd>
-
             </div>
-
           </dl>
-
         </AppCard>
-
 
         <AppCard
           title="Supprimer mon compte"
@@ -75,13 +60,9 @@
           <AppButton variant="danger" :icon="Trash2" @click="confirmation = true">
             Supprimer mon compte
           </AppButton>
-
         </AppCard>
-
       </div>
-
     </div>
-
 
     <ConfirmDialog
       v-if="confirmation"
@@ -93,9 +74,7 @@
       @confirm="supprimer"
     />
   </AppShell>
-
 </template>
-
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
@@ -164,4 +143,3 @@ onMounted(async () => {
   }
 });
 </script>
-

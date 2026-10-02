@@ -14,10 +14,8 @@
   </AppShell>
 </template>
 
-
 <script setup>
 import { House } from 'lucide-vue-next';
 import AppShell from '@/presentation/components/ui/AppShell.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 </script>
-

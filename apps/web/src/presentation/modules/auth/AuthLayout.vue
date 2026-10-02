@@ -33,7 +33,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { RouterLink } from 'vue-router';
 import { Leaf } from 'lucide-vue-next';
@@ -48,4 +47,3 @@ const trame = {
   backgroundSize: '28px 28px',
 };
 </script>
-

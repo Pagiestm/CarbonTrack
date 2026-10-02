@@ -9,7 +9,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { Inbox } from 'lucide-vue-next';
 
@@ -19,4 +18,3 @@ defineProps({
   icon: { type: [Object, Function], default: () => Inbox },
 });
 </script>
-

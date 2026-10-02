@@ -52,7 +52,6 @@
   </section>
 </template>
 
-
 <script setup>
 import { Lightbulb } from 'lucide-vue-next';
 import { SERIE } from '@/presentation/components/ui/chart-theme.js';
@@ -88,4 +87,3 @@ const postes = [
   },
 ];
 </script>
-

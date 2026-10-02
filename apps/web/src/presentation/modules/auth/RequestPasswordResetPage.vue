@@ -38,15 +38,11 @@
       </RouterLink>
     </template>
 
-
     <template #aside>
       <MaterialOfTheDay />
     </template>
-
   </AuthLayout>
-
 </template>
-
 
 <script setup>
 import { ref, watch } from 'vue';
@@ -88,4 +84,3 @@ watch(email, (valeur) => {
   if (valide(valeur)) erreurEmail.value = '';
 });
 </script>
-

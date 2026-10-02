@@ -2,12 +2,9 @@
   <div>
     <PageHeader eyebrow="Administration" :title="title" :subtitle="sousTitre">
       <template v-if="$slots.actions" #actions><slot name="actions" /></template>
-
     </PageHeader>
 
-
     <AppAlert v-if="erreur" class="mb-6">{{ erreur }}</AppAlert>
-
 
     <div class="mb-6 max-w-sm">
       <AppField
@@ -20,9 +17,7 @@
       />
     </div>
 
-
     <AppCard v-if="chargement" padding="p-4"><AppSkeleton :lines="8" height="h-6" /></AppCard>
-
 
     <EmptyState
       v-else-if="resultat.isEmpty"
@@ -35,11 +30,8 @@
       <slot :items="resultat.items" />
       <AppPagination v-model="page" :page="resultat" :loading="chargement" class="mt-6" />
     </template>
-
   </div>
-
 </template>
-
 
 <script setup>
 import { computed } from 'vue';
@@ -72,4 +64,3 @@ const sousTitre = computed(() =>
 defineExpose({ rafraichir });
 rafraichir();
 </script>
-

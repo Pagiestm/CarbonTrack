@@ -11,10 +11,8 @@
   </div>
 </template>
 
-
 <script setup>
 import { RouterView } from 'vue-router';
 import NavBar from '@/presentation/components/NavBar.vue';
 import AdminSidebar from '@/presentation/modules/admin/components/AdminSidebar.vue';
 </script>
-

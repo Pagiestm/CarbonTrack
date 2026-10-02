@@ -31,7 +31,6 @@
   </section>
 </template>
 
-
 <script setup>
 import AppBadge from '@/presentation/components/ui/AppBadge.vue';
 import CarbonScale from '@/presentation/components/ui/CarbonScale.vue';
@@ -67,4 +66,3 @@ const familles = [
   },
 ];
 </script>
-

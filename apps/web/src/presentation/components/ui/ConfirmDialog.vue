@@ -26,7 +26,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onBeforeUnmount, onMounted } from 'vue';
 import { TriangleAlert } from 'lucide-vue-next';
@@ -53,4 +52,3 @@ onBeforeUnmount(() => {
   document.body.style.overflow = '';
 });
 </script>
-

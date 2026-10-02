@@ -29,7 +29,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { computed } from 'vue';
 
@@ -60,4 +59,3 @@ const degrade = {
     'linear-gradient(to right, var(--color-level-low), var(--color-level-mid), var(--color-level-high))',
 };
 </script>
-

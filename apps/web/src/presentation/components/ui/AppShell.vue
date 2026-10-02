@@ -10,7 +10,6 @@
   </div>
 </template>
 
-
 <script setup>
 import NavBar from '@/presentation/components/NavBar.vue';
 import AppFooter from '@/presentation/components/AppFooter.vue';
@@ -20,4 +19,3 @@ defineProps({
   footer: { type: Boolean, default: true },
 });
 </script>
-

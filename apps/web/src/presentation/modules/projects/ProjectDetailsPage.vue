@@ -24,37 +24,28 @@
             Supprimer
           </AppButton>
         </template>
-
       </PageHeader>
-
 
       <div class="mb-6 flex flex-wrap items-center gap-2">
         <AppBadge :tone="tonStatut">{{ projet.statusLabel }}</AppBadge>
 
-
         <AppBadge v-if="projet.location" :icon="MapPin">{{ projet.location }}</AppBadge>
-
 
         <AppBadge v-if="projet.surface" :icon="Ruler">
           {{ projet.surface.toLocaleString('fr-FR') }} m²
         </AppBadge>
 
-
         <AppBadge v-if="projet.startDate" :icon="CalendarDays">
           Démarré le {{ formatDate(projet.startDate) }}
         </AppBadge>
 
-
         <AppBadge :icon="Clock">Créé le {{ formatDate(projet.createdAt) }}</AppBadge>
-
       </div>
-
 
       <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile :icon="Cloud" label="Empreinte totale" :value="projet.totalFootprint.format()">
           <FootprintBadge :footprint="projet.totalFootprint" />
         </StatTile>
-
 
         <StatTile
           :icon="Gauge"
@@ -78,7 +69,6 @@
         />
       </div>
 
-
       <div class="grid gap-6 lg:grid-cols-3">
         <AppCard
           class="lg:col-span-2"
@@ -87,14 +77,11 @@
         >
           <FootprintBreakdown v-if="projet.lines.length" :project="projet" />
           <p v-else class="text-sm text-ink-muted">Ce projet ne contient aucun matériau.</p>
-
         </AppCard>
-
 
         <AppCard title="Le poste dominant" subtitle="Là où la réduction compte le plus.">
           <template v-if="dominant">
             <p class="text-lg font-semibold text-ink">{{ dominant.ligne.material?.name }}</p>
-
 
             <p class="mt-1 text-sm text-ink-muted">
               {{ dominant.ligne.quantity.toLocaleString('fr-FR') }}

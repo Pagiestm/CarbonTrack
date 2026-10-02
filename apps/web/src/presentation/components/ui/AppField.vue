@@ -51,7 +51,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { computed, ref } from 'vue';
 import { Eye, EyeOff } from 'lucide-vue-next';
@@ -95,4 +94,3 @@ const description = computed(() =>
   props.error ? `${props.id}-erreur` : props.hint ? `${props.id}-aide` : undefined,
 );
 </script>
-

@@ -74,7 +74,6 @@
   </figure>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import { SERIE } from '@/presentation/components/ui/chart-theme.js';
@@ -127,4 +126,3 @@ const zones = [
 const description =
   'Coupe schématique d’une extension de 40 m² : la fondation et la dalle représentent 46 % de l’empreinte, l’isolation 24 %, l’ossature bois 18 %, les menuiseries 12 %.';
 </script>
-

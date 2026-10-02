@@ -88,30 +88,21 @@
         <FootprintBadge :footprint="estimation" />
       </template>
 
-
       <p v-if="catalog.chargement" class="text-sm text-ink-muted">Chargement du catalogue…</p>
-
 
       <MaterialPicker v-else v-model="formulaire.materials" :materials="catalog.materiaux" />
       <p v-if="erreurs.etat.parChamp.materials" class="mt-3 text-sm text-danger">
         {{ erreurs.etat.parChamp.materials }}
       </p>
-
     </AppCard>
-
 
     <div class="flex justify-end gap-3">
       <AppButton to="/projects" variant="secondary">Annuler</AppButton>
 
-
       <AppButton type="submit" :loading="loading">{{ submitLabel }}</AppButton>
-
     </div>
-
   </form>
-
 </template>
-
 
 <script setup>
 import { computed, onMounted, reactive, watch } from 'vue';
@@ -227,4 +218,3 @@ watch(
 
 onMounted(catalog.charger);
 </script>
-

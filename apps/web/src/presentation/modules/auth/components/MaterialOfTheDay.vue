@@ -40,7 +40,6 @@
   </div>
 </template>
 
-
 <script setup>
 import AppBadge from '@/presentation/components/ui/AppBadge.vue';
 import CarbonScale from '@/presentation/components/ui/CarbonScale.vue';
@@ -63,4 +62,3 @@ const isolants = [
   { nom: 'Polyuréthane', kg: 34.2 },
 ];
 </script>
-

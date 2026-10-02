@@ -4,12 +4,9 @@
       <template #actions>
         <AppButton to="/projects/create" :icon="Plus">Nouveau projet</AppButton>
       </template>
-
     </PageHeader>
 
-
     <AppAlert v-if="erreur" class="mb-6">{{ erreur }}</AppAlert>
-
 
     <div v-if="statistiques" class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatTile :icon="FolderKanban" label="Projets" :value="resultat.total" />
@@ -33,7 +30,6 @@
       />
     </div>
 
-
     <div class="mb-6 max-w-sm">
       <AppField
         id="recherche"
@@ -45,12 +41,9 @@
       />
     </div>
 
-
     <div v-if="chargement" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <AppCard v-for="n in 6" :key="n"><AppSkeleton :lines="4" /></AppCard>
-
     </div>
-
 
     <EmptyState
       v-else-if="resultat.isEmpty && !recherche"
@@ -59,9 +52,7 @@
       description="Créez votre premier projet pour chiffrer l'empreinte de ses matériaux."
     >
       <AppButton to="/projects/create" :icon="Plus">Créer un projet</AppButton>
-
     </EmptyState>
-
 
     <EmptyState
       v-else-if="resultat.isEmpty"
@@ -75,14 +66,10 @@
         <ProjectCard v-for="projet in resultat.items" :key="projet.id" :project="projet" />
       </div>
 
-
       <AppPagination v-model="page" :page="resultat" :loading="chargement" class="mt-8" />
     </template>
-
   </AppShell>
-
 </template>
-
 
 <script setup>
 import { computed, onMounted } from 'vue';
@@ -137,4 +124,3 @@ const statistiques = computed(() => {
 
 onMounted(rafraichir);
 </script>
-

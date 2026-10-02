@@ -27,7 +27,6 @@
   </section>
 </template>
 
-
 <script setup>
 import { Car, Flame, Plane, TreePine } from 'lucide-vue-next';
 
@@ -46,4 +45,3 @@ const reperes = [
   },
 ];
 </script>
-

@@ -34,11 +34,8 @@
     <template #aside>
       <MaterialOfTheDay />
     </template>
-
   </AuthLayout>
-
 </template>
-
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
@@ -106,4 +103,3 @@ watch(confirmation, (valeur) => {
   if (valeur === nouveau.value) erreurs.oublier('confirmPassword');
 });
 </script>
-

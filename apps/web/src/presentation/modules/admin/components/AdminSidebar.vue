@@ -37,7 +37,6 @@
   </nav>
 </template>
 
-
 <script setup>
 import { RouterLink } from 'vue-router';
 import { FolderKanban, LayoutDashboard, Package, Tags, Users } from 'lucide-vue-next';
@@ -50,4 +49,3 @@ const liens = [
   { to: '/admin/users', libelle: 'Comptes', court: 'Comptes', icone: Users },
 ];
 </script>
-
