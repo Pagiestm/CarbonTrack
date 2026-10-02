@@ -9,7 +9,8 @@ export function googleAuthUrl() {
     client_id: env.GOOGLE_CLIENT_ID ?? '',
     redirect_uri: env.GOOGLE_REDIRECT_URI ?? '',
     response_type: 'code',
-    scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+    scope:
+      'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
   });
   return `${AUTH_URL}?${params}`;
 }
@@ -38,5 +39,5 @@ export async function fetchGoogleProfile(code) {
     throw new Error(`Profil Google inaccessible (${profileResponse.status})`);
   }
   const { email, name, id } = await profileResponse.json();
-  return { email, name, googleId: id };
+  return { email: email.toLowerCase(), name, googleId: id };
 }

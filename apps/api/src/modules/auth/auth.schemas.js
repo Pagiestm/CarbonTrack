@@ -4,18 +4,26 @@ import { email, password } from '../../shared/http/schemas.js';
 export const registerBody = z.object({
   email,
   password,
-  name: z.string({ error: 'Le nom est requis' }).trim().min(1, { error: 'Le nom est requis' }).max(50, { error: 'Le nom est trop long' }),
+  name: z
+    .string({ error: 'Le nom est requis' })
+    .trim()
+    .min(1, { error: 'Le nom est requis' })
+    .max(50, { error: 'Le nom est trop long' }),
 });
 
+// Volontairement permissif : un email mal formé doit donner « identifiants
+// incorrects », pas une erreur de validation qui révélerait la règle.
 export const loginBody = z.object({
-  email: z.string({ error: "L'email est requis" }).trim(),
+  email: z.string({ error: "L'email est requis" }).trim().toLowerCase(),
   password: z.string({ error: 'Le mot de passe est requis' }),
 });
 
 export const requestResetBody = z.object({ email });
 
 export const tokenBody = z.object({
-  token: z.string({ error: 'Lien invalide ou expiré' }).min(1, { error: 'Lien invalide ou expiré' }),
+  token: z
+    .string({ error: 'Lien invalide ou expiré' })
+    .min(1, { error: 'Lien invalide ou expiré' }),
 });
 
 export const resetPasswordBody = tokenBody
