@@ -18,7 +18,6 @@ export class HttpAuthRepository extends AuthRepository {
     return toUser(data.user);
   }
 
-  /** Redirection complète du navigateur : ce n'est pas un appel XHR. */
   googleRedirectUrl() {
     return `${this.apiBaseUrl}/auth/google`;
   }

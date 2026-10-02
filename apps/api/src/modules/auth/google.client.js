@@ -15,7 +15,6 @@ export function googleAuthUrl() {
   return `${AUTH_URL}?${params}`;
 }
 
-// Échange le code d'autorisation contre le profil Google de l'utilisateur.
 export async function fetchGoogleProfile(code) {
   const tokenResponse = await fetch(TOKEN_URL, {
     method: 'POST',

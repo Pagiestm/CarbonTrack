@@ -2,15 +2,6 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useCases } from '@/container.js';
 
-/**
- * État de la session, partagé par toute l'application.
- *
- * Avant, chaque composant relisait le localStorage dans son `onMounted` : la
- * barre de navigation ne se mettait à jour qu'au remontage. Un store rend
- * l'état réactif, lu à un seul endroit.
- *
- * Un store appelle des cas d'usage ; il ne parle jamais à l'API directement.
- */
 export const useSessionStore = defineStore('session', () => {
   const session = ref(useCases.auth.currentSession.execute());
   const user = ref(null);
@@ -42,7 +33,6 @@ export const useSessionStore = defineStore('session', () => {
     window.location.href = useCases.auth.startGoogleLogin.execute();
   };
 
-  /** Retour de Google : jeton dans le fragment de l'URL. */
   const recupererJetonDeLUrl = () => {
     const recuperee = useCases.auth.finishGoogleLogin.execute();
     if (recuperee) session.value = recuperee;

@@ -8,6 +8,7 @@
   </p>
 </template>
 
+
 <script setup>
 import { computed } from 'vue';
 import { CheckCircle2, Info, TriangleAlert } from 'lucide-vue-next';
@@ -23,3 +24,4 @@ const tons = {
 const styles = computed(() => (tons[props.tone] ?? tons.danger).classes);
 const icone = computed(() => (tons[props.tone] ?? tons.danger).icone);
 </script>
+

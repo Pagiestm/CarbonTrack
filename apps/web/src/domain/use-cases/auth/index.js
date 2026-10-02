@@ -20,7 +20,6 @@ export class StartGoogleLogin extends UseCase {
   }
 }
 
-/** Retour de Google : le jeton arrive dans le fragment de l'URL. */
 export class FinishGoogleLogin extends UseCase {
   execute() {
     return this.sessionRepository.consumeFromUrl();

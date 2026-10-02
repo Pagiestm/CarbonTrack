@@ -11,8 +11,6 @@ export const registerBody = z.object({
     .max(50, { error: 'Le nom est trop long' }),
 });
 
-// Volontairement permissif : un email mal formé doit donner « identifiants
-// incorrects », pas une erreur de validation qui révélerait la règle.
 export const loginBody = z.object({
   email: z.string({ error: "L'email est requis" }).trim().toLowerCase(),
   password: z.string({ error: 'Le mot de passe est requis' }),

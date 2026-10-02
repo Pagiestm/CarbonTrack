@@ -1,6 +1,5 @@
 import { HttpError } from './errors.js';
 
-// Codes Prisma traduits en réponse HTTP plutôt qu'en erreur 500.
 const prismaErrors = {
   P2002: [409, 'Cette valeur est déjà utilisée'],
   P2003: [409, 'Cette ressource est encore utilisée ailleurs'],
@@ -24,7 +23,6 @@ export function errorHandler(err, req, res, next) {
     return res.status(status).json({ error: message });
   }
 
-  // Corps JSON illisible, corps trop gros… : erreurs levées par express.json
   if (err?.expose && err.status >= 400 && err.status < 500) {
     return res.status(err.status).json({ error: 'Requête invalide' });
   }

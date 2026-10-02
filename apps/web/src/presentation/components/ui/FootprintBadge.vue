@@ -11,13 +11,13 @@
   </span>
 </template>
 
+
 <script setup>
 import { computed } from 'vue';
 import { Footprint } from '@/domain/entities/Footprint.js';
 
 const props = defineProps({ footprint: { type: Footprint, required: true } });
 
-// Le niveau vient du domaine ; ici on ne fait que l'habiller.
 const niveaux = {
   faible: { classes: 'border-level-low/30 bg-level-low-soft text-level-low', libelle: 'sobre' },
   modere: { classes: 'border-level-mid/30 bg-level-mid-soft text-level-mid', libelle: 'modéré' },
@@ -27,3 +27,4 @@ const niveaux = {
 const styles = computed(() => niveaux[props.footprint.niveau].classes);
 const libelle = computed(() => niveaux[props.footprint.niveau].libelle);
 </script>
+

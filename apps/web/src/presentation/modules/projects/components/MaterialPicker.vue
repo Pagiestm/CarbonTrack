@@ -47,6 +47,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { computed } from 'vue';
 import { Plus, Trash2 } from 'lucide-vue-next';
@@ -59,8 +60,6 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 
-// Groupés par catégorie : choisir un matériau dans une liste à plat de
-// plusieurs centaines d'entrées est impraticable.
 const groupes = computed(() => {
   const parCategorie = new Map();
   for (const materiau of props.materials) {
@@ -90,3 +89,4 @@ const retirer = (index) =>
     props.modelValue.filter((_, i) => i !== index),
   );
 </script>
+

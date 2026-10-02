@@ -1,7 +1,6 @@
 import { forbidden, unauthorized } from '../http/errors.js';
 import { verifyAccessToken } from './tokens.js';
 
-// Vérifie le jeton "Authorization: Bearer …" et expose req.user = { id, role }.
 export function requireAuth(req, res, next) {
   const [scheme, token] = req.get('authorization')?.split(' ') ?? [];
   if (scheme !== 'Bearer' || !token) {

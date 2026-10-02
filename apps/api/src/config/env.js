@@ -1,23 +1,16 @@
 import { z } from 'zod';
 
-// Variables d'environnement, validées une fois au démarrage : une valeur
-// manquante fait échouer le lancement plutôt que la première requête.
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
 
   DATABASE_URL: z.string().min(1),
-  // 32 caractères au moins : un secret court se retrouve par force brute, et
-  // il signe toutes les sessions.
   JWT_SECRET: z.string().min(32, { error: 'JWT_SECRET doit faire au moins 32 caractères' }),
 
-  // Adresse du client, pour CORS, les redirections et les liens des emails.
-  // DEV_/PROD_FRONTEND_URL restent lus pour les anciennes configurations.
   FRONTEND_URL: z.url().optional(),
   DEV_FRONTEND_URL: z.url().optional(),
   PROD_FRONTEND_URL: z.url().optional(),
 
-  // Emails
   EMAIL_USER: z.string().optional(),
   CONTACT_EMAIL: z.string().optional(),
   SMTP_HOST: z.string().optional(),
@@ -25,15 +18,11 @@ const schema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
 
-  // Connexion Google
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GOOGLE_REDIRECT_URI: z.url().optional(),
 });
 
-// Une variable vide vaut une variable absente : Docker et les plateformes
-// d'hébergement passent "" pour un réglage non rempli, que z.url() et
-// z.coerce.number() refuseraient.
 const provided = Object.fromEntries(
   Object.entries(process.env).filter(([, value]) => value !== ''),
 );

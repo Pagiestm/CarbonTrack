@@ -1,9 +1,5 @@
 import { reactive } from 'vue';
 
-/**
- * Les mêmes critères que ceux appliqués par l'API (shared/http/schemas.js) :
- * on les vérifie ici pour guider la saisie, l'API reste l'autorité.
- */
 export const usePasswordCriteria = () => {
   const criteres = reactive({
     length: false,

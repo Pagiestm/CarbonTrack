@@ -1,9 +1,4 @@
 <template>
-  <!--
-    Logo en SVG local&nbsp;: l'ancien pointait sur upload.wikimedia.org, que les
-    navigateurs bloquent (ERR_BLOCKED_BY_ORB). Le bouton affichait une image
-    cassée.
-  -->
   <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
     <path
       fill="#4285F4"
@@ -23,3 +18,4 @@
     />
   </svg>
 </template>
+

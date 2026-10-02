@@ -11,6 +11,7 @@
   </section>
 </template>
 
+
 <script setup>
 defineProps({
   title: { type: String, default: '' },
@@ -18,3 +19,4 @@ defineProps({
   padding: { type: String, default: 'p-6' },
 });
 </script>
+

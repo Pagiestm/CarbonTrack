@@ -12,7 +12,6 @@ export class Material {
     this.category = category ?? null;
   }
 
-  /** Empreinte pour une quantité donnée, en kg eq. CO₂. */
   footprintFor(quantity) {
     return new Footprint(this.carbonFootprint * Number(quantity));
   }

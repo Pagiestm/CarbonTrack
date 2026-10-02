@@ -5,7 +5,6 @@ export function listCategories() {
   return prisma.category.findMany({ orderBy: { id: 'asc' } });
 }
 
-// Catégories qui ont au moins un matériau, avec leurs matériaux.
 export function listCategoriesWithMaterials() {
   return prisma.category.findMany({
     where: { Materials: { some: {} } },

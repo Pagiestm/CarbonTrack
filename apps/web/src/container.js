@@ -12,14 +12,6 @@ import * as contact from '@/domain/use-cases/contact/index.js';
 import * as projects from '@/domain/use-cases/projects/index.js';
 import * as users from '@/domain/use-cases/users/index.js';
 
-/**
- * Racine de composition : le seul endroit où l'on choisit quelle
- * implémentation sert quel contrat.
- *
- * C'est ce qui permet au domaine d'ignorer axios et le localStorage. Pour un
- * test, on rappelle `createContainer` avec de faux dépôts et rien d'autre ne
- * change.
- */
 export const createContainer = ({ apiBaseUrl = import.meta.env.VITE_API_BASE_URL } = {}) => {
   const sessionRepository = new LocalSessionRepository();
 
@@ -37,8 +29,6 @@ export const createContainer = ({ apiBaseUrl = import.meta.env.VITE_API_BASE_URL
     contactRepository: new HttpContactRepository({ http }),
   };
 
-  // Chaque cas d'usage reçoit tous les dépôts ; il ne retient que ceux qu'il
-  // nomme. Ajouter un cas d'usage ne demande donc aucun câblage ici.
   const instancier = (module) =>
     Object.fromEntries(
       Object.entries(module)

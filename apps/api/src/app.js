@@ -17,11 +17,8 @@ import { contactRouter } from './modules/contact/contact.routes.js';
 export function createApp() {
   const app = express();
 
-  // Render place l'API derrière un proxy : l'IP réelle est dans X-Forwarded-For.
   app.set('trust proxy', 1);
   app.use(helmet());
-  // En production, le client appelle l'API sur sa propre origine (/api) ;
-  // CORS ne sert qu'au développement, où client et API ont chacun leur port.
   app.use(cors({ origin: env.FRONTEND_URL }));
   app.use(express.json({ limit: '100kb' }));
   app.use(generalLimiter);

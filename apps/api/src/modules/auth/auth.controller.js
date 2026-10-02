@@ -17,10 +17,6 @@ export const authController = {
     res.redirect(googleAuthUrl());
   },
 
-  // Le jeton repart dans le fragment (#token=…) et non dans la query : un
-  // fragment n'est jamais envoyé au serveur, donc il n'atterrit ni dans les
-  // logs ni dans l'en-tête Referer. En cas d'échec (refus de l'utilisateur,
-  // code expiré…), on revient simplement sur l'accueil.
   async googleCallback(req, res) {
     const { code } = req.query;
     if (typeof code !== 'string' || !code) {
