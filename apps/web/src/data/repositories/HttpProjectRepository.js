@@ -1,5 +1,5 @@
 import { ProjectRepository } from '@/domain/repositories/index.js';
-import { toProject } from '@/data/models/index.js';
+import { toPage, toProject } from '@/data/models/index.js';
 
 export class HttpProjectRepository extends ProjectRepository {
   constructor({ http }) {
@@ -7,14 +7,14 @@ export class HttpProjectRepository extends ProjectRepository {
     this.http = http;
   }
 
-  async list() {
-    const { data } = await this.http.get('/projects');
-    return (data.projects ?? data).map(toProject);
+  async list(options = {}) {
+    const { data } = await this.http.get('/projects', { params: options });
+    return toPage(data, toProject);
   }
 
-  async listAll() {
-    const { data } = await this.http.get('/projects/admin/projects');
-    return (data.projects ?? data).map(toProject);
+  async listAll(options = {}) {
+    const { data } = await this.http.get('/projects/admin/projects', { params: options });
+    return toPage(data, toProject);
   }
 
   async get(id) {

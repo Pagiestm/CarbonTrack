@@ -15,40 +15,50 @@
   </AppShell>
 </template>
 
+
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCases } from '@/container.js';
+import { useToasts } from '@/presentation/composables/useToasts.js';
 import AppShell from '@/presentation/components/ui/AppShell.vue';
 import PageHeader from '@/presentation/components/ui/PageHeader.vue';
 import ProjectForm from '@/presentation/modules/projects/components/ProjectForm.vue';
 
 const route = useRoute();
 const router = useRouter();
-const id = Number(route.params.id);
+const toasts = useToasts();
+const id = computed(() => Number(route.params.id));
 
 const projet = ref(null);
-const erreur = ref('');
+const erreur = ref(null);
 const chargement = ref(false);
 
 const enregistrer = async (donnees) => {
-  erreur.value = '';
+  erreur.value = null;
   chargement.value = true;
   try {
-    await useCases.projects.updateProject.execute(id, donnees);
-    router.push(`/projects/${id}`);
+    await useCases.projects.updateProject.execute(id.value, donnees);
+    toasts.succes('Projet enregistré.');
+    router.push(`/projects/${id.value}`);
   } catch (e) {
-    erreur.value = e.message;
+    erreur.value = e;
   } finally {
     chargement.value = false;
   }
 };
 
-onMounted(async () => {
-  try {
-    projet.value = await useCases.projects.getProject.execute(id);
-  } catch (e) {
-    erreur.value = e.message;
-  }
-});
+watch(
+  id,
+  async (identifiant) => {
+    if (!identifiant) return;
+    try {
+      projet.value = await useCases.projects.getProject.execute(identifiant);
+    } catch (e) {
+      erreur.value = e;
+    }
+  },
+  { immediate: true },
+);
 </script>
+

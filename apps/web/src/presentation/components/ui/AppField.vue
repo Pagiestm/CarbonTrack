@@ -23,15 +23,27 @@
         :aria-invalid="Boolean(error) || undefined"
         :aria-describedby="description"
         :class="[
-          'w-full rounded-field border bg-surface px-3 py-2.5 text-sm text-ink transition-colors',
+          'w-full rounded-field border bg-surface-raised px-3 py-2.5 text-sm text-ink transition-colors',
           'placeholder:text-ink-subtle focus:border-accent focus:outline-none',
           icon && !multiline ? 'pl-9' : '',
+          estMotDePasse ? 'pr-10' : '',
           error ? 'border-danger' : 'border-line hover:border-line-strong',
         ]"
         @input="$emit('update:modelValue', $event.target.value)"
       >
         <slot />
       </component>
+
+      <button
+        v-if="estMotDePasse"
+        type="button"
+        class="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1.5 text-ink-subtle transition-colors hover:text-ink"
+        :aria-label="visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+        :aria-pressed="visible"
+        @click="visible = !visible"
+      >
+        <component :is="visible ? EyeOff : Eye" class="size-4" aria-hidden="true" />
+      </button>
     </div>
 
     <p v-if="error" :id="`${id}-erreur`" class="mt-1.5 text-sm text-danger">{{ error }}</p>
@@ -39,15 +51,17 @@
   </div>
 </template>
 
+
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { Eye, EyeOff } from 'lucide-vue-next';
 
 const props = defineProps({
   id: { type: String, required: true },
   label: { type: String, required: true },
   modelValue: { type: [String, Number], default: '' },
   type: { type: String, default: 'text' },
-  as: { type: String, default: 'input' }, // input | textarea | select
+  as: { type: String, default: 'input' },
   placeholder: { type: String, default: '' },
   autocomplete: { type: String, default: undefined },
   icon: { type: [Object, Function], default: null },
@@ -62,15 +76,23 @@ const props = defineProps({
 
 defineEmits(['update:modelValue']);
 
+const visible = ref(false);
+const estMotDePasse = computed(() => props.type === 'password' && !props.multiline);
+
 const baliseChamp = computed(() => (props.multiline ? 'textarea' : props.as));
 
 const attributsChamp = computed(() => {
   if (props.multiline) return { rows: props.rows };
   if (props.as === 'select') return {};
-  return { type: props.type, step: props.step, min: props.min };
+  return {
+    type: estMotDePasse.value && visible.value ? 'text' : props.type,
+    step: props.step,
+    min: props.min,
+  };
 });
 
 const description = computed(() =>
   props.error ? `${props.id}-erreur` : props.hint ? `${props.id}-aide` : undefined,
 );
 </script>
+

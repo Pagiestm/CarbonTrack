@@ -1,5 +1,5 @@
 import { CatalogRepository } from '@/domain/repositories/index.js';
-import { toCategory, toMaterial } from '@/data/models/index.js';
+import { toCategory, toMaterial, toPage } from '@/data/models/index.js';
 
 export class HttpCatalogRepository extends CatalogRepository {
   constructor({ http }) {
@@ -31,9 +31,9 @@ export class HttpCatalogRepository extends CatalogRepository {
     await this.http.delete(`/categories/${id}`);
   }
 
-  async listMaterials() {
-    const { data } = await this.http.get('/materials');
-    return (data.materials ?? data).map(toMaterial);
+  async listMaterials(options = {}) {
+    const { data } = await this.http.get('/materials', { params: options });
+    return toPage(data, toMaterial);
   }
 
   async material(id) {

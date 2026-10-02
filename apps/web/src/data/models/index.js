@@ -1,17 +1,11 @@
 import { Category } from '@/domain/entities/Category.js';
 import { Material } from '@/domain/entities/Material.js';
 import { Project, ProjectLine } from '@/domain/entities/Project.js';
+import { Page } from '@/domain/entities/Page.js';
 import { Session } from '@/domain/entities/Session.js';
 import { User } from '@/domain/entities/User.js';
 
-/**
- * Traduction des réponses de l'API en entités du domaine.
- *
- * C'est le seul endroit qui connaît la forme exacte du JSON renvoyé (noms de
- * champs, `ProjectMaterial` en PascalCase, décimaux en chaîne…). Si l'API
- * change, c'est ici que ça se corrige, et nulle part ailleurs.
- */
-export const toUser = (brut) => new User(brut);
+export const toUser = (brut) => new User({ ...brut, projectCount: brut._count?.Projects ?? null });
 
 export const toMaterial = (brut) =>
   new Material({
@@ -25,9 +19,13 @@ export const toCategory = (brut) =>
     materials: (brut.Materials ?? brut.materials ?? []).map(toMaterial),
   });
 
+export const toPage = (brut, transforme) =>
+  new Page({ ...brut, items: (brut.items ?? []).map(transforme) });
+
 export const toProject = (brut) =>
   new Project({
     ...brut,
+    lineCount: brut._count?.ProjectMaterial ?? null,
     lines: (brut.ProjectMaterial ?? []).map(
       (ligne) =>
         new ProjectLine({
@@ -38,7 +36,6 @@ export const toProject = (brut) =>
     ),
   });
 
-/** Le jeton est un JWT : on en lit la charge utile pour l'affichage. */
 export const toSession = (token) => {
   const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
   const json = decodeURIComponent(

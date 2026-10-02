@@ -3,10 +3,6 @@ import { toSession } from '@/data/models/index.js';
 
 const CLE = 'authToken';
 
-/**
- * Session rangée dans le localStorage. Détail technique : le domaine ne sait
- * pas où elle est stockée, il demande juste une session au dépôt.
- */
 export class LocalSessionRepository extends SessionRepository {
   read() {
     const token = localStorage.getItem(CLE);
@@ -14,7 +10,6 @@ export class LocalSessionRepository extends SessionRepository {
     try {
       return toSession(token);
     } catch {
-      // Jeton illisible (format changé, valeur tronquée) : on repart propre.
       this.clear();
       return null;
     }
@@ -27,13 +22,9 @@ export class LocalSessionRepository extends SessionRepository {
 
   clear() {
     localStorage.removeItem(CLE);
-    localStorage.removeItem('role'); // clé des anciennes versions du client
+    localStorage.removeItem('role');
   }
 
-  /**
-   * Retour de Google : le jeton arrive dans le fragment (#token=…), qui n'est
-   * jamais transmis au serveur. On le consomme et on nettoie l'URL.
-   */
   consumeFromUrl() {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const token = fragment.get('token');

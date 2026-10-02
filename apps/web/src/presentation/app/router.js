@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/presentation/modules/home/HomePage.vue';
 import { useSessionStore } from '@/presentation/stores/session.js';
 
-// Les pages, hors accueil, sont chargées à la demande : chacune devient un
-// fichier JavaScript séparé au build.
 const routes = [
   { path: '/', name: 'Home', component: HomePage, meta: { title: 'CarbonTrack' } },
   {
@@ -45,6 +43,12 @@ const routes = [
     meta: { title: 'CarbonTrack - Profil', requiresAuth: true },
   },
   {
+    path: '/profile/password',
+    name: 'ChangePassword',
+    component: () => import('@/presentation/modules/profile/ChangePasswordPage.vue'),
+    meta: { title: 'CarbonTrack - Mot de passe', requiresAuth: true },
+  },
+  {
     path: '/profile/edit',
     name: 'EditProfile',
     component: () => import('@/presentation/modules/profile/EditProfilePage.vue'),
@@ -83,14 +87,24 @@ const routes = [
     component: () => import('@/presentation/modules/admin/AdminLayout.vue'),
     meta: { title: 'CarbonTrack - Administration', requiresAuth: true, requiresAdmin: true },
     redirect: { name: 'Dashboard' },
-    // Certains chemins enfants sont absolus (/materials/create…) : ils
-    // restent rendus dans la mise en page d'administration.
     children: [
       {
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/presentation/modules/admin/DashboardPage.vue'),
         meta: { title: 'CarbonTrack - Admin - Dashboard' },
+      },
+      {
+        path: 'projects',
+        name: 'AdminProjects',
+        component: () => import('@/presentation/modules/admin/projects/AdminProjectsPage.vue'),
+        meta: { title: 'CarbonTrack - Admin - Projets' },
+      },
+      {
+        path: 'users',
+        name: 'AdminUsers',
+        component: () => import('@/presentation/modules/admin/users/UsersPage.vue'),
+        meta: { title: 'CarbonTrack - Admin - Comptes' },
       },
       {
         path: 'materials',
@@ -148,13 +162,11 @@ router.beforeEach((to) => {
   document.title = to.meta.title || 'CarbonTrack';
 
   const session = useSessionStore();
-  // Le jeton peut avoir expiré depuis le dernier rendu.
   session.rafraichir();
 
   const exigeAdmin = to.matched.some((route) => route.meta.requiresAdmin);
   const exigeAuth = to.matched.some((route) => route.meta.requiresAuth);
 
-  // Une page d'administration n'existe pas pour qui n'est pas administrateur.
   if (exigeAdmin && !session.estAdmin) {
     return { name: 'NotFound', params: { pathMatch: to.path.substring(1).split('/') } };
   }

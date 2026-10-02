@@ -1,12 +1,3 @@
-/**
- * Contrats des dépôts.
- *
- * L'article d'origine est en TypeScript et déclare des `interface`. En
- * JavaScript, on les exprime par des classes abstraites : elles documentent
- * le contrat, et lèvent si une implémentation oublie une méthode. La règle de
- * dépendance est la même — le domaine définit ce dont il a besoin, la couche
- * data s'y conforme, jamais l'inverse.
- */
 const aImplementer = (classe, methode) => {
   throw new Error(`${classe} doit implémenter ${methode}()`);
 };
@@ -59,6 +50,15 @@ export class UserRepository {
   }
   listAll() {
     aImplementer('UserRepository', 'listAll');
+  }
+  changePassword() {
+    aImplementer('UserRepository', 'changePassword');
+  }
+  changeRole() {
+    aImplementer('UserRepository', 'changeRole');
+  }
+  removeUser() {
+    aImplementer('UserRepository', 'removeUser');
   }
 }
 

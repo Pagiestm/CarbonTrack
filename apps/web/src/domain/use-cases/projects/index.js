@@ -2,14 +2,14 @@ import { UseCase } from '../UseCase.js';
 import { Footprint } from '../../entities/Footprint.js';
 
 export class ListProjects extends UseCase {
-  execute() {
-    return this.projectRepository.list();
+  execute(options = {}) {
+    return this.projectRepository.list(options);
   }
 }
 
 export class ListAllProjects extends UseCase {
-  execute() {
-    return this.projectRepository.listAll();
+  execute(options = {}) {
+    return this.projectRepository.listAll(options);
   }
 }
 
@@ -19,11 +19,6 @@ export class GetProject extends UseCase {
   }
 }
 
-/**
- * Une ligne sans matériau ou de quantité nulle n'a pas de sens, et un même
- * matériau ne peut pas figurer deux fois : l'API applique la même règle, on
- * l'applique aussi ici pour ne pas faire un aller-retour pour rien.
- */
 const verifierLignes = (lignes) => {
   const valides = lignes.filter((l) => l.materialId && Number(l.quantity) > 0);
   if (!valides.length) {
@@ -37,22 +32,14 @@ const verifierLignes = (lignes) => {
 };
 
 export class CreateProject extends UseCase {
-  async execute({ name, description, materials }) {
-    return this.projectRepository.create({
-      name,
-      description,
-      materials: verifierLignes(materials),
-    });
+  async execute({ materials, ...contexte }) {
+    return this.projectRepository.create({ ...contexte, materials: verifierLignes(materials) });
   }
 }
 
 export class UpdateProject extends UseCase {
-  async execute(id, { name, description, materials }) {
-    return this.projectRepository.update(id, {
-      name,
-      description,
-      materials: verifierLignes(materials),
-    });
+  async execute(id, { materials, ...contexte }) {
+    return this.projectRepository.update(id, { ...contexte, materials: verifierLignes(materials) });
   }
 }
 
@@ -62,11 +49,6 @@ export class DeleteProject extends UseCase {
   }
 }
 
-/**
- * Estime l'empreinte d'une sélection avant d'enregistrer le projet, pour que
- * le formulaire affiche un total qui bouge pendant la saisie. L'API reste la
- * source de vérité au moment de l'enregistrement.
- */
 export class EstimateFootprint extends UseCase {
   execute(lignes, materiauxParId) {
     return Footprint.somme(

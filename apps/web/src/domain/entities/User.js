@@ -1,27 +1,41 @@
-/**
- * Un compte CarbonTrack.
- *
- * Les entités ne connaissent ni HTTP, ni Vue, ni le format de l'API : elles
- * décrivent le métier et rien d'autre. C'est ce qui permet de les tester sans
- * rien démarrer.
- */
 export class User {
-  constructor({ id, email, name, role, googleId = null, createdAt = null }) {
+  constructor({
+    id,
+    email,
+    name,
+    role,
+    googleId = null,
+    createdAt = null,
+    company = null,
+    jobTitle = null,
+    phone = null,
+    city = null,
+    projectCount = null,
+  }) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.role = role;
     this.googleId = googleId;
     this.createdAt = createdAt;
+    this.company = company;
+    this.jobTitle = jobTitle;
+    this.phone = phone;
+    this.city = city;
+    this.projectCount = projectCount;
   }
 
   get isAdmin() {
     return this.role === 'ADMIN';
   }
 
-  /** Un compte créé par Google n'a pas de mot de passe à modifier. */
   get isGoogleAccount() {
     return Boolean(this.googleId);
+  }
+
+  get subtitle() {
+    if (this.jobTitle && this.company) return `${this.jobTitle} chez ${this.company}`;
+    return this.jobTitle ?? this.company ?? null;
   }
 
   get initials() {

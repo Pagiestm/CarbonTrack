@@ -31,8 +31,14 @@ export class DeleteCategory extends UseCase {
 }
 
 export class ListMaterials extends UseCase {
+  execute(options = {}) {
+    return this.catalogRepository.listMaterials(options);
+  }
+}
+
+export class ListAllMaterials extends UseCase {
   execute() {
-    return this.catalogRepository.listMaterials();
+    return this.catalogRepository.listMaterials({ all: 'true' });
   }
 }
 

@@ -8,8 +8,8 @@
       />
 
       <AppCard>
-        <form v-if="!envoye" class="space-y-5" @submit.prevent="envoyer">
-          <AppAlert v-if="erreur">{{ erreur }}</AppAlert>
+        <form v-if="!envoye" class="space-y-5" novalidate @submit.prevent="envoyer">
+          <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
           <div class="grid gap-5 sm:grid-cols-2">
             <AppField
@@ -19,6 +19,7 @@
               :icon="User"
               placeholder="Votre nom"
               autocomplete="name"
+              :error="erreurs.etat.parChamp.name"
             />
             <AppField
               id="email"
@@ -28,6 +29,7 @@
               :icon="Mail"
               placeholder="vous@exemple.fr"
               autocomplete="email"
+              :error="erreurs.etat.parChamp.email"
             />
           </div>
 
@@ -37,6 +39,7 @@
             label="Sujet"
             :icon="Tag"
             placeholder="De quoi s'agit-il ?"
+            :error="erreurs.etat.parChamp.subject"
           />
 
           <AppField
@@ -47,6 +50,7 @@
             :rows="6"
             placeholder="Décrivez votre demande…"
             hint="Quelques phrases suffisent."
+            :error="erreurs.etat.parChamp.message"
           />
 
           <AppButton type="submit" :icon="Send" :loading="chargement">Envoyer</AppButton>
@@ -69,10 +73,12 @@
   </AppShell>
 </template>
 
+
 <script setup>
 import { reactive, ref } from 'vue';
 import { Mail, MailCheck, Send, Tag, User } from 'lucide-vue-next';
 import { useCases } from '@/container.js';
+import { useFormErrors } from '@/presentation/composables/useFormErrors.js';
 import AppShell from '@/presentation/components/ui/AppShell.vue';
 import PageHeader from '@/presentation/components/ui/PageHeader.vue';
 import AppCard from '@/presentation/components/ui/AppCard.vue';
@@ -81,20 +87,34 @@ import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
 
 const formulaire = reactive({ name: '', email: '', subject: '', message: '' });
-const erreur = ref('');
+const erreurs = useFormErrors(['name', 'email', 'subject', 'message']);
 const envoye = ref(false);
 const chargement = ref(false);
 
+const valider = () => {
+  erreurs.reinitialiser();
+  if (!formulaire.name.trim()) erreurs.poser('name', 'Le nom est requis');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formulaire.email)) {
+    erreurs.poser('email', "Le format de l'email est invalide");
+  }
+  if (!formulaire.subject.trim()) erreurs.poser('subject', 'Le sujet est requis');
+  if (formulaire.message.trim().length < 10) {
+    erreurs.poser('message', 'Le message doit faire au moins 10 caractères');
+  }
+  return !erreurs.aDesErreurs();
+};
+
 const envoyer = async () => {
-  erreur.value = '';
+  if (!valider()) return;
   chargement.value = true;
   try {
     await useCases.contact.sendContactMessage.execute({ ...formulaire });
     envoye.value = true;
   } catch (e) {
-    erreur.value = e.message;
+    erreurs.depuisApi(e);
   } finally {
     chargement.value = false;
   }
 };
 </script>
+

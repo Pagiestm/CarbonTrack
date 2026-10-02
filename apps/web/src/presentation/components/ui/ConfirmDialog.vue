@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 z-100 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+    class="fixed inset-0 z-100 flex items-center justify-center bg-ink/30 p-4"
     role="dialog"
     aria-modal="true"
     :aria-label="title"
@@ -11,7 +11,7 @@
       <div class="flex size-10 items-center justify-center rounded-full bg-danger-soft">
         <TriangleAlert class="size-5 text-danger" aria-hidden="true" />
       </div>
-      <h2 class="mt-4 font-display text-lg font-bold text-ink">{{ title }}</h2>
+      <h2 class="mt-4 text-lg font-bold text-ink">{{ title }}</h2>
       <p v-if="description" class="mt-2 text-sm text-ink-muted">{{ description }}</p>
 
       <div class="mt-6 flex justify-end gap-3">
@@ -25,6 +25,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { onBeforeUnmount, onMounted } from 'vue';
@@ -40,8 +41,6 @@ defineProps({
 
 const emit = defineEmits(['cancel', 'confirm']);
 
-// Échap ferme la boîte où que soit le focus, et le fond ne défile plus
-// derrière elle.
 const auClavier = (e) => e.key === 'Escape' && emit('cancel');
 
 onMounted(() => {
@@ -54,3 +53,4 @@ onBeforeUnmount(() => {
   document.body.style.overflow = '';
 });
 </script>
+

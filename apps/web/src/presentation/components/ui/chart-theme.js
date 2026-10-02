@@ -1,15 +1,10 @@
-// Réglages communs aux graphiques Chart.js : mêmes jetons que l'interface,
-// libellés en français.
-export const ACCENT = '#34d399';
-export const ACCENT_SOFT = 'rgba(52, 211, 153, 0.18)';
-export const SAP = '#a3e635';
+export const ACCENT = '#15803d';
+export const ACCENT_SOFT = 'rgba(21, 128, 61, 0.12)';
 
-// Palette catégorielle : tons distincts et de luminosité proche, pour qu'aucune
-// part ne paraisse plus importante qu'une autre à cause de sa couleur.
-export const SERIE = ['#34d399', '#a3e635', '#38bdf8', '#fbbf24', '#fb7185', '#c084fc', '#2dd4bf'];
+export const SERIE = ['#2f6f4e', '#4a6fa5', '#b07d48', '#6b7f8e', '#7a5c8e', '#a4504b', '#3f7d7b'];
 
-const INK_MUTED = '#9aada4';
-const LINE = '#1f2a25';
+const INK_MUTED = '#57534e';
+const LINE = '#e7e5e4';
 
 export const moisDeLAnnee = () => {
   const annee = new Date().getFullYear();
@@ -19,40 +14,57 @@ export const moisDeLAnnee = () => {
 };
 
 const infobulle = {
-  backgroundColor: '#18211d',
-  borderColor: LINE,
-  borderWidth: 1,
-  titleColor: '#eaf2ee',
-  bodyColor: '#9aada4',
+  backgroundColor: '#1c1917',
+  titleColor: '#fafaf9',
+  bodyColor: '#d6d3d1',
   padding: 10,
-  cornerRadius: 8,
+  cornerRadius: 6,
+  displayColors: false,
 };
 
 export const optionsGraphique = ({ titreAxeY = '' } = {}) => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { labels: { color: INK_MUTED, boxWidth: 12, usePointStyle: true } },
+    legend: { display: false },
     tooltip: infobulle,
   },
   scales: {
-    x: { ticks: { color: INK_MUTED }, grid: { color: LINE } },
+    x: { ticks: { color: INK_MUTED }, grid: { display: false } },
     y: {
       beginAtZero: true,
-      // Des entiers : on compte des projets et des comptes, pas des demis.
       ticks: { color: INK_MUTED, precision: 0 },
       grid: { color: LINE },
+      border: { display: false },
       title: { display: Boolean(titreAxeY), text: titreAxeY, color: INK_MUTED },
     },
   },
 });
 
-export const optionsAnneau = () => ({
+export const optionsAnneau = ({ legende = false } = {}) => ({
   responsive: true,
   maintainAspectRatio: false,
-  cutout: '62%',
+  cutout: '66%',
   plugins: {
-    legend: { position: 'bottom', labels: { color: INK_MUTED, boxWidth: 10, usePointStyle: true } },
+    legend: legende
+      ? {
+          position: 'bottom',
+          labels: { color: INK_MUTED, boxWidth: 10, usePointStyle: true, padding: 14 },
+        }
+      : { display: false },
     tooltip: infobulle,
+  },
+});
+
+export const optionsBarresHorizontales = () => ({
+  ...optionsGraphique(),
+  indexAxis: 'y',
+  scales: {
+    x: { beginAtZero: true, ticks: { color: INK_MUTED }, grid: { color: LINE } },
+    y: {
+      ticks: { color: INK_MUTED, autoSkip: false, font: { size: 11 } },
+      grid: { display: false },
+      border: { display: false },
+    },
   },
 });

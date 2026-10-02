@@ -3,7 +3,7 @@
     <div class="relative h-64">
       <canvas ref="canevas" />
       <div class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span class="font-display text-2xl font-bold text-ink">{{ total.format() }}</span>
+        <span class="text-2xl font-bold text-ink">{{ total.format() }}</span>
         <span class="text-xs text-ink-subtle">eq. CO₂</span>
       </div>
     </div>
@@ -35,6 +35,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Chart } from 'chart.js/auto';
@@ -46,7 +47,6 @@ const props = defineProps({ project: { type: Project, required: true } });
 const canevas = ref(null);
 let graphique = null;
 
-// La répartition est calculée par l'entité : le composant ne fait que peindre.
 const repartition = computed(() => props.project.repartition);
 const total = computed(() => props.project.totalFootprint);
 const couleur = (index) => SERIE[index % SERIE.length];
@@ -63,7 +63,7 @@ const dessiner = () => {
         {
           data: repartition.value.map(({ ligne }) => ligne.footprint.kg),
           backgroundColor: repartition.value.map((_, i) => couleur(i)),
-          borderColor: '#111815',
+          borderColor: '#ffffff',
           borderWidth: 2,
         },
       ],
@@ -79,3 +79,4 @@ onMounted(dessiner);
 watch(repartition, dessiner);
 onBeforeUnmount(() => graphique?.destroy());
 </script>
+
