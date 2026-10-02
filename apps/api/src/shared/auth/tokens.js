@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { env } from '../../config/env.js';
 
-// Un jeton de réinitialisation porte purpose = 'password-reset' : il ne peut
-// pas servir de jeton de session, et inversement.
 const RESET_PURPOSE = 'password-reset';
 
 export function signAccessToken(user) {

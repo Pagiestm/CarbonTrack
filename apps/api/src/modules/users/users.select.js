@@ -1,4 +1,3 @@
-// Champs d'un utilisateur renvoyés par l'API : jamais le hash du mot de passe.
 export const publicUserSelect = {
   id: true,
   email: true,
@@ -6,4 +5,8 @@ export const publicUserSelect = {
   role: true,
   googleId: true,
   createdAt: true,
+  company: true,
+  jobTitle: true,
+  phone: true,
+  city: true,
 };

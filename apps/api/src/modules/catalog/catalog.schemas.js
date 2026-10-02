@@ -7,7 +7,6 @@ const text = (label, max) =>
     .min(1, { error: `${label} est requis` })
     .max(max, { error: `${label} ne doit pas dépasser ${max} caractères` });
 
-// Les formulaires envoient parfois des nombres sous forme de texte ("12.50").
 const positiveNumber = (label) =>
   z.coerce
     .number({ error: `${label} doit être un nombre` })

@@ -12,7 +12,7 @@ CarbonTrack/
 │   └── web/              client : Vue 3, Vite 8, Tailwind CSS 4
 │       ├── Dockerfile    cibles dev et runtime
 │       ├── nginx.conf    serveur de l'image de production
-│       └── src/          app/, api/, features/, shared/, assets/
+│       └── src/          domain/, data/, presentation/, container.js
 ├── docs/                 cette documentation
 │   ├── merise/           modèle de données
 │   └── deploiement/      Docker et Render
@@ -60,14 +60,26 @@ fait échouer le lancement, pas la première requête.
 
 Le détail est dans [apps/api/README.md](../apps/api/README.md).
 
-## Le client : une organisation par fonctionnalités
+## Le client : une clean architecture
 
-`src/features/` suit les domaines de l'application plutôt que la nature des
-fichiers : une page et ses composants vivent ensemble. `src/api/` reprend les
-modules de l'API, un fichier par module, tous construits sur le même client
-axios. `src/shared/` porte ce qui traverse les domaines.
+Trois couches, une règle : les dépendances pointent vers le métier.
 
-Le détail est dans [apps/web/README.md](../apps/web/README.md).
+```
+presentation  ──▶  domain  ◀──  data
+```
+
+- `domain/` porte les entités (`Project`, `Material`, `Footprint`…), les
+  contrats de dépôts et les cas d'usage. Il n'importe ni Vue, ni axios, ni
+  `localStorage` — ce qui permet de le tester sans rien démarrer.
+- `data/` implémente ces contrats en HTTP et traduit les réponses de l'API en
+  entités. C'est le seul endroit qui connaît la forme du JSON.
+- `presentation/` est le Vue : pages, composants, stores Pinia. Un composant
+  appelle un cas d'usage, jamais l'API.
+- `container.js` câble les deux côtés, en un seul endroit.
+
+Le pourquoi, les écarts assumés et les exemples sont dans
+[architecture-client.md](./architecture-client.md). Le détail du client est
+dans [apps/web/README.md](../apps/web/README.md).
 
 ## Le modèle de données
 

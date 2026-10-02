@@ -7,8 +7,6 @@ export const idParams = z.object({
     .positive({ error: 'Identifiant invalide' }),
 });
 
-// Normalisé en minuscules : PostgreSQL compare en respectant la casse, et
-// sans ça « Jean@example.com » et « jean@example.com » feraient deux comptes.
 export const email = z
   .string({ error: "L'email est requis" })
   .trim()
@@ -16,7 +14,6 @@ export const email = z
   .max(100, { error: "L'email est trop long" })
   .pipe(z.email({ error: "Format d'email invalide" }));
 
-// Au moins 8 caractères, une minuscule, une majuscule, un chiffre et un symbole.
 export const password = z
   .string({ error: 'Le mot de passe est requis' })
   .max(100, { error: 'Le mot de passe est trop long' })

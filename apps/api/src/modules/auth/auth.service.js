@@ -1,21 +1,22 @@
 import bcrypt from 'bcryptjs';
 import { env } from '../../config/env.js';
 import { prisma } from '../../shared/db/prisma.js';
-import { badRequest, conflict } from '../../shared/http/errors.js';
+import { badRequest, conflict, surLeChamp } from '../../shared/http/errors.js';
 import { signAccessToken } from '../../shared/auth/tokens.js';
-import { loadTemplate, sendMail } from '../../shared/mail/mailer.js';
+import { renderTemplate, sendMail } from '../../shared/mail/mailer.js';
 import { publicUserSelect } from '../users/users.select.js';
 import { fetchGoogleProfile } from './google.client.js';
 
-const confirmationTemplate = loadTemplate('registrationConfirmation');
-
-// L'email de bienvenue ne doit pas faire échouer une inscription réussie.
 async function sendWelcomeEmail(user) {
   try {
     await sendMail({
       to: user.email,
       subject: "Confirmation d'inscription",
-      html: confirmationTemplate({ name: user.name, siteUrl: env.FRONTEND_URL }),
+      html: await renderTemplate('registrationConfirmation', {
+        name: user.name,
+        siteUrl: env.FRONTEND_URL,
+        preview: 'Votre compte CarbonTrack est prêt',
+      }),
     });
   } catch (error) {
     console.error('Email de confirmation non envoyé :', error.message);
@@ -25,7 +26,10 @@ async function sendWelcomeEmail(user) {
 export async function register({ email, password, name }) {
   const existing = await prisma.user.findUnique({ where: { email }, select: { id: true } });
   if (existing) {
-    throw conflict('Un compte existe déjà avec cet email');
+    throw conflict(
+      'Un compte existe déjà avec cet email',
+      surLeChamp('email', 'Cet email est déjà utilisé'),
+    );
   }
 
   const user = await prisma.user.create({
@@ -38,7 +42,6 @@ export async function register({ email, password, name }) {
 
 export async function login({ email, password }) {
   const user = await prisma.user.findUnique({ where: { email } });
-  // Un compte créé par Google n'a pas de mot de passe : bcrypt.compare échoue.
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw badRequest('Email ou mot de passe incorrect');
   }
@@ -47,8 +50,6 @@ export async function login({ email, password }) {
   return { token: signAccessToken(user), user: publicUser };
 }
 
-// Connexion Google : retrouve le compte par email ou par identifiant Google,
-// le crée au besoin, et rattache l'identifiant Google à un compte existant.
 export async function loginWithGoogle(code) {
   const { email, name, googleId } = await fetchGoogleProfile(code);
 

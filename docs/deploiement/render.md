@@ -65,7 +65,8 @@ se réveiller. Un moniteur UptimeRobot sur
 - Render bloque les ports SMTP sortants 25, 465 et 587 sur les instances
   gratuites. Un compte SMTP sur un autre port (Mailtrap en 2525, par exemple)
   passe ; sinon il faut un envoi par API HTTP.
-- Les gabarits d'email vivent dans `apps/api/src/templates/email`, avec l'API.
+- Les gabarits d'email sont des fichiers MJML dans `apps/api/src/templates/email`,
+  compilés en HTML à l'exécution. Rien n'est committé en HTML.
 - Le plan gratuit compte 750 heures par mois et par compte : une API qui ne
   dort jamais en consomme environ 720, à partager avec les autres services.
 

@@ -11,5 +11,6 @@ const required = (max) =>
 export const contactBody = z.object({
   name: required(100),
   email,
+  subject: required(150),
   message: required(5000),
 });

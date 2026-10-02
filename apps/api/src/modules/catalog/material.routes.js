@@ -4,6 +4,7 @@ import { idParams } from '../../shared/http/schemas.js';
 import { validate } from '../../shared/http/validate.js';
 import { materialController } from './catalog.controller.js';
 import { materialBody, materialUpdateBody } from './catalog.schemas.js';
+import { listQuery } from '../../shared/http/pagination.js';
 
 export const materialRouter = Router();
 
@@ -80,7 +81,7 @@ materialRouter.use(requireAuth);
  *               items:
  *                 $ref: '#/components/schemas/Material'
  */
-materialRouter.get('/', materialController.list);
+materialRouter.get('/', validate({ query: listQuery }), materialController.list);
 
 /**
  * @swagger

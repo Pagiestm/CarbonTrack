@@ -4,6 +4,7 @@ import { idParams } from '../../shared/http/schemas.js';
 import { validate } from '../../shared/http/validate.js';
 import { projectsController } from './projects.controller.js';
 import { projectBody } from './projects.schemas.js';
+import { listQuery } from '../../shared/http/pagination.js';
 
 export const projectsRouter = Router();
 
@@ -73,7 +74,7 @@ projectsRouter.use(requireAuth);
  *               items:
  *                 $ref: '#/components/schemas/Project'
  */
-projectsRouter.get('/', projectsController.list);
+projectsRouter.get('/', validate({ query: listQuery }), projectsController.list);
 
 /**
  * @swagger
@@ -116,7 +117,12 @@ projectsRouter.get('/:id', validate({ params: idParams }), projectsController.ge
  *       403:
  *         description: Access denied
  */
-projectsRouter.get('/admin/projects', requireAdmin, projectsController.listAll);
+projectsRouter.get(
+  '/admin/projects',
+  requireAdmin,
+  validate({ query: listQuery }),
+  projectsController.listAll,
+);
 
 /**
  * @swagger

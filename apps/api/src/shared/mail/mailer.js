@@ -1,5 +1,8 @@
 import { readFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import handlebars from 'handlebars';
+import mjml2html from 'mjml';
 import nodemailer from 'nodemailer';
 import { env } from '../../config/env.js';
 
@@ -21,10 +24,28 @@ export async function sendMail({ to, subject, html, replyTo }) {
   await getTransporter().sendMail({ from: env.EMAIL_USER, to, subject, html, replyTo });
 }
 
-// Gabarits HTML générés depuis les fichiers .mjml voisins. Handlebars
-// échappe les valeurs insérées avec {{ }}.
 const templatesDir = new URL('../../templates/email/', import.meta.url);
+const cache = new Map();
 
-export function loadTemplate(name) {
-  return handlebars.compile(readFileSync(new URL(`${name}.html`, templatesDir), 'utf8'));
+async function compiler(name) {
+  const chemin = new URL(`${name}.mjml`, templatesDir);
+  const { html, errors } = await mjml2html(readFileSync(chemin, 'utf8'), {
+    filePath: dirname(fileURLToPath(chemin)),
+    validationLevel: 'strict',
+  });
+
+  if (errors?.length) {
+    const details = errors.map((e) => e.formattedMessage ?? e.message).join(' · ');
+    throw new Error(`Gabarit ${name}.mjml invalide : ${details}`);
+  }
+
+  return handlebars.compile(html);
+}
+
+export async function renderTemplate(name, data = {}) {
+  if (!cache.has(name)) {
+    cache.set(name, compiler(name));
+  }
+  const gabarit = await cache.get(name);
+  return gabarit(data);
 }

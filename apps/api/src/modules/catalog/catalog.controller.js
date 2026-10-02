@@ -26,7 +26,7 @@ export const categoryController = {
 
 export const materialController = {
   async list(req, res) {
-    res.json(await materialService.listMaterials());
+    res.json(await materialService.listMaterials(req.valid.query));
   },
 
   async get(req, res) {
