@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validate } from '../../shared/http/validate.js';
 import { authController } from './auth.controller.js';
 import { loginBody, registerBody } from './auth.schemas.js';
+import { authLimiter } from '../../shared/http/rate-limit.js';
 
 export const authRouter = Router();
 
@@ -64,7 +65,12 @@ export const authRouter = Router();
  *         description: Bad Request
  */
 
-authRouter.post('/register', validate({ body: registerBody }), authController.register);
+authRouter.post(
+  '/register',
+  authLimiter,
+  validate({ body: registerBody }),
+  authController.register,
+);
 
 /**
  * @swagger
@@ -101,7 +107,7 @@ authRouter.post('/register', validate({ body: registerBody }), authController.re
  *       400:
  *         description: Invalid credentials
  */
-authRouter.post('/login', validate({ body: loginBody }), authController.login);
+authRouter.post('/login', authLimiter, validate({ body: loginBody }), authController.login);
 
 authRouter.get('/google', authController.googleRedirect);
 authRouter.get('/google/callback', authController.googleCallback);

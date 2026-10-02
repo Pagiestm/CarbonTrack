@@ -191,9 +191,9 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   clearSession,
+  consumeTokenFromUrl,
   isAdmin as checkIsAdmin,
   isAuthenticated as checkIsAuthenticated,
-  saveSession,
 } from '@/shared/auth/session';
 
 const isAuthenticated = ref(false);
@@ -215,12 +215,7 @@ const logout = () => {
 };
 
 onMounted(() => {
-  // Retour de la connexion Google : le jeton arrive dans l'URL
-  const token = new URLSearchParams(window.location.search).get('token');
-  if (token) {
-    saveSession(token);
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
+  consumeTokenFromUrl();
 
   isAuthenticated.value = checkIsAuthenticated();
   isAdmin.value = isAuthenticated.value && checkIsAdmin();

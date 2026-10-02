@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validate } from '../../shared/http/validate.js';
 import { contactController } from './contact.controller.js';
 import { contactBody } from './contact.schemas.js';
+import { emailLimiter } from '../../shared/http/rate-limit.js';
 
 export const contactRouter = Router();
 
@@ -36,4 +37,4 @@ export const contactRouter = Router();
  *       500:
  *         description: Error sending the message
  */
-contactRouter.post('/', validate({ body: contactBody }), contactController.send);
+contactRouter.post('/', emailLimiter, validate({ body: contactBody }), contactController.send);

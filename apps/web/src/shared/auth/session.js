@@ -43,6 +43,19 @@ export const saveSession = (token) => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
+// Retour de la connexion Google : l'API renvoie le jeton dans le fragment
+// (#token=…), qui n'est jamais transmis au serveur. On le consomme puis on
+// nettoie l'URL pour qu'il ne reste pas dans la barre d'adresse.
+export const consumeTokenFromUrl = () => {
+  const fragment = new URLSearchParams(window.location.hash.slice(1));
+  const token = fragment.get('token');
+  if (!token) return false;
+
+  saveSession(token);
+  window.history.replaceState({}, document.title, window.location.pathname);
+  return true;
+};
+
 export const clearSession = () => {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem('role'); // clé des anciennes versions du client

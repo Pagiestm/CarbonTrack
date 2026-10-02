@@ -17,8 +17,10 @@ export const authController = {
     res.redirect(googleAuthUrl());
   },
 
-  // Le client lit le jeton dans l'URL de retour ; en cas d'échec (refus de
-  // l'utilisateur, code expiré…), il revient simplement sur l'accueil.
+  // Le jeton repart dans le fragment (#token=…) et non dans la query : un
+  // fragment n'est jamais envoyé au serveur, donc il n'atterrit ni dans les
+  // logs ni dans l'en-tête Referer. En cas d'échec (refus de l'utilisateur,
+  // code expiré…), on revient simplement sur l'accueil.
   async googleCallback(req, res) {
     const { code } = req.query;
     if (typeof code !== 'string' || !code) {
@@ -26,7 +28,7 @@ export const authController = {
     }
     try {
       const { token } = await authService.loginWithGoogle(code);
-      res.redirect(`${env.FRONTEND_URL}?token=${token}`);
+      res.redirect(`${env.FRONTEND_URL}#token=${token}`);
     } catch (error) {
       console.error('Connexion Google échouée :', error.message);
       res.redirect(env.FRONTEND_URL);

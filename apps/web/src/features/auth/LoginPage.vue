@@ -83,7 +83,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { loginUser, googleAuth } from '@/api/auth';
-import { saveSession } from '@/shared/auth/session';
+import { consumeTokenFromUrl, saveSession } from '@/shared/auth/session';
 
 const formState = ref({
   email: '',
@@ -119,13 +119,9 @@ const loginWithGoogle = async () => {
   }
 };
 
-// Vérifie si le token est présent dans l'URL
+// Retour de la connexion Google : le jeton arrive dans le fragment de l'URL.
 onMounted(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-
-  if (token) {
-    saveSession(token);
+  if (consumeTokenFromUrl()) {
     router.push('/');
   }
 });

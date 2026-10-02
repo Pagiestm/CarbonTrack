@@ -7,7 +7,9 @@ const schema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
 
   DATABASE_URL: z.string().min(1),
-  JWT_SECRET: z.string().min(1),
+  // 32 caractères au moins : un secret court se retrouve par force brute, et
+  // il signe toutes les sessions.
+  JWT_SECRET: z.string().min(32, { error: 'JWT_SECRET doit faire au moins 32 caractères' }),
 
   // Adresse du client, pour CORS, les redirections et les liens des emails.
   // DEV_/PROD_FRONTEND_URL restent lus pour les anciennes configurations.

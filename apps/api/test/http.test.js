@@ -92,3 +92,30 @@ describe('API', () => {
     });
   });
 });
+
+describe('limitation de débit', () => {
+  it('bloque les tentatives de connexion répétées', async () => {
+    const app = createApp();
+    const essai = () =>
+      request(app).post('/auth/login').send({ email: 'x@y.fr', password: 'faux' });
+
+    // La limite ne compte que les échecs : 10 passent, le 11e est refusé.
+    let dernier;
+    for (let i = 0; i < 11; i += 1) {
+      dernier = await essai();
+    }
+    expect(dernier.status).toBe(429);
+    expect(dernier.body.error).toMatch(/tentatives/i);
+  });
+
+  it("bloque les envois d'email répétés depuis le formulaire de contact", async () => {
+    const app = createApp();
+    let dernier;
+    for (let i = 0; i < 6; i += 1) {
+      dernier = await request(app)
+        .post('/contact')
+        .send({ name: 'A', email: 'a@b.fr', subject: 'Sujet', message: 'Un message assez long.' });
+    }
+    expect(dernier.status).toBe(429);
+  });
+});
