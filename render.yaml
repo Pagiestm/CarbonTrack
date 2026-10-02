@@ -1,4 +1,4 @@
-# Déploiement gratuit sur Render (Blueprint) : voir docs/deploiement-render.md
+# Déploiement gratuit sur Render (Blueprint) : voir docs/deploiement/render.md
 #
 # - carbontrack-api : l'API Express + Prisma, depuis apps/api
 # - carbontrack     : le client Vue en site statique, depuis apps/web ; /api

@@ -13,6 +13,8 @@ Application Vue 3 de CarbonTrack.
 ## Architecture
 
 ```
+Dockerfile               image du client (cibles dev et runtime)
+nginx.conf               serveur de l'image de production
 src/
 ├── app/                 point d'entrée (main.js), App.vue, routeur, page 404
 ├── api/                 un fichier par module de l'API
@@ -39,19 +41,23 @@ Les imports passent par l'alias `@/` (par exemple `@/api/projects`). Toutes les 
 
 ## Installation
 
-Depuis la racine du dépôt :
+La pile Docker démarre le client avec l'API et la base en une commande —
+`docker compose up` depuis la racine, détails dans
+[docs/deploiement/docker.md](../../docs/deploiement/docker.md).
+
+Sans Docker, depuis la racine du dépôt :
 
 ```sh
 npm install
 cp apps/web/.env.example apps/web/.env
 ```
 
-`.env` ne contient que l'adresse de l'API : `http://localhost:3000` en développement. En production, Render fournit `VITE_API_BASE_URL=/api` au moment du build (voir `render.yaml`).
+`.env` ne contient que l'adresse de l'API : `http://localhost:3000` en développement. En production, l'adresse est figée dans le bundle au moment du build : Render la fournit par `VITE_API_BASE_URL=/api` (voir `render.yaml`), l'image Docker par l'argument de build du même nom. Dans les deux cas, `/api` est réécrit vers l'API, qui partage donc l'origine du client.
 
 ## Commandes
 
-| Commande (depuis la racine)            | Effet                                  |
-| -------------------------------------- | -------------------------------------- |
-| `npm run dev:web`                      | serveur de développement               |
-| `npm run build`                        | build de production dans `apps/web/dist` |
-| `npm run lint -w @carbontrack/web`     | ESLint                                 |
+| Commande (depuis la racine)        | Effet                                    |
+| ---------------------------------- | ---------------------------------------- |
+| `npm run dev:web`                  | serveur de développement                 |
+| `npm run build`                    | build de production dans `apps/web/dist` |
+| `npm run lint -w @carbontrack/web` | ESLint                                   |
