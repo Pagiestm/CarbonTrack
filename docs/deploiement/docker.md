@@ -78,6 +78,24 @@ L'interface est sur le port 8026 et non 8025, le port par défaut de Mailpit :
 il est souvent déjà pris par une autre pile. Le port SMTP n'est pas publié sur
 l'hôte, seule l'API s'en sert.
 
+Une base fraîche est vide : sans catalogue, impossible de composer un projet.
+Un jeu de données de départ la remplit, avec un compte de démonstration
+(`demo@carbontrack.fr` / `Motdepasse1!`, administrateur) :
+
+```sh
+docker compose exec api npm run seed          # ajoute ce qui manque
+docker compose exec api npm run seed:reset    # vide d'abord, puis remplit
+```
+
+Le script est idempotent : on peut le rejouer sans créer de doublons. Il
+génère 10 catégories, 56 matériaux, 26 comptes et une soixantaine de projets
+étalés sur l'année, de quoi faire vivre les graphiques du tableau de bord. La
+graine du générateur est fixe : deux exécutions sur une base vide donnent les
+mêmes données.
+
+`seed:reset` ne touche qu'aux comptes générés (`@carbontrack.test`) et au
+compte de démonstration : les comptes réels sont conservés.
+
 Au démarrage, l'API génère le client Prisma puis applique les migrations.
 Ensuite, `node --watch` et Vite rechargent à chaud : `apps/api` et `apps/web`
 sont montés depuis l'hôte, une modification est prise en compte sans

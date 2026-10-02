@@ -5,13 +5,14 @@
     </p>
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 class="font-display text-3xl font-bold text-ink sm:text-4xl">{{ title }}</h1>
+        <h1 class="text-3xl font-bold text-ink sm:text-4xl">{{ title }}</h1>
         <p v-if="subtitle" class="mt-2 max-w-2xl text-ink-muted">{{ subtitle }}</p>
       </div>
       <div v-if="$slots.actions" class="flex shrink-0 gap-3"><slot name="actions" /></div>
     </div>
   </header>
 </template>
+
 
 <script setup>
 defineProps({
@@ -20,3 +21,4 @@ defineProps({
   eyebrow: { type: String, default: '' },
 });
 </script>
+

@@ -6,8 +6,7 @@ package-lock.json
 apps/api/src/generated
 apps/api/prisma/migrations
 
-# Prettier prend le MJML pour du HTML et réécrirait les {{variables}}
-# Handlebars dans la source sans que le .html compilé suive.
+# Prettier prend le MJML pour du HTML et réécrirait les {{variables}} Handlebars.
 apps/api/src/templates/email
 
 docs/merise

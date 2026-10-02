@@ -38,7 +38,8 @@ limité aux fichiers qu'il nomme :
   que Prettier gère déjà. Les deux outils ne se contredisent donc jamais.
 
 Sont ignorés : `dist`, `coverage`, le client Prisma généré
-(`apps/api/src/generated`) et les gabarits d'email compilés.
+(`apps/api/src/generated`) et les gabarits MJML, que Prettier prendrait pour du
+HTML.
 
 `no-unused-vars` est réglé avec `ignoreRestSiblings` et un préfixe `_` toléré :
 retirer un champ par déstructuration — `const { password: _hash, ...reste } =

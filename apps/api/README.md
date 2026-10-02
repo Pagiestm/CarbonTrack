@@ -30,7 +30,7 @@ src/
 │   ├── http/            erreurs HTTP, validation, gestionnaire d'erreurs
 │   ├── auth/            jetons JWT, requireAuth / requireAdmin
 │   └── mail/            envoi d'emails et gabarits
-├── templates/email/     gabarits (.mjml source, .html compilé)
+├── templates/email/     gabarits MJML, compilés en HTML à l'exécution
 └── generated/prisma/    client Prisma (généré, ignoré par git)
 ```
 

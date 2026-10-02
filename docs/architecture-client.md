@@ -45,6 +45,7 @@ apps/web/src/
 ├── presentation/             Vue
 │   ├── app/                  point d'entrée, App.vue, routeur
 │   ├── stores/               état partagé (Pinia) — la couche « bloc » de l'article
+│   ├── composables/          logique de vue réutilisable (toasts, pagination)
 │   ├── components/           composants communs, dont le kit d'interface (ui/)
 │   └── modules/              les pages, par domaine fonctionnel
 │

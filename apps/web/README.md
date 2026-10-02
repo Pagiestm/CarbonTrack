@@ -48,13 +48,43 @@ chargées à la demande.
 
 ## Le kit d'interface
 
-`presentation/components/ui/` : `AppButton`, `AppField`, `AppCard`,
-`AppAlert`, `AppShell`, `PageHeader`, `EmptyState`, `ConfirmDialog`,
-`FootprintBadge`, `GoogleLogo`, plus `chart-theme.js` pour les graphiques.
+`presentation/components/ui/` :
 
-Tout passe par les jetons du thème — aucune couleur en dur dans un composant.
-`FootprintBadge` colore une empreinte selon le **niveau défini par l'entité
-`Footprint`** : la couleur suit le métier, pas l'inverse.
+| Composant        | Rôle                                                      |
+| ---------------- | --------------------------------------------------------- |
+| `AppShell`       | coquille de page : navigation, contenu, pied de page      |
+| `PageHeader`     | titre, surtitre, sous-titre et actions                    |
+| `AppCard`        | encart avec titre et actions                              |
+| `AppButton`      | 4 variantes, 3 tailles, état de chargement, icône         |
+| `AppField`       | champ étiqueté : texte, nombre, zone, liste, erreur, aide |
+| `AppAlert`       | message persistant dans un formulaire                     |
+| `ToastHost`      | notifications éphémères, pilotées par `useToasts`         |
+| `ConfirmDialog`  | confirmation avant une action irréversible                |
+| `EmptyState`     | liste vide, avec une action pour la remplir               |
+| `AppSkeleton`    | leurre de chargement                                      |
+| `AppPagination`  | pagination, pilotée par `usePagination`                   |
+| `AppBadge`       | pastille d'état générique                                 |
+| `FootprintBadge` | empreinte colorée selon son niveau métier                 |
+| `chart-theme.js` | réglages et palette des graphiques                        |
+
+`presentation/composables/` :
+
+| Composable     | Rôle                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| `useToasts`    | file de notifications partagée par toute l'application                                     |
+| `usePagedList` | liste paginée **par le serveur** : page, recherche temporisée, réponses obsolètes ignorées |
+| `useCsvExport` | export CSV d'un projet, au format qu'attend Excel en français                              |
+
+Tout passe par les jetons du thème — **aucune couleur en dur dans un
+composant**. `FootprintBadge` colore une empreinte selon le niveau défini par
+l'entité `Footprint` : la couleur suit le métier, pas l'inverse.
+
+## Le thème
+
+Clair et neutre : gris chauds, un seul accent vert forêt désaturé, des aplats
+francs. Ni halo, ni lueur, ni dégradé décoratif — la couleur vive est réservée
+à ce qui porte une information. Les jetons sont dans
+`src/assets/tailwind.css`.
 
 ## Installation
 

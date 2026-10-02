@@ -13,6 +13,7 @@
   </component>
 </template>
 
+
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -36,10 +37,10 @@ const attributsLien = computed(() =>
 );
 
 const variantes = {
-  primary: 'bg-accent text-accent-ink hover:bg-accent-strong shadow-[0_0_0_1px] shadow-accent/20',
-  secondary: 'border border-line-strong bg-surface-overlay text-ink hover:bg-surface-hover',
+  primary: 'bg-accent text-accent-ink hover:bg-accent-strong',
+  secondary: 'border border-line-strong bg-surface-raised text-ink hover:bg-surface-overlay',
   ghost: 'text-ink-muted hover:bg-surface-overlay hover:text-ink',
-  danger: 'border border-danger/40 bg-danger-soft text-danger hover:bg-danger hover:text-surface',
+  danger: 'border border-danger/30 bg-danger-soft text-danger hover:bg-danger hover:text-white',
 };
 
 const tailles = {
@@ -56,3 +57,4 @@ const classes = computed(() => [
   props.block && 'w-full',
 ]);
 </script>
+
