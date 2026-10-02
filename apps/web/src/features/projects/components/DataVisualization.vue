@@ -1,23 +1,23 @@
 <template>
   <div class="data-visualization p-6">
-    <h2 class="text-2xl font-semibold mb-4 text-customGreen">
-      Empreinte Carbone total par matériaux
-    </h2>
+    <h2 class="text-2xl font-semibold mb-4 text-accent">Empreinte Carbone total par matériaux</h2>
     <canvas id="chart" class="h-12"></canvas>
     <div class="legend mt-4">
-      <p class="text-sm text-light mb-2">
+      <p class="text-sm text-ink mb-2">
         Ce graphique à barres montre l'empreinte carbone totale par matériau utilisé dans le projet.
       </p>
-      <ul class="list-disc list-inside text-sm text-light">
+      <ul class="list-disc list-inside text-sm text-ink">
         <li>Chaque barre représente un matériau différent.</li>
         <li>La hauteur de la barre indique l'empreinte carbone totale.</li>
         <li>
-          Les couleurs varient en fonction de la quantité : <br />
-          <br /><span class="font-semibold">BLEU : </span> pour les matériaux à faible empreinte
-          carbone (≤ 2 kg CO₂e/kg), <br /><span class="font-semibold">ORANGE : </span> pour les
-          matériaux à empreinte carbone modérée (2 - 10 kg CO₂e/kg), <br /><span
+          Les couleurs varient en fonction de la quantité&nbsp;: <br />
+          <br /><span class="font-semibold">BLEU&nbsp;: </span> pour les matériaux à faible
+          empreinte carbone (≤ 2 kg CO₂e/kg), <br /><span class="font-semibold"
+            >ORANGE&nbsp;:
+          </span>
+          pour les matériaux à empreinte carbone modérée (2 - 10 kg CO₂e/kg), <br /><span
             class="font-semibold"
-            >ROUGE :
+            >ROUGE&nbsp;:
           </span>
           pour les matériaux à forte empreinte carbone (> 10 kg CO₂e/kg).
         </li>

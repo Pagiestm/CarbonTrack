@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-400 bg-secondary flex justify-center">
+  <section class="w-full py-12 md:py-20 bg-surface flex justify-center">
     <div class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12">
       <div class="grid grid-cols-2 gap-6 order-last lg:order-first">
         <AdvantageCard
@@ -24,11 +24,13 @@
         />
       </div>
       <div class="space-y-4 animate-fadeIn">
-        <div class="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-light">Avantages</div>
-        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-100">
-          Pourquoi choisir <span class="text-customGreen">CarbonTrack ?</span>
+        <div class="inline-block rounded-lg bg-surface-overlay px-3 py-1 text-sm text-ink">
+          Avantages
+        </div>
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-ink">
+          Pourquoi choisir <span class="text-accent">CarbonTrack&nbsp;?</span>
         </h2>
-        <p class="max-w-2xl text-gray-300 md:text-xl lg:text-base xl:text-xl">
+        <p class="max-w-2xl text-ink-muted md:text-xl lg:text-base xl:text-xl">
           CarbonTrack offre une solution complète et facile à utiliser pour calculer et réduire
           votre empreinte carbone. Découvrez les avantages de notre application pour vos projets de
           construction.

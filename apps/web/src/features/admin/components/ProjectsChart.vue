@@ -1,22 +1,17 @@
 <template>
-  <div class="card bg-white shadow-md rounded-lg p-6">
-    <div class="data-visualization">
-      <h2 class="text-2xl font-semibold mb-4 text-customGreen">
-        Projets créés par mois pour l'année actuelle
-      </h2>
-      <canvas ref="projectsChart" class="h-12"></canvas>
-      <div class="legend mt-4">
-        <p class="text-sm mb-2">
-          Ce graphique montre le nombre de projets créés chaque mois pour l'année actuelle.
-        </p>
-      </div>
+  <AppCard title="Projets créés" subtitle="Par mois, sur l'année en cours">
+    <!-- maintainAspectRatio: false oblige à donner une hauteur au conteneur. -->
+    <div class="h-72">
+      <canvas ref="projectsChart"></canvas>
     </div>
-  </div>
+  </AppCard>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Chart } from 'chart.js/auto';
+import AppCard from '@/shared/ui/AppCard.vue';
+import { ACCENT, ACCENT_SOFT, moisDeLAnnee, optionsGraphique } from '@/shared/ui/chart-theme';
 import { getAllProjectsForAdmin } from '@/api/projects';
 
 const projectsData = ref([]);
@@ -34,9 +29,7 @@ const fetchProjects = async () => {
 
 const transformDataForChart = (projects) => {
   const currentYear = new Date().getFullYear();
-  const months = Array.from({ length: 12 }, (_, i) =>
-    new Date(currentYear, i).toLocaleString('default', { month: 'long' }),
-  );
+  const months = moisDeLAnnee();
   const projectsByMonth = Array(12).fill(0);
 
   projects.forEach((project) => {
@@ -53,8 +46,8 @@ const transformDataForChart = (projects) => {
       {
         label: 'Projets créés',
         data: projectsByMonth,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: ACCENT_SOFT,
+        borderColor: ACCENT,
         borderWidth: 1,
       },
     ],
@@ -68,14 +61,7 @@ onMounted(async () => {
   chartInstance.value = new Chart(ctx, {
     type: 'bar',
     data: chartData,
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
+    options: optionsGraphique({ titreAxeY: 'Projets créés' }),
   });
 });
 </script>

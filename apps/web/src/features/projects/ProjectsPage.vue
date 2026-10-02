@@ -1,10 +1,10 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
+  <section class="w-full py-24 lg:py-32 bg-surface min-h-screen">
     <div class="container mx-auto px-4">
       <header class="mb-12 text-center lg:text-left">
-        <h1 class="text-5xl font-bold text-light">Mes projets</h1>
-        <p class="text-lg text-gray-300 mt-4">
+        <h1 class="text-5xl font-bold text-ink">Mes projets</h1>
+        <p class="text-lg text-ink-muted mt-4">
           Vue d'ensemble de vos projets et recommandations personnalisées.
         </p>
       </header>

@@ -1,22 +1,16 @@
 <template>
-  <div class="card bg-white shadow-md rounded-lg p-6">
-    <div class="user-chart">
-      <h2 class="text-2xl font-semibold text-customGreen mb-4">
-        Nombre d'utilisateurs inscrits par mois
-      </h2>
-      <canvas ref="userChart" class="h-12"></canvas>
-      <div class="legend mt-4">
-        <p class="text-sm mb-2">
-          Ce graphique montre le nombre d'utilisateurs inscrits chaque mois pour l'année actuelle.
-        </p>
-      </div>
+  <AppCard title="Nouveaux comptes" subtitle="Par mois, sur l'année en cours">
+    <div class="h-72">
+      <canvas ref="userChart"></canvas>
     </div>
-  </div>
+  </AppCard>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Chart } from 'chart.js/auto';
+import AppCard from '@/shared/ui/AppCard.vue';
+import { ACCENT, ACCENT_SOFT, moisDeLAnnee, optionsGraphique } from '@/shared/ui/chart-theme';
 import { getAllUsers } from '@/api/users';
 
 const users = ref([]);
@@ -34,9 +28,7 @@ const fetchUsers = async () => {
 
 const transformDataForChart = (users) => {
   const currentYear = new Date().getFullYear();
-  const months = Array.from({ length: 12 }, (_, i) =>
-    new Date(currentYear, i).toLocaleString('default', { month: 'long' }),
-  );
+  const months = moisDeLAnnee();
   const usersByMonth = Array(12).fill(0);
 
   users.forEach((user) => {
@@ -53,8 +45,8 @@ const transformDataForChart = (users) => {
       {
         label: 'Utilisateurs inscrits',
         data: usersByMonth,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: ACCENT_SOFT,
+        borderColor: ACCENT,
         borderWidth: 1,
         fill: false,
         tension: 0.1,
@@ -70,24 +62,7 @@ onMounted(async () => {
   chartInstance.value = new Chart(ctx, {
     type: 'line',
     data: chartData,
-    options: {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Mois',
-          },
-        },
-        y: {
-          title: {
-            display: true,
-            text: "Nombre d'utilisateurs",
-          },
-          beginAtZero: true,
-        },
-      },
-    },
+    options: optionsGraphique({ titreAxeY: "Nombre d'utilisateurs" }),
   });
 });
 </script>

@@ -1,121 +1,99 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-secondary px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl xl:w-full xl:grid xl:grid-cols-6 gap-8 p-8">
-      <div class="max-w-sm w-full lg:col-span-2 flex flex-col justify-center">
-        <h2 class="text-2xl font-bold text-center text-light mb-6">Bienvenue</h2>
-        <p class="text-center text-light mb-6">
-          Veuillez vous connecter pour accéder à votre compte
-        </p>
-        <form @submit.prevent="login" class="space-y-6">
-          <div v-if="errorMessage" class="text-red-500 text-center">
-            {{ errorMessage }}
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium text-light">Email</label>
-            <input
-              type="email"
-              id="email"
-              v-model="formState.email"
-              required
-              placeholder="you@example.com"
-              class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary"
-            />
-          </div>
-          <div>
-            <label for="password" class="block text-sm font-medium text-light">Password</label>
-            <input
-              type="password"
-              id="password"
-              v-model="formState.password"
-              required
-              placeholder="••••••••"
-              class="mt-2 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-xs focus:outline-hidden focus:ring-customGreen focus:border-customGreen sm:text-sm text-light bg-secondary"
-            />
-          </div>
-          <button
-            type="submit"
-            class="w-full px-4 py-2 bg-customGreen text-white font-medium rounded-md shadow-xs hover:bg-customGreen-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-customGreen"
-          >
-            <span v-if="!isLoading">Connexion</span>
-            <span v-else>Chargement...</span>
-          </button>
-        </form>
-        <button
-          @click="loginWithGoogle"
-          class="w-full mt-4 px-4 py-2 bg-white text-gray-700 font-medium rounded-md shadow-xs border border-gray-300 flex items-center justify-center"
+  <AuthLayout title="Content de vous revoir" subtitle="Connectez-vous pour accéder à vos projets.">
+    <form class="space-y-5" @submit.prevent="login">
+      <p
+        v-if="errorMessage"
+        role="alert"
+        class="rounded-lg border border-danger/40 bg-danger-soft px-3 py-2.5 text-sm text-danger"
+      >
+        {{ errorMessage }}
+      </p>
+
+      <AppField
+        id="email"
+        v-model="formState.email"
+        label="Adresse email"
+        type="email"
+        placeholder="vous@exemple.fr"
+        autocomplete="email"
+      />
+
+      <div>
+        <AppField
+          id="password"
+          v-model="formState.password"
+          label="Mot de passe"
+          type="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        />
+        <RouterLink
+          to="/password-reset/request"
+          class="mt-2 inline-block text-sm text-accent hover:underline"
         >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/480px-Google_%22G%22_logo.svg.png"
-            alt="Google Logo"
-            class="w-5 h-5 mr-2"
-          />
-          Connexion avec Google
-        </button>
-        <div class="mt-6 text-center">
-          <p class="text-customGray">
-            Vous n'avez pas de compte ?
-            <a href="/register" class="text-light hover:underline">Inscrivez-vous</a>
-          </p>
-          <p class="text-light mt-2">
-            <a href="/password-reset/request" class="text-light hover:underline"
-              >Mot de passe oublié ?</a
-            >
-          </p>
-        </div>
+          Mot de passe oublié&nbsp;?
+        </RouterLink>
       </div>
-      <div class="hidden xl:flex xl:items-center xl:justify-center xl:col-span-1">
-        <div class="h-full w-px bg-gray-600"></div>
-      </div>
-      <div class="hidden xl:flex xl:items-center xl:justify-center xl:col-span-3">
-        <div class="text-center">
-          <img
-            src="https://images.pexels.com/photos/532192/pexels-photo-532192.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt="Description de l'image"
-            class="mb-4 mx-auto rounded-lg w-full h-auto"
-          />
-        </div>
-      </div>
+
+      <AppButton type="submit" block :loading="isLoading">
+        {{ isLoading ? 'Connexion…' : 'Se connecter' }}
+      </AppButton>
+    </form>
+
+    <div class="my-6 flex items-center gap-3">
+      <span class="h-px flex-1 bg-line" />
+      <span class="text-xs text-ink-subtle">ou</span>
+      <span class="h-px flex-1 bg-line" />
     </div>
-  </div>
+
+    <AppButton variant="secondary" block @click="loginWithGoogle">
+      <GoogleLogo class="size-5" />
+      Continuer avec Google
+    </AppButton>
+
+    <template #footer>
+      Vous n'avez pas de compte&nbsp;?
+      <RouterLink to="/register" class="font-medium text-accent hover:underline">
+        Créer un compte
+      </RouterLink>
+    </template>
+  </AuthLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { loginUser, googleAuth } from '@/api/auth';
+import { onMounted, ref } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { googleAuth, loginUser } from '@/api/auth';
 import { consumeTokenFromUrl, saveSession } from '@/shared/auth/session';
+import AuthLayout from '@/features/auth/AuthLayout.vue';
+import AppButton from '@/shared/ui/AppButton.vue';
+import AppField from '@/shared/ui/AppField.vue';
+import GoogleLogo from '@/shared/ui/GoogleLogo.vue';
 
-const formState = ref({
-  email: '',
-  password: '',
-});
-
+const formState = ref({ email: '', password: '' });
 const errorMessage = ref('');
 const isLoading = ref(false);
-
 const router = useRouter();
 
 const login = async () => {
   isLoading.value = true;
+  errorMessage.value = '';
   try {
-    const { token } = await loginUser({
-      email: formState.value.email,
-      password: formState.value.password,
-    });
+    const { token } = await loginUser({ ...formState.value });
     saveSession(token);
     router.push('/');
-  } catch {
-    errorMessage.value = 'Une erreur est survenue, veuillez réessayer';
+  } catch (error) {
+    errorMessage.value = error.message;
   } finally {
     isLoading.value = false;
   }
 };
 
-const loginWithGoogle = async () => {
+const loginWithGoogle = () => {
   try {
-    await googleAuth();
+    googleAuth();
   } catch {
-    errorMessage.value = 'Google authentication failed';
+    errorMessage.value = 'La connexion avec Google a échoué, veuillez réessayer';
   }
 };
 

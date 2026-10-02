@@ -37,7 +37,7 @@
     <!-- Menu -->
     <aside
       :class="menuClasses"
-      class="fixed inset-0 bg-white shadow-md md:relative md:w-56 md:block md:h-full transform transition-transform duration-300 ease-in-out z-50"
+      class="fixed inset-0 bg-surface-raised shadow-md md:relative md:w-56 md:block md:h-full transform transition-transform duration-300 ease-in-out z-50"
     >
       <div class="p-4 flex justify-between items-center">
         <h1 class="text-xl font-bold">Administration</h1>
@@ -65,8 +65,8 @@
             to="/"
             @click="closeMenu"
             :class="[
-              'flex items-center p-4 transition-all duration-200 hover:bg-gray-300',
-              { 'bg-gray-200': isActive('/') },
+              'flex items-center p-4 transition-all duration-200 hover:bg-surface-hover',
+              { 'bg-surface-overlay': isActive('/') },
             ]"
           >
             <li class="flex items-center">
@@ -88,8 +88,8 @@
             to="/admin/dashboard"
             @click="closeMenu"
             :class="[
-              'flex items-center p-4 transition-all duration-200 hover:bg-gray-300',
-              { 'bg-gray-200': isActive('/admin/dashboard') },
+              'flex items-center p-4 transition-all duration-200 hover:bg-surface-hover',
+              { 'bg-surface-overlay': isActive('/admin/dashboard') },
             ]"
           >
             <li class="flex items-center">
@@ -104,15 +104,15 @@
                   d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"
                 />
               </svg>
-              Dashboard
+              Tableau de bord
             </li>
           </router-link>
           <router-link
             to="/admin/materials"
             @click="closeMenu"
             :class="[
-              'flex items-center p-4 transition-all duration-200 hover:bg-gray-300',
-              { 'bg-gray-200': isActive('/admin/materials') },
+              'flex items-center p-4 transition-all duration-200 hover:bg-surface-hover',
+              { 'bg-surface-overlay': isActive('/admin/materials') },
             ]"
           >
             <li class="flex items-center">
@@ -127,15 +127,15 @@
                   d="M280-600v-80h560v80H280Zm0 160v-80h560v80H280Zm0 160v-80h560v80H280ZM160-600q-17 0-28.5-11.5T120-640q0-17 11.5-28.5T160-680q17 0 28.5 11.5T200-640q0 17-11.5 28.5T160-600Zm0 160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520q17 0 28.5 11.5T200-480q0 17-11.5 28.5T160-440Zm0 160q-17 0-28.5-11.5T120-320q0-17 11.5-28.5T160-360q17 0 28.5 11.5T200-320q0 17-11.5 28.5T160-280Z"
                 />
               </svg>
-              Materiaux
+              Matériaux
             </li>
           </router-link>
           <router-link
             to="/admin/categories"
             @click="closeMenu"
             :class="[
-              'flex items-center p-4 transition-all duration-200 hover:bg-gray-300',
-              { 'bg-gray-200': isActive('/admin/categories') },
+              'flex items-center p-4 transition-all duration-200 hover:bg-surface-hover',
+              { 'bg-surface-overlay': isActive('/admin/categories') },
             ]"
           >
             <li class="flex items-center">

@@ -1,43 +1,43 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen flex items-center justify-center">
+  <section class="w-full py-24 lg:py-32 bg-surface min-h-screen flex items-center justify-center">
     <div class="container mx-auto px-4">
       <header class="mb-12 text-center">
-        <h1 class="text-5xl font-bold text-white">Modifier le Profil</h1>
-        <p class="text-lg text-gray-300 mt-4">
+        <h1 class="text-5xl font-bold text-ink">Modifier le Profil</h1>
+        <p class="text-lg text-ink-muted mt-4">
           Modifiez les informations ci-dessous pour mettre à jour votre profil.
         </p>
       </header>
-      <div v-if="loading" class="text-center text-white">Chargement des données...</div>
+      <div v-if="loading" class="text-center text-ink">Chargement des données...</div>
       <form
         v-else
         @submit.prevent="submitUpdateUserProfile"
-        class="bg-primary p-8 rounded-lg shadow-lg mx-auto max-w-lg"
+        class="bg-surface-overlay p-8 rounded-lg shadow-lg mx-auto max-w-lg"
       >
         <div class="mb-6">
-          <label for="name" class="block text-white mb-2">Nom</label>
+          <label for="name" class="block text-ink mb-2">Nom</label>
           <input
             v-model="user.name"
             type="text"
             id="name"
-            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+            class="w-full p-3 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
           />
           <FormError :message="errors.name" />
         </div>
         <div class="mb-6">
-          <label for="email" class="block text-white mb-2">Email</label>
+          <label for="email" class="block text-ink mb-2">Email</label>
           <input
             v-model="user.email"
             type="email"
             id="email"
-            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+            class="w-full p-3 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
           />
           <FormError :message="errors.email" />
         </div>
         <div class="flex justify-center">
           <button
             type="submit"
-            class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+            class="py-3 px-6 bg-accent text-accent-ink font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
           >
             Mettre à jour le profil
           </button>

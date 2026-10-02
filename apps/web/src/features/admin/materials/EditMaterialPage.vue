@@ -1,38 +1,36 @@
 <template>
   <section class="w-full py-24 lg:py-32 overflow-hidden flex items-center justify-center">
-    <div class="container max-w-xl bg-white p-6 shadow-md rounded-lg">
-      <h2 class="text-3xl font-bold text-center text-primary underline mb-6">
-        Modifier le Matériau
-      </h2>
-      <div v-if="loading" class="text-center text-primary">Chargement des données...</div>
+    <div class="container max-w-xl bg-surface-raised p-6 shadow-md rounded-lg">
+      <h2 class="text-3xl font-bold text-center text-ink underline mb-6">Modifier le Matériau</h2>
+      <div v-if="loading" class="text-center text-ink">Chargement des données...</div>
       <form v-else @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <label for="name" class="block text-sm font-medium text-primary mb-1 underline"
-            >Nom du Matériau :</label
+          <label for="name" class="block text-sm font-medium text-ink mb-1 underline"
+            >Nom du Matériau&nbsp;:</label
           >
           <input
             id="name"
             v-model="localMaterial.name"
             placeholder="Ex: Acier"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.name" />
         </div>
         <div>
-          <label for="supplier" class="block text-sm font-medium text-primary mb-1 underline"
-            >Fournisseur :</label
+          <label for="supplier" class="block text-sm font-medium text-ink mb-1 underline"
+            >Fournisseur&nbsp;:</label
           >
           <input
             id="supplier"
             v-model="localMaterial.supplier"
             placeholder="Ex: Fournisseur XYZ"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.supplier" />
         </div>
         <div>
-          <label for="carbonFootprint" class="block text-sm font-medium text-primary mb-1 underline"
-            >Empreinte Carbone :</label
+          <label for="carbonFootprint" class="block text-sm font-medium text-ink mb-1 underline"
+            >Empreinte Carbone&nbsp;:</label
           >
           <input
             id="carbonFootprint"
@@ -41,25 +39,25 @@
             step="0.01"
             min="0"
             placeholder="Ex: 123.45"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.carbonFootprint" />
         </div>
         <div>
-          <label for="unit" class="block text-sm font-medium text-primary mb-1 underline"
-            >Unité :</label
+          <label for="unit" class="block text-sm font-medium text-ink mb-1 underline"
+            >Unité&nbsp;:</label
           >
           <input
             id="unit"
             v-model="localMaterial.unit"
             placeholder="Ex: kg"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.unit" />
         </div>
         <div>
-          <label for="pricePerUnit" class="block text-sm font-medium text-primary mb-1 underline"
-            >Prix par Unité :</label
+          <label for="pricePerUnit" class="block text-sm font-medium text-ink mb-1 underline"
+            >Prix par Unité&nbsp;:</label
           >
           <input
             id="pricePerUnit"
@@ -68,18 +66,18 @@
             step="0.01"
             min="0"
             placeholder="Ex: 50.00"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.pricePerUnit" />
         </div>
         <div>
-          <label for="categoryId" class="block text-sm font-medium text-primary mb-1 underline"
-            >Catégorie :</label
+          <label for="categoryId" class="block text-sm font-medium text-ink mb-1 underline"
+            >Catégorie&nbsp;:</label
           >
           <select
             id="categoryId"
             v-model="localMaterial.categoryId"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           >
             <option value="">Choisir une Catégorie</option>
             <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -91,7 +89,7 @@
         <div class="flex justify-center">
           <button
             type="submit"
-            class="w-auto px-6 bg-customGreen text-white font-semibold py-3 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
+            class="w-auto px-6 bg-accent text-accent-ink font-semibold py-3 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
           >
             Enregistrer
           </button>

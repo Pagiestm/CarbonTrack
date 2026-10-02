@@ -1,46 +1,50 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
+  <section class="w-full py-24 lg:py-32 bg-surface min-h-screen">
     <div class="container mx-auto px-4">
       <header class="mb-12 text-center lg:text-left">
-        <h1 class="text-5xl font-bold text-white">Mettre à Jour le Projet</h1>
-        <p class="text-lg text-gray-300 mt-4">
+        <h1 class="text-5xl font-bold text-ink">Mettre à Jour le Projet</h1>
+        <p class="text-lg text-ink-muted mt-4">
           Modifiez les informations ci-dessous pour mettre à jour le projet.
         </p>
       </header>
-      <div v-if="loading" class="text-center text-white">Chargement des données...</div>
-      <form v-else @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
+      <div v-if="loading" class="text-center text-ink">Chargement des données...</div>
+      <form
+        v-else
+        @submit.prevent="handleSubmit"
+        class="bg-surface-overlay p-8 rounded-lg shadow-lg"
+      >
         <div class="mb-6">
-          <label for="name" class="block text-white mb-2">Nom du Projet</label>
+          <label for="name" class="block text-ink mb-2">Nom du Projet</label>
           <input
             v-model="projectData.name"
             type="text"
             id="name"
-            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+            class="w-full p-3 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
           />
           <FormError :message="errors.name" />
         </div>
         <div class="mb-6">
-          <label for="description" class="block text-white mb-2">Description</label>
+          <label for="description" class="block text-ink mb-2">Description</label>
           <textarea
             v-model="projectData.description"
             id="description"
-            class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+            class="w-full p-3 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
           ></textarea>
           <FormError :message="errors.description" />
         </div>
         <div class="mb-6">
-          <label class="block text-white mb-2">Sélectionner les Matériaux par Catégorie</label>
+          <label class="block text-ink mb-2">Sélectionner les Matériaux par Catégorie</label>
           <div v-if="isLoadingCategories" class="flex justify-center items-center">
-            <span class="text-white">Chargement des catégories...</span>
+            <span class="text-ink">Chargement des catégories...</span>
           </div>
           <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div v-for="category in categories" :key="category.id" class="mb-4">
-              <h3 class="text-lg font-semibold text-customGreen mb-2">{{ category.name }}</h3>
+              <h3 class="text-lg font-semibold text-accent mb-2">{{ category.name }}</h3>
               <div class="mb-2">
                 <select
                   v-model="selectedMaterialId[category.id]"
-                  class="w-full p-2 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+                  class="w-full p-2 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
                 >
                   <option disabled value="">Sélectionner un matériau</option>
                   <option
@@ -59,12 +63,12 @@
                   step="1"
                   min="0"
                   placeholder="Quantité"
-                  class="w-24 p-2 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
+                  class="w-24 p-2 rounded-sm bg-surface-raised text-ink border border-line focus:outline-hidden focus:ring-2 focus:ring-accent"
                 />
                 <button
                   type="button"
                   @click="addMaterial(category.id)"
-                  class="py-2 px-4 bg-customGreen text-white rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+                  class="py-2 px-4 bg-accent text-accent-ink rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
                 >
                   Ajouter
                 </button>
@@ -78,15 +82,15 @@
           <li
             v-for="(material, index) in projectData.materials"
             :key="index"
-            class="flex justify-between items-center mb-2 bg-gray-800 p-3 rounded-sm"
+            class="flex justify-between items-center mb-2 bg-surface-raised p-3 rounded-sm"
           >
-            <span class="text-light"
+            <span class="text-ink"
               >{{ getMaterialName(material.materialId) }} - {{ material.quantity }}</span
             >
             <button
               type="button"
               @click="removeMaterial(index)"
-              class="py-2 px-2 bg-red-500 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+              class="py-2 px-2 bg-danger text-surface font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
             >
               Supprimer
             </button>
@@ -95,7 +99,7 @@
         <FormError :message="errors.materials" class="mb-2" />
         <button
           type="submit"
-          class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+          class="py-3 px-6 bg-accent text-accent-ink font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
         >
           Mettre à Jour le Projet
         </button>

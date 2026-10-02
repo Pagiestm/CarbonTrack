@@ -1,22 +1,20 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary flex justify-center items-center min-h-screen">
+  <section class="w-full py-24 lg:py-32 bg-surface flex justify-center items-center min-h-screen">
     <div
       class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12 justify-center items-center"
     >
-      <div v-if="loading" class="text-center text-light">Chargement des données...</div>
+      <div v-if="loading" class="text-center text-ink">Chargement des données...</div>
       <div v-else class="space-y-4 text-center lg:text-left">
-        <h1
-          class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-customGreen mb-8"
-        >
+        <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-accent mb-8">
           Mon profil
         </h1>
         <div v-if="user" class="flex flex-col items-center lg:flex-row lg:items-center gap-4">
           <span
-            class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary justify-center items-center"
+            class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface-overlay justify-center items-center"
           >
             <svg
-              class="w-8 h-8 text-customGreen"
+              class="w-8 h-8 text-accent"
               fill="currentColor"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
@@ -27,19 +25,19 @@
             </svg>
           </span>
           <div class="grid gap-1 text-center lg:text-left">
-            <div class="text-lg font-semibold text-light">{{ user.name }}</div>
-            <div class="text-light">{{ user.email }}</div>
+            <div class="text-lg font-semibold text-ink">{{ user.name }}</div>
+            <div class="text-ink">{{ user.email }}</div>
           </div>
         </div>
         <div v-if="user" class="grid gap-4 text-center lg:text-left">
           <div>
-            <div class="text-lg font-medium text-light underline mb-2 mt-4">
-              Informations personnelles :
+            <div class="text-lg font-medium text-ink underline mb-2 mt-4">
+              Informations personnelles&nbsp;:
             </div>
-            <div class="text-light">
-              Nom : {{ user.name }}<br />
-              Email : {{ user.email }}<br />
-              Inscrit le : {{ formatDate(user.createdAt) }}
+            <div class="text-ink">
+              Nom&nbsp;: {{ user.name }}<br />
+              Email&nbsp;: {{ user.email }}<br />
+              Inscrit le&nbsp;: {{ formatDate(user.createdAt) }}
             </div>
           </div>
         </div>
@@ -50,35 +48,47 @@
         >
           <router-link
             to="/profile/edit"
-            class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+            class="py-2 px-4 bg-accent text-accent-ink font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
           >
             Modifier le profil
           </router-link>
         </div>
         <button
           @click="showDeleteModal = true"
-          class="py-2 px-4 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+          class="py-2 px-4 bg-danger text-surface font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
         >
           Supprimer le compte
         </button>
         <DeleteConfirmationModal
           :show="showDeleteModal"
           title="Confirmer la suppression"
-          message="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+          message="Êtes-vous sûr de vouloir supprimer votre compte&nbsp;? Cette action est irréversible."
           @confirm="deleteAccount"
           @cancel="showDeleteModal = false"
         />
       </div>
+      <!--
+        Anciennement une photo hotlinkée sur Unsplash : dépendance à un service
+        tiers, licence incertaine et chargement à la merci du réseau. Remplacée
+        par un aplat construit avec les jetons du thème.
+      -->
       <div
-        class="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
+        class="mx-auto flex aspect-video items-center justify-center overflow-hidden rounded-card border border-line bg-gradient-to-br from-accent-soft to-surface-raised sm:w-full lg:order-last lg:aspect-square"
       >
-        <img
-          src="https://images.unsplash.com/photo-1505235687559-28b5f54645b7?q=80&w=3864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          width="550"
-          height="550"
-          alt="Profile"
-          class="w-full h-full object-cover"
-        />
+        <svg
+          class="size-24 text-accent/40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0v.75h-15v-.75Z"
+          />
+        </svg>
       </div>
     </div>
   </section>

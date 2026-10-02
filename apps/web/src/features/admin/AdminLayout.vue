@@ -1,5 +1,5 @@
 <template>
-  <div class="md:flex h-screen bg-gray-100">
+  <div class="md:flex h-screen bg-surface">
     <NavBarAdmin />
     <main class="md:flex-1 p-6">
       <router-view />

@@ -1,210 +1,98 @@
 <template>
-  <nav class="bg-gray-800 p-4 shadow-md fixed top-0 w-full z-50">
-    <div class="container mx-auto flex justify-between items-center">
-      <router-link to="/" class="text-white text-xl font-semibold">CarbonTrack</router-link>
-      <div class="hidden md:flex">
-        <!-- Desktop Links -->
-        <router-link
-          v-if="!isAuthenticated"
-          to="/login"
-          class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >Connexion</router-link
-        >
-        <router-link
-          v-if="isAuthenticated"
-          to="/profile"
-          class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >Profil</router-link
-        >
-        <router-link
-          v-if="isAuthenticated"
-          to="/projects"
-          class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >Mes projets</router-link
-        >
-        <router-link
-          v-if="isAuthenticated && isAdmin"
-          to="/admin"
-          class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-          >Admin</router-link
-        >
-        <button
-          v-if="isAuthenticated"
-          @click="logout"
-          class="text-gray-300 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium transition duration-300"
-        >
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-surface/90 backdrop-blur">
+    <nav class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+      <RouterLink to="/" class="text-lg font-bold tracking-tight text-ink">
+        Carbon<span class="text-accent">Track</span>
+      </RouterLink>
+
+      <div class="hidden items-center gap-1 md:flex">
+        <RouterLink v-for="lien in liens" :key="lien.to" :to="lien.to" :class="classeLien">
+          {{ lien.libelle }}
+        </RouterLink>
+        <AppButton v-if="isAuthenticated" variant="ghost" size="sm" @click="logout">
           Déconnexion
-        </button>
+        </AppButton>
+        <AppButton v-else to="/login" size="sm" class="ml-2">Connexion</AppButton>
       </div>
-      <div class="md:hidden">
-        <!-- Burger Button for Mobile -->
-        <button @click="toggleMenu" class="text-white focus:outline-hidden">
-          <svg
-            v-if="!menuOpen"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16m-7 6h7"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!-- Mobile Menu -->
+
+      <button
+        type="button"
+        class="rounded-lg p-2 text-ink-muted hover:bg-surface-overlay hover:text-ink md:hidden"
+        :aria-expanded="menuOpen"
+        aria-controls="menu-mobile"
+        aria-label="Ouvrir le menu"
+        @click="menuOpen = !menuOpen"
+      >
+        <svg class="size-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            :d="menuOpen ? 'M6 18 18 6M6 6l12 12' : 'M4 7h16M4 12h16M4 17h16'"
+          />
+        </svg>
+      </button>
+    </nav>
+
     <div
       v-if="menuOpen"
-      class="fixed top-0 left-0 w-full h-full bg-secondary flex flex-col justify-between p-4 transition-transform transform md:hidden"
-      :class="{ 'translate-x-0': menuOpen, '-translate-x-full': !menuOpen }"
+      id="menu-mobile"
+      class="border-t border-line bg-surface px-4 py-3 md:hidden"
     >
-      <div class="flex justify-between items-center mb-4">
-        <router-link to="/" class="text-white text-xl font-semibold">CarbonTrack</router-link>
-        <button @click="toggleMenu" class="text-white">
-          <!-- Close Button -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="flex flex-col">
-        <router-link
-          v-if="!isAuthenticated"
-          to="/login"
-          class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
-          @click="toggleMenu"
-        >
-          Connexion
-          <svg
-            class="w-6 h-6 ml-2 text-customGreen"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </router-link>
-        <router-link
-          v-if="isAuthenticated"
-          to="/profile"
-          class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
-          @click="toggleMenu"
-        >
-          Profil
-          <svg
-            class="w-6 h-6 ml-2 text-customGreen"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </router-link>
-        <router-link
-          v-if="isAuthenticated"
-          to="/projects"
-          class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
-          @click="toggleMenu"
-        >
-          Mes projets
-          <svg
-            class="w-6 h-6 ml-2 text-customGreen"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </router-link>
-        <router-link
-          v-if="isAuthenticated && isAdmin"
-          to="/admin"
-          class="text-customGreen py-3 rounded-md text-xl font-medium transition duration-300 mb-2 flex items-center justify-between"
-          @click="toggleMenu"
-        >
-          Admin
-          <svg
-            class="w-6 h-6 ml-2 text-customGreen"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </router-link>
-      </div>
-      <div class="mt-auto">
-        <button
-          v-if="isAuthenticated"
-          @click="logout"
-          class="text-customGreen py-2 rounded-md text-lg font-medium transition duration-300 mb-2 flex items-center justify-between"
-        >
-          Déconnexion
-        </button>
-      </div>
+      <RouterLink
+        v-for="lien in liens"
+        :key="lien.to"
+        :to="lien.to"
+        :class="[classeLien, 'block']"
+        @click="menuOpen = false"
+      >
+        {{ lien.libelle }}
+      </RouterLink>
+      <AppButton
+        v-if="isAuthenticated"
+        variant="ghost"
+        size="sm"
+        block
+        class="mt-2 justify-start"
+        @click="logout"
+      >
+        Déconnexion
+      </AppButton>
+      <AppButton v-else to="/login" size="sm" block class="mt-2" @click="menuOpen = false">
+        Connexion
+      </AppButton>
     </div>
-  </nav>
+  </header>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, onMounted, ref } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
 import {
   clearSession,
   consumeTokenFromUrl,
   isAdmin as checkIsAdmin,
   isAuthenticated as checkIsAuthenticated,
 } from '@/shared/auth/session';
+import AppButton from '@/shared/ui/AppButton.vue';
 
 const isAuthenticated = ref(false);
 const isAdmin = ref(false);
 const menuOpen = ref(false);
-
-const toggleMenu = () => {
-  menuOpen.value = !menuOpen.value;
-};
-
 const router = useRouter();
+
+const classeLien =
+  'rounded-lg px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-overlay hover:text-ink';
+
+const liens = computed(() => [
+  { to: '/contact', libelle: 'Contact' },
+  ...(isAuthenticated.value
+    ? [
+        { to: '/projects', libelle: 'Mes projets' },
+        { to: '/profile', libelle: 'Profil' },
+      ]
+    : []),
+  ...(isAdmin.value ? [{ to: '/admin', libelle: 'Administration' }] : []),
+]);
 
 const logout = () => {
   clearSession();
@@ -216,7 +104,6 @@ const logout = () => {
 
 onMounted(() => {
   consumeTokenFromUrl();
-
   isAuthenticated.value = checkIsAuthenticated();
   isAdmin.value = isAuthenticated.value && checkIsAdmin();
 });

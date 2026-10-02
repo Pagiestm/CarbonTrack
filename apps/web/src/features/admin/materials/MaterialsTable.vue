@@ -5,22 +5,22 @@
       <div
         v-for="material in materials"
         :key="material.id"
-        class="bg-white shadow-md rounded-lg p-4 mb-4"
+        class="bg-surface-raised shadow-md rounded-lg p-4 mb-4"
       >
         <div class="flex flex-col">
           <h2 class="text-lg font-bold">{{ material.name }}</h2>
-          <p class="text-gray-600">Fournisseur: {{ material.supplier }}</p>
-          <p class="text-gray-600">Empreinte carbone: {{ material.carbonFootprint }}</p>
-          <p class="text-gray-600">Unité: {{ material.unit }}</p>
-          <p class="text-gray-600">Prix par unité: {{ material.pricePerUnit }}</p>
-          <p class="text-gray-600">Catégorie: {{ getCategoryName(material.categoryId) }}</p>
+          <p class="text-ink-muted">Fournisseur: {{ material.supplier }}</p>
+          <p class="text-ink-muted">Empreinte carbone: {{ material.carbonFootprint }}</p>
+          <p class="text-ink-muted">Unité: {{ material.unit }}</p>
+          <p class="text-ink-muted">Prix par unité: {{ material.pricePerUnit }}</p>
+          <p class="text-ink-muted">Catégorie: {{ getCategoryName(material.categoryId) }}</p>
           <div class="flex justify-center space-x-2 mt-4">
             <router-link :to="{ name: 'EditMaterialPage', params: { id: material.id } }">
               <button class="text-blue-500">
                 <i class="fas fa-edit fa-lg"></i>
               </button>
             </router-link>
-            <button @click="openModal(material)" class="text-red-500">
+            <button @click="openModal(material)" class="text-danger">
               <i class="fas fa-trash-alt fa-lg"></i>
             </button>
           </div>
@@ -30,8 +30,8 @@
 
     <!-- Table view for desktop -->
     <div class="hidden lg:flex flex-col grow overflow-x-auto">
-      <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-primary text-white">
+      <table class="w-full bg-surface-raised shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-surface-overlay text-ink">
           <tr>
             <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Nom</th>
             <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">
@@ -54,7 +54,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-surface-raised divide-y divide-line">
           <tr v-for="material in materials" :key="material.id">
             <td class="border px-4 py-2 text-center">{{ material.name }}</td>
             <td class="border px-4 py-2 text-center">{{ material.supplier }}</td>
@@ -69,7 +69,7 @@
                     <i class="fas fa-edit fa-lg"></i>
                   </button>
                 </router-link>
-                <button @click="openModal(material)" class="text-red-500 px-2 py-2 ml-2">
+                <button @click="openModal(material)" class="text-danger px-2 py-2 ml-2">
                   <i class="fas fa-trash-alt fa-lg"></i>
                 </button>
               </div>

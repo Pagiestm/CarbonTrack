@@ -1,45 +1,45 @@
 <template>
   <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary flex justify-center min-h-screen">
+  <section class="w-full py-24 lg:py-32 bg-surface flex justify-center min-h-screen">
     <div class="container px-4 md:px-6 xl:flex xl:space-x-12 items-start">
-      <div v-if="loading" class="text-center text-customGray">
+      <div v-if="loading" class="text-center text-ink-muted">
         Chargement des détails du projet...
       </div>
       <div v-else-if="project" class="w-full xl:w-1/2 mb-8 xl:mb-0">
-        <h1 class="text-4xl font-bold mb-6 text-customGreen">{{ project.name }}</h1>
-        <p class="text-light mb-4">{{ project.description }}</p>
+        <h1 class="text-4xl font-bold mb-6 text-accent">{{ project.name }}</h1>
+        <p class="text-ink mb-4">{{ project.description }}</p>
         <div class="mb-6">
           <div class="mb-4">
-            <p class="text-lg font-semibold text-light">Empreinte totale :</p>
-            <p class="text-2xl font-bold text-customGreen">{{ project.totalFootprint }} kg CO₂</p>
+            <p class="text-lg font-semibold text-ink">Empreinte totale&nbsp;:</p>
+            <p class="text-2xl font-bold text-accent">{{ project.totalFootprint }} kg CO₂</p>
           </div>
           <div>
-            <p class="text-lg font-semibold text-light">Créé le :</p>
-            <p class="text-2xl font-bold text-customGreen">
+            <p class="text-lg font-semibold text-ink">Créé le&nbsp;:</p>
+            <p class="text-2xl font-bold text-accent">
               {{ new Date(project.createdAt).toLocaleDateString() }}
             </p>
           </div>
         </div>
-        <h2 class="text-3xl font-semibold mb-4 text-customGreen">Matériaux Utilisés</h2>
-        <ul class="mb-8 border-t border-customGray">
+        <h2 class="text-3xl font-semibold mb-4 text-accent">Matériaux Utilisés</h2>
+        <ul class="mb-8 border-t border-line-strong">
           <li
             v-for="material in project.ProjectMaterial"
             :key="material.id"
-            class="py-4 border-b border-customGray flex justify-between items-center"
+            class="py-4 border-b border-line-strong flex justify-between items-center"
           >
-            <span class="text-light font-medium">{{ material.material.name }}</span>
-            <span class="text-customGray">Quantité : {{ material.quantity }}</span>
+            <span class="text-ink font-medium">{{ material.material.name }}</span>
+            <span class="text-ink-muted">Quantité&nbsp;: {{ material.quantity }}</span>
           </li>
         </ul>
         <div class="mb-8">
-          <h3 class="text-2xl font-semibold text-customGreen">
+          <h3 class="text-2xl font-semibold text-accent">
             Recommandations pour réduire l'empreinte carbone
           </h3>
-          <p class="text-light mt-2">
+          <p class="text-ink mt-2">
             Les matériaux utilisés peuvent être modifiés pour réduire l'empreinte carbone. Voici
-            quelques recommandations :
+            quelques recommandations&nbsp;:
           </p>
-          <ul class="list-disc list-inside text-light mt-2">
+          <ul class="list-disc list-inside text-ink mt-2">
             <li>Utiliser des matériaux recyclés ou recyclables.</li>
             <li>Choisir des matériaux locaux pour réduire les émissions liées au transport.</li>
             <li>Opter pour des matériaux à faible émission de CO₂, comme le bois certifié FSC.</li>
@@ -53,9 +53,9 @@
       <div v-if="project" class="w-full xl:w-1/2">
         <MaterialDistributionChart
           :data="formattedData"
-          class="bg-primary rounded-lg shadow-lg mb-4"
+          class="bg-surface-overlay rounded-lg shadow-lg mb-4"
         />
-        <DataVisualization :data="formattedData" class="bg-primary rounded-lg shadow-lg" />
+        <DataVisualization :data="formattedData" class="bg-surface-overlay rounded-lg shadow-lg" />
       </div>
     </div>
   </section>

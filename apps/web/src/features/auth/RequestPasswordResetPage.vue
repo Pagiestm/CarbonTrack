@@ -1,116 +1,95 @@
 <template>
-  <NavBar />
-  <section class="w-full py-24 lg:py-32 bg-secondary min-h-screen">
-    <div class="container mx-auto px-4">
-      <header class="mb-12 text-center lg:text-left">
-        <h1 class="text-5xl font-bold text-white">Demande de réinitialisation de mot de passe</h1>
-        <p class="text-lg text-gray-300 mt-4">
-          Entrez votre adresse email pour recevoir un lien de réinitialisation de mot de passe.
-        </p>
-      </header>
-      <div v-if="isLoading" class="text-center text-white">Envoi en cours...</div>
-      <div v-else>
-        <form @submit.prevent="handleSubmit" class="bg-primary p-8 rounded-lg shadow-lg">
-          <div class="mb-6">
-            <label for="email" class="block text-white mb-2">Email</label>
-            <input
-              v-model="email"
-              type="email"
-              id="email"
-              class="w-full p-3 rounded-sm bg-gray-800 text-white border border-gray-600 focus:outline-hidden focus:ring-2 focus:ring-customGreen"
-            />
-            <FormError :message="errors.email" />
-          </div>
-          <button
-            type="submit"
-            :disabled="isLoading"
-            class="py-3 px-6 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
-          >
-            <span v-if="isLoading">Envoi...</span>
-            <span v-else>Envoyer</span>
-          </button>
-        </form>
-        <SuccessMessage
-          v-if="showSuccessMessage"
-          :show="showSuccessMessage"
-          :message="successMessage"
-          @close="handleCloseSuccessMessage"
-        />
-        <ErrorMessage
-          v-if="showErrorMessage"
-          :show="showErrorMessage"
-          :message="errorMessage"
-          @close="handleCloseErrorMessage"
-        />
+  <AuthLayout
+    title="Mot de passe oublié"
+    subtitle="Entrez votre adresse email, nous vous enverrons un lien de réinitialisation."
+  >
+    <form v-if="!envoye" class="space-y-5" @submit.prevent="handleSubmit">
+      <p
+        v-if="errorMessage"
+        role="alert"
+        class="rounded-lg border border-danger/40 bg-danger-soft px-3 py-2.5 text-sm text-danger"
+      >
+        {{ errorMessage }}
+      </p>
+
+      <AppField
+        id="email"
+        v-model="email"
+        label="Adresse email"
+        type="email"
+        placeholder="vous@exemple.fr"
+        autocomplete="email"
+        :error="erreurEmail"
+      />
+
+      <AppButton type="submit" block :loading="isLoading">
+        {{ isLoading ? 'Envoi…' : 'Envoyer le lien' }}
+      </AppButton>
+    </form>
+
+    <div v-else class="text-center">
+      <div
+        class="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-success-soft"
+      >
+        <svg class="size-6 text-success" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
+          />
+        </svg>
       </div>
+      <p class="text-ink">Si un compte existe pour cette adresse, le lien vient de partir.</p>
+      <p class="mt-2 text-sm text-ink-muted">
+        Pensez à regarder vos indésirables. Le lien est valable une heure.
+      </p>
     </div>
-  </section>
-  <AppFooter />
+
+    <template #footer>
+      <RouterLink to="/login" class="font-medium text-accent hover:underline">
+        Retour à la connexion
+      </RouterLink>
+    </template>
+  </AuthLayout>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue';
-import NavBar from '@/shared/components/NavBar.vue';
-import AppFooter from '@/shared/components/AppFooter.vue';
-import FormError from '@/shared/components/alerts/FormError.vue';
-import SuccessMessage from '@/shared/components/alerts/SuccessMessage.vue';
-import ErrorMessage from '@/shared/components/alerts/ErrorMessage.vue';
+import { RouterLink } from 'vue-router';
 import { requestPasswordReset } from '@/api/auth';
+import AuthLayout from '@/features/auth/AuthLayout.vue';
+import AppButton from '@/shared/ui/AppButton.vue';
+import AppField from '@/shared/ui/AppField.vue';
 
 const email = ref('');
-const isLoading = ref(false);
-const errors = ref({});
-const showSuccessMessage = ref(false);
-const successMessage = ref('');
-const showErrorMessage = ref(false);
+const erreurEmail = ref('');
 const errorMessage = ref('');
+const isLoading = ref(false);
+const envoye = ref(false);
 
-const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(String(email).toLowerCase());
-};
-
-const validateFields = () => {
-  errors.value = {};
-  if (!email.value) {
-    errors.value.email = "L'email est requis.";
-  } else if (!validateEmail(email.value)) {
-    errors.value.email = "Le format de l'email est invalide.";
-  }
-  return Object.keys(errors.value).length === 0;
-};
+const emailValide = (valeur) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valeur);
 
 const handleSubmit = async () => {
-  if (validateFields()) {
-    isLoading.value = true;
-    try {
-      await requestPasswordReset(email.value);
-      successMessage.value = 'Email de réinitialisation envoyé avec succès !';
-      showSuccessMessage.value = true;
-    } catch {
-      errorMessage.value = "Échec de l'envoi de l'email de réinitialisation.";
-      showErrorMessage.value = true;
-    } finally {
-      isLoading.value = false;
-    }
+  errorMessage.value = '';
+  if (!email.value) {
+    erreurEmail.value = "L'email est requis";
+    return;
+  }
+  if (!emailValide(email.value)) {
+    erreurEmail.value = "Le format de l'email est invalide";
+    return;
+  }
+
+  isLoading.value = true;
+  try {
+    await requestPasswordReset(email.value);
+    envoye.value = true;
+  } catch (error) {
+    errorMessage.value = error.message;
+  } finally {
+    isLoading.value = false;
   }
 };
 
-const handleCloseSuccessMessage = () => {
-  showSuccessMessage.value = false;
-};
-
-const handleCloseErrorMessage = () => {
-  showErrorMessage.value = false;
-};
-
-// Watchers to clear errors when fields are corrected
-watch(
-  () => email.value,
-  () => {
-    if (validateEmail(email.value)) {
-      errors.value.email = '';
-    }
-  },
-);
+watch(email, (valeur) => {
+  if (emailValide(valeur)) erreurEmail.value = '';
+});
 </script>

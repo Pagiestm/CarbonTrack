@@ -1,14 +1,14 @@
 <template>
-  <section class="w-full py-12 md:py-24 lg:py-32 bg-secondary flex justify-center items-center">
+  <section class="w-full py-12 md:py-20 bg-surface flex justify-center items-center">
     <div class="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12">
       <div class="space-y-4 flex flex-col items-start">
-        <div class="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-light">
+        <div class="inline-block rounded-lg bg-surface-overlay px-3 py-1 text-sm text-ink">
           Fonctionnalités
         </div>
-        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-light">
-          Calculez votre <span class="text-customGreen">impact environnemental</span>
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-ink">
+          Calculez votre <span class="text-accent">impact environnemental</span>
         </h2>
-        <p class="mx-auto text-light md:text-xl lg:text-base xl:text-xl">
+        <p class="mx-auto text-ink md:text-xl lg:text-base xl:text-xl">
           CarbonTrack vous permet de calculer facilement l'empreinte carbone des matériaux de
           construction utilisés dans vos projets. Accédez à une base de données exhaustive et
           personnalisez vos calculs pour obtenir des résultats précis.

@@ -6,28 +6,28 @@
       </div>
       <router-link to="/projects/create">
         <button
-          class="py-2 px-4 bg-customGreen text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+          class="py-2 px-4 bg-accent text-accent-ink font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
         >
-          Nouveau Projet
+          Nouveau projet
         </button>
       </router-link>
     </div>
-    <div v-if="loading" class="text-center text-gray-500 mt-6">Chargement des projets...</div>
+    <div v-if="loading" class="text-center text-ink-subtle mt-6">Chargement des projets...</div>
     <div v-else-if="paginatedProjects.length" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-6">
       <div
         v-for="project in paginatedProjects"
         :key="project.id"
-        class="bg-primary rounded-lg shadow-lg overflow-hidden"
+        class="bg-surface-overlay rounded-lg shadow-lg overflow-hidden"
       >
         <div class="p-6 flex flex-col justify-between h-full">
           <div>
-            <h3 class="text-2xl font-semibold text-light mb-2">{{ project.name }}</h3>
-            <p class="text-gray-300 mb-4">{{ truncateText(project.description, 70) }}</p>
+            <h3 class="text-2xl font-semibold text-ink mb-2">{{ project.name }}</h3>
+            <p class="text-ink-muted mb-4">{{ truncateText(project.description, 70) }}</p>
           </div>
           <div class="flex justify-between items-center">
             <router-link :to="{ name: 'ProjectDetailsPage', params: { id: project.id } }">
               <button
-                class="bg-customGreen text-secondary py-2 px-4 rounded-sm transition duration-300 flex items-center"
+                class="bg-accent text-accent-ink py-2 px-4 rounded-sm transition duration-300 flex items-center"
               >
                 Voir les détails
                 <i class="fas fa-info-circle ml-2"></i>
@@ -43,7 +43,7 @@
               </router-link>
               <button
                 @click="confirmDelete(project)"
-                class="text-red-500 hover:text-red-700 transition duration-300 flex items-center"
+                class="text-danger hover:text-danger transition duration-300 flex items-center"
               >
                 <i class="fas fa-trash-alt fa-lg"></i>
               </button>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center text-gray-500 mt-6">Aucun projet trouvé.</div>
+    <div v-else class="text-center text-ink-subtle mt-6">Aucun projet trouvé.</div>
     <Pagination
       :totalItems="filteredProjects.length"
       :itemsPerPage="itemsPerPage"
@@ -61,7 +61,7 @@
     <DeleteConfirmationModal
       :show="showConfirmModal"
       title="Confirmer la suppression"
-      :message="`Êtes-vous sûr de vouloir supprimer le projet : ${projectToDelete?.name} ?`"
+      :message="`Êtes-vous sûr de vouloir supprimer le projet&nbsp;: ${projectToDelete?.name} ?`"
       @confirm="deleteProjectById"
       @cancel="showConfirmModal = false"
     />

@@ -1,24 +1,60 @@
 @import 'tailwindcss';
 
+/*
+  Palette unique de l'application, thème sombre. Avant, cinq couleurs
+  cohabitaient avec les gris bruts de Tailwind (bg-gray-800, text-gray-300…) :
+  deux palettes en parallèle, donc aucune cohérence possible. Tout passe
+  désormais par ces jetons.
+*/
 @theme {
-  --color-primary: #1d1f2a;
-  --color-secondary: #111111;
-  --color-light: #eeeeee;
-  --color-customGreen: #42b883;
-  --color-customGray: #b4b4b4;
+  /* Surfaces, du fond le plus profond au plus clair */
+  --color-surface: #0f1115;
+  --color-surface-raised: #161922;
+  --color-surface-overlay: #1d212c;
+  --color-surface-hover: #242938;
+
+  /* Traits */
+  --color-line: #262b38;
+  --color-line-strong: #3a4151;
+
+  /* Texte, par ordre d'importance */
+  --color-ink: #f2f4f8;
+  --color-ink-muted: #a7b0c0;
+  --color-ink-subtle: #788294;
+
+  /*
+    Accent. Le texte posé sur l'accent est sombre (--color-accent-ink) : du
+    blanc sur ce vert ne donne que 2,5:1, très en dessous du minimum lisible.
+  */
+  --color-accent: #42b883;
+  --color-accent-strong: #36a173;
+  --color-accent-soft: #11241d;
+  --color-accent-ink: #08130e;
+
+  /* États */
+  --color-danger: #f87171;
+  --color-danger-soft: #2a1515;
+  --color-success: #4ade80;
+  --color-success-soft: #112a1b;
+  --color-warning: #fbbf24;
+
+  --radius-card: 0.875rem;
 }
 
-/*
-  Tailwind 4 colore les bordures en currentcolor par défaut, là où la v3
-  utilisait gray-200 : cette règle garde l'ancien rendu. Pour la retirer,
-  ajouter une couleur de bordure explicite partout où elle manque.
-*/
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Un contour visible au clavier, sur toute l'application. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }

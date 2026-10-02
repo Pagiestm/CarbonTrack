@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto mt-10">
     <div class="text-center">
-      <h1 class="text-3xl font-bold text-primary underline mt-4">Catégories</h1>
+      <h1 class="text-3xl font-bold text-ink underline mt-4">Catégories</h1>
       <div
         class="flex flex-col sm:flex-row justify-between items-center mt-8 space-y-4 sm:space-y-0 sm:space-x-4"
       >
@@ -10,17 +10,17 @@
         </div>
         <router-link to="/categories/create" class="w-full sm:w-auto">
           <button
-            class="bg-customGreen text-white font-semibold py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out sm:w-auto"
+            class="bg-accent text-accent-ink font-semibold py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out sm:w-auto"
           >
             Ajouter une Catégorie
           </button>
         </router-link>
       </div>
-      <p v-if="state.loading" class="mt-4 text-gray-600">Chargement des données...</p>
-      <p v-if="!state.loading && filteredCategories.length === 0" class="mt-4 text-gray-600">
+      <p v-if="state.loading" class="mt-4 text-ink-muted">Chargement des données...</p>
+      <p v-if="!state.loading && filteredCategories.length === 0" class="mt-4 text-ink-muted">
         Aucune catégorie disponible.
       </p>
-      <p v-if="state.errorMessage" class="mt-4 text-red-600">{{ state.errorMessage }}</p>
+      <p v-if="state.errorMessage" class="mt-4 text-danger">{{ state.errorMessage }}</p>
       <div v-if="!state.loading && filteredCategories.length > 0" class="mt-6">
         <CategoriesTable :categories="paginatedCategories" @delete="deleteCategory" />
         <Pagination

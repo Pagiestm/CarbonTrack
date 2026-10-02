@@ -5,7 +5,7 @@
       <div
         v-for="category in categories"
         :key="category.id"
-        class="bg-white shadow-md rounded-lg p-4 mb-4"
+        class="bg-surface-raised shadow-md rounded-lg p-4 mb-4"
       >
         <div class="flex flex-col">
           <h2 class="text-lg font-bold">{{ category.name }}</h2>
@@ -15,7 +15,7 @@
                 <i class="fas fa-edit fa-lg"></i>
               </button>
             </router-link>
-            <button @click="openModal(category)" class="text-red-500">
+            <button @click="openModal(category)" class="text-danger">
               <i class="fas fa-trash-alt fa-lg"></i>
             </button>
           </div>
@@ -25,8 +25,8 @@
 
     <!-- Table view for desktop -->
     <div class="hidden lg:flex flex-col grow overflow-x-auto">
-      <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-primary text-white">
+      <table class="w-full bg-surface-raised shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-surface-overlay text-ink">
           <tr>
             <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">Nom</th>
             <th class="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">
@@ -34,7 +34,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-surface-raised divide-y divide-line">
           <tr v-for="category in categories" :key="category.id">
             <td class="border px-4 py-2 text-center">{{ category.name }}</td>
             <td class="border px-4 py-2 text-center">
@@ -44,7 +44,7 @@
                     <i class="fas fa-edit fa-lg"></i>
                   </button>
                 </router-link>
-                <button @click="openModal(category)" class="text-red-500 px-2 py-2 ml-2">
+                <button @click="openModal(category)" class="text-danger px-2 py-2 ml-2">
                   <i class="fas fa-trash-alt fa-lg"></i>
                 </button>
               </div>

@@ -1,12 +1,12 @@
 <template>
   <div class="data-visualization p-6">
-    <h2 class="text-2xl font-semibold mb-4 text-customGreen">Comparaison des matériaux utilisés</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-accent">Comparaison des matériaux utilisés</h2>
     <canvas id="radarChart" class="h-12"></canvas>
     <div class="text-sm legend mt-4">
-      <p class="text-light mb-2">
+      <p class="text-ink mb-2">
         Ce graphique en radar compare les quantités de différents matériaux utilisés dans le projet.
       </p>
-      <ul class="list-disc list-inside text-light">
+      <ul class="list-disc list-inside text-ink">
         <li>Chaque axe représente un matériau différent.</li>
         <li>La distance du centre indique la quantité utilisée.</li>
         <li>Les valeurs plus proches du bord indiquent une plus grande quantité.</li>

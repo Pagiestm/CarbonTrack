@@ -1,26 +1,26 @@
 <template>
   <section class="w-full py-24 lg:py-32 overflow-hidden flex items-center justify-center">
-    <div class="container max-w-xl bg-white p-6 shadow-md rounded-lg">
-      <h2 class="text-3xl font-bold text-center text-primary underline mb-6">
+    <div class="container max-w-xl bg-surface-raised p-6 shadow-md rounded-lg">
+      <h2 class="text-3xl font-bold text-center text-ink underline mb-6">
         Créer une Nouvelle Catégorie
       </h2>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <label for="name" class="block text-sm font-medium text-primary mb-1 underline"
-            >Nom de la Catégorie :</label
+          <label for="name" class="block text-sm font-medium text-ink mb-1 underline"
+            >Nom de la Catégorie&nbsp;:</label
           >
           <input
             id="name"
             v-model="newCategory.name"
             placeholder="Ex: Métaux"
-            class="w-full p-3 border border-gray-300 rounded-md focus:border-customGreen focus:outline-hidden"
+            class="w-full p-3 border border-line rounded-md focus:border-accent focus:outline-hidden"
           />
           <FormError :message="errors.name" />
         </div>
         <div class="flex justify-center">
           <button
             type="submit"
-            class="w-auto px-6 bg-customGreen text-white font-semibold py-3 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
+            class="w-auto px-6 bg-accent text-accent-ink font-semibold py-3 rounded-full shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
           >
             Créer
           </button>
