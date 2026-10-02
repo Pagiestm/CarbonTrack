@@ -21,7 +21,7 @@ communiquent qu'en HTTP.
 
 ```
 apps/api/    API REST : Node.js 24, Express 5, Prisma 7, PostgreSQL
-apps/web/    client : Vue 3, Vite 8, Tailwind CSS 4
+apps/web/    client : Vue 3, Vite 8, Tailwind CSS 4 — en clean architecture
 docs/        documentation : architecture, modèle de données, déploiement
 ```
 

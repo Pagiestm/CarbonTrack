@@ -1,44 +1,69 @@
 @import 'tailwindcss';
 
+/* Polices auto-hébergées : aucune requête vers un service tiers. */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+
 /*
-  Palette unique de l'application, thème sombre. Avant, cinq couleurs
-  cohabitaient avec les gris bruts de Tailwind (bg-gray-800, text-gray-300…) :
-  deux palettes en parallèle, donc aucune cohérence possible. Tout passe
-  désormais par ces jetons.
+  Thème « carbone & sève ».
+
+  Les surfaces sont des presque-noirs légèrement verts plutôt que du gris
+  neutre : le sujet est le vivant et le bâti, pas un terminal. L'accent est un
+  émeraude franc, et une échelle distincte (sobre → lourd) sert aux données
+  d'empreinte, pour que la couleur porte une information et pas seulement une
+  décoration.
 */
 @theme {
-  /* Surfaces, du fond le plus profond au plus clair */
-  --color-surface: #0f1115;
-  --color-surface-raised: #161922;
-  --color-surface-overlay: #1d212c;
-  --color-surface-hover: #242938;
+  /* Surfaces, du plus profond au plus clair */
+  --color-surface: #0a0f0d;
+  --color-surface-raised: #111815;
+  --color-surface-overlay: #18211d;
+  --color-surface-hover: #202b26;
 
   /* Traits */
-  --color-line: #262b38;
-  --color-line-strong: #3a4151;
+  --color-line: #1f2a25;
+  --color-line-strong: #32433b;
 
   /* Texte, par ordre d'importance */
-  --color-ink: #f2f4f8;
-  --color-ink-muted: #a7b0c0;
-  --color-ink-subtle: #788294;
+  --color-ink: #eaf2ee;
+  --color-ink-muted: #9aada4;
+  --color-ink-subtle: #6a7d74;
 
   /*
-    Accent. Le texte posé sur l'accent est sombre (--color-accent-ink) : du
-    blanc sur ce vert ne donne que 2,5:1, très en dessous du minimum lisible.
+    Accent. Le texte posé dessus est sombre : du blanc sur ce vert tomberait
+    sous le seuil de lisibilité.
   */
-  --color-accent: #42b883;
-  --color-accent-strong: #36a173;
-  --color-accent-soft: #11241d;
-  --color-accent-ink: #08130e;
+  --color-accent: #34d399;
+  --color-accent-strong: #10b981;
+  --color-accent-soft: #0c2520;
+  --color-accent-ink: #04140f;
+
+  /* Accent secondaire, pour les mises en avant et les séries de données */
+  --color-sap: #a3e635;
+  --color-sap-soft: #1b2410;
+
+  /*
+    Échelle d'empreinte. Elle reprend les trois niveaux définis par l'entité
+    Footprint : la couleur suit le métier, pas l'inverse.
+  */
+  --color-level-low: #34d399;
+  --color-level-low-soft: #0c2520;
+  --color-level-mid: #fbbf24;
+  --color-level-mid-soft: #2a2007;
+  --color-level-high: #fb7185;
+  --color-level-high-soft: #2b1116;
 
   /* États */
-  --color-danger: #f87171;
-  --color-danger-soft: #2a1515;
-  --color-success: #4ade80;
-  --color-success-soft: #112a1b;
-  --color-warning: #fbbf24;
+  --color-danger: #fb7185;
+  --color-danger-soft: #2b1116;
+  --color-success: #34d399;
+  --color-success-soft: #0c2520;
 
-  --radius-card: 0.875rem;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-field: 0.625rem;
 }
 
 @layer base {
@@ -49,12 +74,25 @@
   body {
     background-color: var(--color-surface);
     color: var(--color-ink);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Un contour visible au clavier, sur toute l'application. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  /* Un contour visible au clavier, partout. */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
+}
+
+@utility halo {
+  /* Voile lumineux posé derrière les en-têtes, pour éviter l'aplat mort. */
+  background-image: radial-gradient(60rem 30rem at 50% -10rem, #34d39920, transparent 70%);
 }
