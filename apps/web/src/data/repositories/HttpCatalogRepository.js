@@ -31,6 +31,11 @@ export class HttpCatalogRepository extends CatalogRepository {
     await this.http.delete(`/categories/${id}`);
   }
 
+  async countMaterials() {
+    const { data } = await this.http.get('/materials/count');
+    return data.count;
+  }
+
   async listMaterials(options = {}) {
     const { data } = await this.http.get('/materials', { params: options });
     return toPage(data, toMaterial);

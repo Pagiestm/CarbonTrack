@@ -25,6 +25,10 @@ export const categoryController = {
 };
 
 export const materialController = {
+  async count(req, res) {
+    res.json({ count: await materialService.countMaterials() });
+  },
+
   async list(req, res) {
     res.json(await materialService.listMaterials(req.valid.query));
   },

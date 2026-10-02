@@ -7,14 +7,15 @@
     >
       <div>
         <p
-          class="inline-flex items-center gap-2 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-medium text-ink-muted"
+          v-if="materiauxReferences"
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-medium text-ink-muted"
         >
           <span class="size-1.5 rounded-full bg-accent" aria-hidden="true" />
-          56 matériaux référencés · base carbone ADEME
+          {{ materiauxReferences }}
         </p>
 
         <h1
-          class="mt-6 text-4xl leading-[1.05] font-bold tracking-tight text-balance text-ink sm:text-5xl"
+          class="text-4xl leading-[1.05] font-bold tracking-tight text-balance text-ink sm:text-5xl"
         >
           Un chantier, c'est d'abord <span class="text-accent">des tonnes de CO₂</span>
         </h1>
@@ -63,6 +64,8 @@
 </template>
 
 <script setup>
+import { computed, onMounted, ref } from 'vue';
+import { useCases } from '@/container.js';
 import { Footprint } from '@/domain/entities/Footprint.js';
 import { useSessionStore } from '@/presentation/stores/session.js';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
@@ -72,6 +75,21 @@ import BuildingSection from '@/presentation/modules/home/components/BuildingSect
 
 const session = useSessionStore();
 const apercu = new Footprint(12_400);
+
+const nbMateriaux = ref(0);
+const materiauxReferences = computed(() => {
+  const n = nbMateriaux.value;
+  if (!n) return '';
+  return `${n.toLocaleString('fr-FR')} ${n > 1 ? 'matériaux référencés' : 'matériau référencé'}`;
+});
+
+onMounted(async () => {
+  try {
+    nbMateriaux.value = await useCases.catalog.countMaterials.execute();
+  } catch {
+    nbMateriaux.value = 0;
+  }
+});
 
 const trame = {
   backgroundImage: 'radial-gradient(circle at 1px 1px, var(--color-line) 1px, transparent 0)',

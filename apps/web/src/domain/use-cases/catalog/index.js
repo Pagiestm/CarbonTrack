@@ -30,6 +30,12 @@ export class DeleteCategory extends UseCase {
   }
 }
 
+export class CountMaterials extends UseCase {
+  execute() {
+    return this.catalogRepository.countMaterials();
+  }
+}
+
 export class ListMaterials extends UseCase {
   execute(options = {}) {
     return this.catalogRepository.listMaterials(options);

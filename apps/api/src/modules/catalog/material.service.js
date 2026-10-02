@@ -4,6 +4,10 @@ import { page, rechercheSur, toSkipTake } from '../../shared/http/pagination.js'
 
 const avecCategorie = { include: { category: { select: { id: true, name: true } } } };
 
+export function countMaterials() {
+  return prisma.material.count();
+}
+
 export async function listMaterials(options) {
   const where = rechercheSur(['name', 'supplier'], options.search);
 

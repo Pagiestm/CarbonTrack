@@ -8,6 +8,28 @@ import { listQuery } from '../../shared/http/pagination.js';
 
 export const materialRouter = Router();
 
+/**
+ * @swagger
+ * /materials/count:
+ *   get:
+ *     summary: Count referenced materials (public, used by the home page)
+ *     tags: [Materials]
+ *     security: []
+ *     responses:
+ *       200:
+ *         description: Number of materials in the catalogue
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 count:
+ *                   type: integer
+ *             example:
+ *               count: 56
+ */
+materialRouter.get('/count', materialController.count);
+
 materialRouter.use(requireAuth);
 
 /**

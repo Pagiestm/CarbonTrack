@@ -78,6 +78,9 @@ export class CatalogRepository {
   deleteCategory() {
     aImplementer('CatalogRepository', 'deleteCategory');
   }
+  countMaterials() {
+    aImplementer('CatalogRepository', 'countMaterials');
+  }
   listMaterials() {
     aImplementer('CatalogRepository', 'listMaterials');
   }
