@@ -29,10 +29,19 @@ const schema = z.object({
   GOOGLE_REDIRECT_URI: z.url().optional(),
 });
 
-const parsed = schema.safeParse(process.env);
+// Une variable vide vaut une variable absente : Docker et les plateformes
+// d'hébergement passent "" pour un réglage non rempli, que z.url() et
+// z.coerce.number() refuseraient.
+const provided = Object.fromEntries(
+  Object.entries(process.env).filter(([, value]) => value !== ''),
+);
+
+const parsed = schema.safeParse(provided);
 
 if (!parsed.success) {
-  const lines = parsed.error.issues.map((issue) => `  - ${issue.path.join('.')} : ${issue.message}`);
+  const lines = parsed.error.issues.map(
+    (issue) => `  - ${issue.path.join('.')} : ${issue.message}`,
+  );
   throw new Error(`Configuration invalide :\n${lines.join('\n')}`);
 }
 

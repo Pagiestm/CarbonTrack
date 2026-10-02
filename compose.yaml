@@ -1,0 +1,106 @@
+# Pile de développement.
+#
+#   client   http://localhost:5173
+#   API      http://localhost:3000   (Swagger sur /api-docs)
+#   Adminer  http://localhost:8081/?pgsql=db&db=CarbonTrack  (postgres / root)
+#   Mailpit  http://localhost:8026   (emails envoyés par l'API)
+#
+# Prérequis : cp apps/api/.env.example apps/api/.env
+#             cp apps/web/.env.example apps/web/.env
+#
+# `environment:` l'emporte sur `env_file:` : la pile impose ainsi ses propres
+# DATABASE_URL et SMTP_* sans qu'il faille toucher aux .env entre Docker et le
+# développement local.
+
+name: carbontrack
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: CarbonTrack
+    ports:
+      - '5432:5432'
+    volumes:
+      # PostgreSQL 18 : le volume se monte sur /var/lib/postgresql, pas .../data.
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d CarbonTrack']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  adminer:
+    image: adminer:5
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - '8081:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  mailpit:
+    image: axllent/mailpit:v1
+    restart: unless-stopped
+    ports:
+      # 8026 et non 8025, le port par défaut de Mailpit : il est souvent déjà
+      # pris par une autre pile. Le port SMTP n'est pas publié, seule l'API
+      # s'en sert et elle est sur le même réseau.
+      - '8026:8025'
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: dev
+    restart: unless-stopped
+    # Le client Prisma est généré dans src/, que le montage masque : il faut le
+    # régénérer au démarrage.
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && node --watch src/server.js"
+    env_file:
+      - apps/api/.env
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:root@db:5432/CarbonTrack
+      FRONTEND_URL: http://localhost:5173
+      # Mailpit intercepte tout : aucun email ne part vraiment.
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_USER: ''
+      SMTP_PASS: ''
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./apps/api:/app/apps/api
+      # Volume anonyme : garde le node_modules de l'image sous le montage.
+      - /app/apps/api/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: dev
+    restart: unless-stopped
+    env_file:
+      - apps/web/.env
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/apps/web/node_modules
+    depends_on:
+      - api
+
+volumes:
+  db-data:

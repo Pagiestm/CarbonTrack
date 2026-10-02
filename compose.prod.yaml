@@ -1,0 +1,57 @@
+# Pile de production.
+#   docker compose -f compose.prod.yaml up -d --build
+#
+# Seul le client est publié : son nginx réécrit /api vers l'API, qui reste
+# dans le réseau Compose. Toutes les variables viennent d'apps/api/.env, qui
+# configure ici la pile entière, base comprise.
+
+name: carbontrack-prod
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    env_file:
+      - apps/api/.env
+    volumes:
+      # PostgreSQL 18 : le volume se monte sur /var/lib/postgresql, pas .../data.
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: runtime
+    restart: unless-stopped
+    env_file:
+      - apps/api/.env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    expose:
+      - '3000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: runtime
+      args:
+        VITE_API_BASE_URL: /api
+    restart: unless-stopped
+    ports:
+      - '8080:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  db-data:
