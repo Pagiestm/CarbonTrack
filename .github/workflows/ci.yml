@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format
+        run: npm run format:check
+
+      # Le client Prisma est importé par le code de l'API : sans lui, les tests
+      # ne démarrent pas.
+      - name: Client Prisma
+        run: npm run build -w @carbontrack/api
+
+      - name: Tests
+        run: npm test
+
+      - name: Build du client
+        run: npm run build
+
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Image de l'API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          target: runtime
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Image du client
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          target: runtime
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
