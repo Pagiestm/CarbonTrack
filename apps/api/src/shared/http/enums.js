@@ -1,0 +1,3 @@
+export const PROJECT_KINDS = ['NEUF', 'RENOVATION', 'EXTENSION', 'AMENAGEMENT'];
+export const PROJECT_STATUSES = ['DRAFT', 'IN_PROGRESS', 'DONE'];
+export const ROLES = ['USER', 'ADMIN'];

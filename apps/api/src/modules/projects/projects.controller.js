@@ -2,11 +2,11 @@ import * as projectsService from './projects.service.js';
 
 export const projectsController = {
   async list(req, res) {
-    res.json(await projectsService.listProjects(req.user.id));
+    res.json(await projectsService.listProjects(req.user.id, req.valid.query));
   },
 
   async listAll(req, res) {
-    res.json(await projectsService.listAllProjects());
+    res.json(await projectsService.listAllProjects(req.valid.query));
   },
 
   async get(req, res) {

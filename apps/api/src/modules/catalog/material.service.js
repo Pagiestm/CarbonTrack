@@ -1,8 +1,31 @@
 import { prisma } from '../../shared/db/prisma.js';
-import { badRequest, conflict, notFound } from '../../shared/http/errors.js';
+import { badRequest, conflict, notFound, surLeChamp } from '../../shared/http/errors.js';
+import { page, rechercheSur, toSkipTake } from '../../shared/http/pagination.js';
 
-export function listMaterials() {
-  return prisma.material.findMany({ orderBy: { id: 'asc' } });
+const avecCategorie = { include: { category: { select: { id: true, name: true } } } };
+
+export async function listMaterials(options) {
+  const where = rechercheSur(['name', 'supplier'], options.search);
+
+  if (options.all) {
+    const items = await prisma.material.findMany({
+      where,
+      ...avecCategorie,
+      orderBy: { name: 'asc' },
+    });
+    return page(items, items.length, { page: 1, perPage: items.length || 1 });
+  }
+
+  const [items, total] = await prisma.$transaction([
+    prisma.material.findMany({
+      where,
+      ...avecCategorie,
+      orderBy: { name: 'asc' },
+      ...toSkipTake(options),
+    }),
+    prisma.material.count({ where }),
+  ]);
+  return page(items, total, options);
 }
 
 export async function getMaterial(id) {
@@ -43,6 +66,6 @@ async function assertCategoryExists(categoryId) {
     select: { id: true },
   });
   if (!category) {
-    throw badRequest('Catégorie introuvable');
+    throw badRequest('Catégorie introuvable', surLeChamp('categoryId', 'Catégorie introuvable'));
   }
 }

@@ -18,7 +18,14 @@ model User {
   role      String   @db.VarChar(50)
   googleId  String?  @db.VarChar(100)
   createdAt DateTime @default(now())
-  Projects  Project[]
+
+  // Renseignés librement par l'utilisateur depuis son profil.
+  company  String? @db.VarChar(100)
+  jobTitle String? @db.VarChar(80)
+  phone    String? @db.VarChar(30)
+  city     String? @db.VarChar(100)
+
+  Projects Project[]
 }
 
 model Category {
@@ -40,13 +47,22 @@ model Material {
 }
 
 model Project {
-  id             Int              @id @default(autoincrement())
-  name           String           @db.VarChar(100)
-  description    String?          @db.Text
-  totalFootprint Decimal          @db.Decimal(15, 2)
-  createdAt      DateTime         @default(now())
-  userId         Int
-  user           User             @relation(fields: [userId], references: [id])
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(100)
+  description    String?  @db.Text
+  totalFootprint Decimal  @db.Decimal(15, 2)
+  createdAt      DateTime @default(now())
+
+  // Contexte du chantier. Tout est facultatif : un projet reste utilisable
+  // avec son seul nom et ses matériaux.
+  location  String?   @db.VarChar(100)
+  surface   Float?    @db.DoublePrecision
+  kind      String    @default("NEUF") @db.VarChar(20)
+  status    String    @default("DRAFT") @db.VarChar(20)
+  startDate DateTime?
+
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
   ProjectMaterial ProjectMaterial[]
 }
 
