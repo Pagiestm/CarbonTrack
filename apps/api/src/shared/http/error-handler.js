@@ -10,8 +10,7 @@ export function notFoundHandler(req, res) {
   res.status(404).json({ error: 'Route introuvable' });
 }
 
-// eslint-disable-next-line no-unused-vars -- Express reconnaît un gestionnaire d'erreurs à ses quatre arguments
-export function errorHandler(err, req, res, next) {
+export function errorHandler(err, req, res, _next) {
   if (err instanceof HttpError) {
     return res
       .status(err.status)

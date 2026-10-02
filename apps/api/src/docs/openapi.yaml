@@ -1,0 +1,835 @@
+openapi: 3.0.0
+info:
+  title: API de CarbonTrack
+  version: 1.0.0
+  description: Documentation de l'API de CarbonTrack
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Project:
+      type: object
+      required:
+        - name
+        - totalFootprint
+        - userId
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the project
+        name:
+          type: string
+          description: The name of the project
+        description:
+          type: string
+          description: The description of the project
+        totalFootprint:
+          type: number
+          format: decimal
+          description: The total carbon footprint of the project
+        createdAt:
+          type: string
+          format: date-time
+          description: The creation date of the project
+        userId:
+          type: integer
+          description: The id of the user who created the project
+      example:
+        name: Project Alpha
+        description: A sample project
+        materials:
+          - materialId: 1
+            quantity: 10
+          - materialId: 3
+            quantity: 5
+    Material:
+      type: object
+      required:
+        - id
+        - name
+        - supplier
+        - carbonFootprint
+        - unit
+        - pricePerUnit
+        - categoryId
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the material
+        name:
+          type: string
+          description: The name of the material
+        supplier:
+          type: string
+          description: The supplier of the material
+        carbonFootprint:
+          type: number
+          format: decimal
+          description: The carbon footprint of the material
+        unit:
+          type: string
+          description: The unit of the material
+        pricePerUnit:
+          type: number
+          format: decimal
+          description: The price per unit of the material
+        categoryId:
+          type: integer
+          description: The id of the category
+      example:
+        id: 1
+        name: Steel
+        supplier: ABC Corp
+        carbonFootprint: 12.34
+        unit: kg
+        pricePerUnit: 100.5
+        categoryId: 2
+    Category:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the category
+        name:
+          type: string
+          description: The name of the category
+      example:
+        id: 1
+        name: Metals
+    CategoryWithMaterials:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the category
+        name:
+          type: string
+          description: The name of the category
+        materials:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: The auto-generated id of the material
+              name:
+                type: string
+                description: The name of the material
+      example:
+        id: 1
+        name: Metals
+        materials:
+          - id: 1
+            name: Steel
+          - id: 2
+            name: Copper
+    User:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the user
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+        name:
+          type: string
+          description: User name
+      example:
+        email: test@gmail.com
+        password: Azerty123*
+        name: John Doe
+security:
+  - bearerAuth: []
+paths:
+  /profile:
+    get:
+      summary: Get user profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+    put:
+      summary: Update user profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete user account and related projects
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Account and related projects deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /profile/admin/users:
+    get:
+      summary: Retrieve a list of all users for admins
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: A list of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: Access denied
+  /profile/password:
+    put:
+      summary: Change the password of the signed-in account
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Password changed
+        '400':
+          description: Current password incorrect, or Google account
+  /profile/admin/users/{id}/role:
+    put:
+      summary: Change a user role (admin)
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Role changed
+        '400':
+          description: Cannot change your own role
+  /profile/admin/users/{id}:
+    delete:
+      summary: Delete a user and their projects (admin)
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Account deleted
+  /projects:
+    get:
+      summary: Retrieve a list of projects
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: A list of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+    post:
+      summary: Create a new project
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '201':
+          description: The created project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+  /projects/{id}:
+    get:
+      summary: Retrieve a single project by ID
+      tags:
+        - Projects
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Project ID
+      responses:
+        '200':
+          description: A single project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+    put:
+      summary: Update a project by ID
+      tags:
+        - Projects
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Project ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+            examples:
+              example1:
+                summary: Update project name and description
+                value:
+                  name: Project Beta
+                  description: An updated sample project
+                  materials:
+                    - materialId: 1
+                      quantity: 10
+                    - materialId: 3
+                      quantity: 5
+              example2:
+                summary: Add a new material
+                value:
+                  name: Project Alpha
+                  description: A sample project
+                  materials:
+                    - materialId: 1
+                      quantity: 10
+                    - materialId: 3
+                      quantity: 5
+                    - materialId: 2
+                      quantity: 7
+              example3:
+                summary: Remove an existing material
+                value:
+                  name: Project Alpha
+                  description: A sample project
+                  materials:
+                    - materialId: 1
+                      quantity: 10
+              example4:
+                summary: Update material quantities
+                value:
+                  name: Project Alpha
+                  description: A sample project
+                  materials:
+                    - materialId: 1
+                      quantity: 15
+                    - materialId: 3
+                      quantity: 8
+              example5:
+                summary: Update project without changing materials
+                value:
+                  name: Project Gamma
+                  description: A new description for the project
+                  materials:
+                    - materialId: 1
+                      quantity: 10
+                    - materialId: 3
+                      quantity: 5
+      responses:
+        '200':
+          description: The updated project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+    delete:
+      summary: Delete a project by ID
+      tags:
+        - Projects
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Project ID
+      responses:
+        '204':
+          description: No content
+  /projects/admin/projects:
+    get:
+      summary: Retrieve a list of all projects for admins
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: A list of all projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '403':
+          description: Access denied
+  /contact:
+    post:
+      summary: Send a contact message
+      tags:
+        - Contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                message:
+                  type: string
+            example:
+              name: John Doe
+              email: john.doe@example.com
+              message: Hello, I would like to know more about your services.
+      responses:
+        '200':
+          description: Message sent successfully
+        '400':
+          description: Bad request, validation failed
+        '500':
+          description: Error sending the message
+  /materials/count:
+    get:
+      summary: Count referenced materials (public, used by the home page)
+      tags:
+        - Materials
+      security: []
+      responses:
+        '200':
+          description: Number of materials in the catalogue
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+              example:
+                count: 56
+  /materials:
+    get:
+      summary: Retrieve a list of materials
+      tags:
+        - Materials
+      responses:
+        '200':
+          description: A list of materials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Material'
+    post:
+      summary: Create a new material
+      tags:
+        - Materials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Material'
+      responses:
+        '201':
+          description: The created material
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Material'
+  /materials/{id}:
+    get:
+      summary: Retrieve a single material by ID
+      tags:
+        - Materials
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Material ID
+      responses:
+        '200':
+          description: A single material
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Material'
+    put:
+      summary: Update a material by ID
+      tags:
+        - Materials
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Material ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Material'
+      responses:
+        '200':
+          description: The updated material
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Material'
+    delete:
+      summary: Delete a material by ID
+      tags:
+        - Materials
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Material ID
+      responses:
+        '204':
+          description: No content
+  /categories:
+    get:
+      summary: Retrieve a list of categories
+      tags:
+        - Categories
+      responses:
+        '200':
+          description: A list of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      summary: Create a new category
+      tags:
+        - Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the category
+                  example: New Category
+      responses:
+        '201':
+          description: The created category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '500':
+          description: Server error
+  /categories/categories-with-materials:
+    get:
+      summary: Retrieve a list of categories with their associated materials
+      tags:
+        - Categories
+      responses:
+        '200':
+          description: A list of categories with materials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryWithMaterials'
+  /categories/{id}:
+    put:
+      summary: Update an existing category
+      tags:
+        - Categories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the category
+                  example: Updated Category
+      responses:
+        '200':
+          description: The updated category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '500':
+          description: Server error
+    delete:
+      summary: Delete an existing category
+      tags:
+        - Categories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the category
+      responses:
+        '200':
+          description: Category deleted successfully
+        '404':
+          description: Category not found
+        '500':
+          description: Server error
+  /password-reset/request-password-reset:
+    post:
+      summary: Request a password reset
+      tags:
+        - PasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              example:
+                email: test@gmail.com
+      responses:
+        '200':
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request
+  /password-reset/reset-password:
+    post:
+      summary: Reset the password
+      tags:
+        - PasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                newPassword:
+                  type: string
+                confirmPassword:
+                  type: string
+              example:
+                token: your_jwt_token_here
+                newPassword: NewPassword123*
+                confirmPassword: NewPassword123*
+      responses:
+        '200':
+          description: Password has been reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request
+  /password-reset/check-token:
+    post:
+      summary: Check that a password reset token is valid and unused
+      tags:
+        - PasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Token is valid
+        '400':
+          description: Token is invalid, expired or already used
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: The user was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+  /auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                email: test@gmail.com
+                password: Azerty123*
+      responses:
+        '200':
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid credentials
+tags:
+  - name: Projects
+    description: Project management
+  - name: Materials
+    description: Hardware management (Only for admins)
+  - name: Categories
+    description: Category management (Only for admins)
+  - name: Auth
+    description: The authentication managing API

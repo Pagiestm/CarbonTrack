@@ -18,7 +18,7 @@ src/
 ├── server.js            démarrage et arrêt propre (SIGTERM)
 ├── app.js               assemblage : middlewares, routes, gestion d'erreurs
 ├── config/env.js        variables d'environnement, validées au démarrage
-├── docs/swagger.js      documentation lue dans les commentaires @swagger des routes
+├── docs/openapi.yaml    documentation de l'API (Swagger), servie sur /api-docs
 ├── modules/             un dossier par domaine
 │   ├── auth/            inscription, connexion, Google, mot de passe oublié
 │   ├── users/           profil (/profile) et liste des comptes (admin)
@@ -38,7 +38,7 @@ Chaque module découpe son code de la même façon :
 
 | Fichier           | Rôle                                                    |
 | ----------------- | ------------------------------------------------------- |
-| `*.routes.js`     | chemins, middlewares, documentation Swagger             |
+| `*.routes.js`     | chemins et middlewares                                  |
 | `*.schemas.js`    | schémas zod des entrées                                 |
 | `*.controller.js` | lit la requête validée (`req.valid`), répond            |
 | `*.service.js`    | règles métier et accès à la base ; lève des `HttpError` |

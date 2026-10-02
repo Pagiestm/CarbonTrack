@@ -1,26 +1,3 @@
-# Pile de développement.
-#
-#   client   http://localhost:5173
-#   API      http://localhost:3000   (Swagger sur /api-docs)
-#   Adminer  http://localhost:8081/?pgsql=db&db=CarbonTrack  (postgres / root)
-#   Mailpit  http://localhost:8026   (emails envoyés par l'API)
-#
-# Prérequis : cp apps/api/.env.example apps/api/.env
-#             cp apps/web/.env.example apps/web/.env
-#
-# Lancement : docker compose up --watch
-#
-# Les sources ne sont pas montées depuis l'hôte : sous Docker Desktop pour
-# Windows, un dossier de C:\ monté dans un conteneur ne transmet pas les
-# notifications de modification, et ni Vite ni node --watch ne voient rien.
-# Compose Watch (develop.watch) recopie chaque fichier modifié dans le
-# conteneur, où les notifications fonctionnent. Sans --watch, la pile tourne
-# sur les sources de l'image.
-#
-# `environment:` l'emporte sur `env_file:` : la pile impose ainsi ses propres
-# DATABASE_URL et SMTP_* sans qu'il faille toucher aux .env entre Docker et le
-# développement local.
-
 name: carbontrack
 
 services:
@@ -34,7 +11,6 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      # PostgreSQL 18 : le volume se monte sur /var/lib/postgresql, pas .../data.
       - db-data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres -d CarbonTrack']
@@ -57,9 +33,6 @@ services:
     image: axllent/mailpit:v1
     restart: unless-stopped
     ports:
-      # 8026 et non 8025, le port par défaut de Mailpit : il est souvent déjà
-      # pris par une autre pile. Le port SMTP n'est pas publié, seule l'API
-      # s'en sert et elle est sur le même réseau.
       - '8026:8025'
 
   api:
@@ -68,11 +41,7 @@ services:
       dockerfile: apps/api/Dockerfile
       target: dev
     restart: unless-stopped
-    # Le client Prisma n'est pas dans l'image (.dockerignore) : il est généré au
-    # démarrage.
-    # nodemon et non node --watch : Compose Watch remplace les fichiers au lieu
-    # de les réécrire, et node --watch ne voit que le premier changement de
-    # chaque fichier.
+
     command: sh -c "npx prisma generate && npx prisma migrate deploy && npx nodemon --watch src --ignore src/generated -e js,ts,json src/server.js"
     env_file:
       - apps/api/.env
@@ -81,15 +50,14 @@ services:
       PORT: 3000
       DATABASE_URL: postgresql://postgres:root@db:5432/CarbonTrack
       FRONTEND_URL: http://localhost:5173
-      # Mailpit intercepte tout : aucun email ne part vraiment.
+
       SMTP_HOST: mailpit
       SMTP_PORT: 1025
       SMTP_USER: ''
       SMTP_PASS: ''
     ports:
       - '3000:3000'
-    # prisma/ reste monté : `prisma migrate dev`, lancé dans le conteneur, écrit
-    # ainsi ses migrations directement sur l'hôte.
+
     volumes:
       - ./apps/api/prisma:/app/apps/api/prisma
     develop:

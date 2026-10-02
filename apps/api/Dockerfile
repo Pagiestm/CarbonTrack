@@ -1,14 +1,7 @@
 # syntax=docker/dockerfile:1
 
-# Contexte de build : la RACINE du dépôt, le monorepo n'ayant qu'un
-# package-lock.json.
-#   docker build -f apps/api/Dockerfile -t carbontrack-api .
-
 ARG NODE_VERSION=24-alpine
 
-# npm ci exige le manifeste de chaque workspace déclaré, même celui qu'on
-# n'installe pas. Les copier seuls garde la couche en cache tant que les
-# dépendances ne bougent pas.
 FROM node:${NODE_VERSION} AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -16,7 +9,6 @@ COPY apps/api/package.json apps/api/
 COPY apps/web/package.json apps/web/
 RUN npm ci -w @carbontrack/api
 
-# compose.yaml monte les sources par-dessus : seul node_modules vient d'ici.
 FROM deps AS dev
 ENV NODE_ENV=development
 COPY apps/api apps/api
@@ -28,7 +20,6 @@ FROM deps AS build
 COPY apps/api apps/api
 RUN npm run build -w @carbontrack/api
 
-# La CLI prisma reste en production : start:prod joue `prisma migrate deploy`.
 FROM deps AS prod-deps
 RUN npm ci -w @carbontrack/api --omit=dev
 

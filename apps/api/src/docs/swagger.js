@@ -1,22 +1,6 @@
-import { fileURLToPath } from 'node:url';
-import swaggerJsdoc from 'swagger-jsdoc';
+import { readFileSync } from 'node:fs';
+import YAML from 'yaml';
 
-const modulesDir = fileURLToPath(new URL('../modules/', import.meta.url)).replaceAll('\\', '/');
-
-export const swaggerSpec = swaggerJsdoc({
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API de CarbonTrack',
-      version: '1.0.0',
-      description: "Documentation de l'API de CarbonTrack",
-    },
-    components: {
-      securitySchemes: {
-        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      },
-    },
-    security: [{ bearerAuth: [] }],
-  },
-  apis: [`${modulesDir}**/*.routes.js`],
-});
+export const swaggerSpec = YAML.parse(
+  readFileSync(new URL('./openapi.yaml', import.meta.url), 'utf8'),
+);

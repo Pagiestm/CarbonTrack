@@ -28,8 +28,6 @@ jobs:
       - name: Format
         run: npm run format:check
 
-      # Le client Prisma est importé par le code de l'API : sans lui, les tests
-      # ne démarrent pas.
       - name: Client Prisma
         run: npm run build -w @carbontrack/api
 

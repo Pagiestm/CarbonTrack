@@ -1,6 +1,3 @@
-// Schéma de la base CarbonTrack : https://pris.ly/d/prisma-schema
-// L'URL de connexion est lue dans prisma.config.js.
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -19,7 +16,6 @@ model User {
   googleId  String?  @db.VarChar(100)
   createdAt DateTime @default(now())
 
-  // Renseignés librement par l'utilisateur depuis son profil.
   company  String? @db.VarChar(100)
   jobTitle String? @db.VarChar(80)
   phone    String? @db.VarChar(30)
@@ -53,8 +49,6 @@ model Project {
   totalFootprint Decimal  @db.Decimal(15, 2)
   createdAt      DateTime @default(now())
 
-  // Contexte du chantier. Tout est facultatif : un projet reste utilisable
-  // avec son seul nom et ses matériaux.
   location  String?   @db.VarChar(100)
   surface   Float?    @db.DoublePrecision
   kind      String    @default("NEUF") @db.VarChar(20)

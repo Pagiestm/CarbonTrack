@@ -1,15 +1,3 @@
-# Déploiement gratuit sur Render (Blueprint) : voir docs/deploiement/render.md
-#
-# - carbontrack-api : l'API Express + Prisma, depuis apps/api
-# - carbontrack     : le client Vue en site statique, depuis apps/web ; /api
-#                     est réécrit vers l'API pour rester sur la même origine
-#
-# Le dépôt est un monorepo npm (workspaces) : les commandes partent de la
-# racine, qui porte le seul package-lock.json.
-#
-# La base PostgreSQL vit ailleurs (Neon ou l'instance Render existante) :
-# renseigner DATABASE_URL à la création.
-
 services:
   - name: carbontrack-api
     type: web
@@ -29,20 +17,19 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false # URL PostgreSQL, avec ?sslmode=require
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
         value: https://carbontrack.theotimepagies.com
-      # Connexion Google : l'URI de redirection doit être déclarée telle quelle
-      # dans la console Google Cloud.
+
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
         value: https://carbontrack-api-3s89.onrender.com/auth/google/callback
-      # Emails (confirmation, mot de passe oublié, contact)
+
       - key: EMAIL_USER
         sync: false
       - key: SMTP_HOST
@@ -56,7 +43,7 @@ services:
 
   - name: carbontrack
     type: web
-    runtime: static # servi par le CDN Render, pas de région à choisir
+    runtime: static
     buildCommand: npm ci -w @carbontrack/web && npm run build -w @carbontrack/web
     staticPublishPath: ./apps/web/dist
     buildFilter:

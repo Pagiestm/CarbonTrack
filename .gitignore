@@ -4,10 +4,8 @@ coverage
 *.log
 .DS_Store
 
-# Secrets locaux
 .env
 .env.*
 !.env.example
 
-# Sauvegardes automatiques de Looping (docs/merise)
 *.lo1
