@@ -1,8 +1,7 @@
 <template>
   <AuthLayout title="Nouveau mot de passe" subtitle="Choisissez un mot de passe solide.">
-    <form class="space-y-5" @submit.prevent="enregistrer">
-      <AppAlert v-if="erreur">{{ erreur }}</AppAlert>
-      <AppAlert v-if="succes" tone="success">{{ succes }}</AppAlert>
+    <form class="space-y-5" novalidate @submit.prevent="enregistrer">
+      <AppAlert v-if="erreurs.etat.general">{{ erreurs.etat.general }}</AppAlert>
 
       <div>
         <AppField
@@ -13,6 +12,7 @@
           :icon="Lock"
           placeholder="••••••••"
           autocomplete="new-password"
+          :error="erreurs.etat.parChamp.newPassword"
           @update:model-value="evaluer"
         />
         <PasswordCriteria :criteria="criteres" />
@@ -26,47 +26,57 @@
         :icon="Lock"
         placeholder="••••••••"
         autocomplete="new-password"
-        :error="erreurConfirmation"
+        :error="erreurs.etat.parChamp.confirmPassword"
       />
 
       <AppButton type="submit" block :loading="chargement">Changer mon mot de passe</AppButton>
     </form>
+    <template #aside>
+      <MaterialOfTheDay />
+    </template>
+
   </AuthLayout>
+
 </template>
+
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Lock } from 'lucide-vue-next';
 import { useCases } from '@/container.js';
+import { useFormErrors } from '@/presentation/composables/useFormErrors.js';
+import { useToasts } from '@/presentation/composables/useToasts.js';
 import AuthLayout from '@/presentation/modules/auth/AuthLayout.vue';
 import PasswordCriteria from '@/presentation/modules/auth/components/PasswordCriteria.vue';
 import { usePasswordCriteria } from '@/presentation/modules/auth/components/usePasswordCriteria.js';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import MaterialOfTheDay from '@/presentation/modules/auth/components/MaterialOfTheDay.vue';
 
 const route = useRoute();
 const router = useRouter();
+const toasts = useToasts();
 const token = route.query.token;
 
 const nouveau = ref('');
 const confirmation = ref('');
-const erreur = ref('');
-const succes = ref('');
-const erreurConfirmation = ref('');
+const erreurs = useFormErrors(['newPassword', 'confirmPassword']);
 const chargement = ref(false);
 const { criteres, evaluer, toutValide } = usePasswordCriteria();
 
 const enregistrer = async () => {
-  erreur.value = '';
-  erreurConfirmation.value = '';
+  erreurs.reinitialiser();
   evaluer(nouveau.value);
 
   if (!toutValide()) {
-    erreur.value = 'Le mot de passe ne remplit pas tous les critères';
-    return;
+    erreurs.poser('newPassword', 'Tous les critères ci-dessous doivent être remplis');
   }
+  if (confirmation.value !== nouveau.value) {
+    erreurs.poser('confirmPassword', 'Les mots de passe ne correspondent pas');
+  }
+  if (erreurs.aDesErreurs()) return;
 
   chargement.value = true;
   try {
@@ -75,17 +85,15 @@ const enregistrer = async () => {
       newPassword: nouveau.value,
       confirmPassword: confirmation.value,
     });
-    succes.value = 'Mot de passe modifié. Redirection vers la connexion…';
-    setTimeout(() => router.push('/login'), 1200);
+    toasts.succes('Mot de passe modifié, connectez-vous.');
+    router.push('/login');
   } catch (e) {
-    erreurConfirmation.value = e.message.includes('correspondent') ? e.message : '';
-    erreur.value = erreurConfirmation.value ? '' : e.message;
+    erreurs.depuisApi(e);
   } finally {
     chargement.value = false;
   }
 };
 
-// Un lien invalide, expiré ou déjà utilisé ne doit pas afficher le formulaire.
 onMounted(async () => {
   try {
     await useCases.auth.checkResetToken.execute(token);
@@ -95,6 +103,7 @@ onMounted(async () => {
 });
 
 watch(confirmation, (valeur) => {
-  if (valeur === nouveau.value) erreurConfirmation.value = '';
+  if (valeur === nouveau.value) erreurs.oublier('confirmPassword');
 });
 </script>
+

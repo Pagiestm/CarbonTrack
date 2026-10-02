@@ -7,7 +7,7 @@
             <span class="flex size-8 items-center justify-center rounded-lg bg-accent-soft">
               <Leaf class="size-4 text-accent" aria-hidden="true" />
             </span>
-            <span class="font-display text-lg font-bold text-ink">CarbonTrack</span>
+            <span class="text-lg font-bold text-ink">CarbonTrack</span>
           </div>
           <p class="mt-3 max-w-xs text-sm leading-relaxed text-ink-muted">
             Calculez, suivez et réduisez l'empreinte carbone des matériaux de vos projets de
@@ -44,6 +44,7 @@
   </footer>
 </template>
 
+
 <script setup>
 import { RouterLink } from 'vue-router';
 import { Leaf, Mail } from 'lucide-vue-next';
@@ -58,3 +59,4 @@ const liens = [
 
 const annee = new Date().getFullYear();
 </script>
+

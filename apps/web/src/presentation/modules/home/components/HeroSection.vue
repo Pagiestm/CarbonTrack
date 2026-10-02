@@ -1,81 +1,83 @@
 <template>
-  <section class="halo relative overflow-hidden px-4 pt-20 pb-16 sm:px-6 lg:pt-28">
-    <div class="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2">
+  <section class="relative overflow-hidden border-b border-line">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true" :style="trame" />
+
+    <div
+      class="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1fr_1.15fr] lg:gap-16 lg:py-24"
+    >
       <div>
         <p
-          class="inline-flex items-center gap-2 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs text-ink-muted"
+          class="inline-flex items-center gap-2 rounded-full border border-line bg-surface-raised px-3 py-1 text-xs font-medium text-ink-muted"
         >
           <span class="size-1.5 rounded-full bg-accent" aria-hidden="true" />
-          Base de données matériaux et calcul instantané
+          56 matériaux référencés · base carbone ADEME
         </p>
 
-        <h1 class="mt-6 font-display text-4xl leading-[1.05] font-bold text-ink sm:text-6xl">
-          Chaque matériau<br />
-          a un <span class="text-accent">coût carbone</span>.
+        <h1
+          class="mt-6 text-4xl leading-[1.05] font-bold tracking-tight text-balance text-ink sm:text-5xl"
+        >
+          Un chantier, c'est d'abord <span class="text-accent">des tonnes de CO₂</span>
         </h1>
 
-        <p class="mt-6 max-w-lg text-lg leading-relaxed text-ink-muted">
-          CarbonTrack chiffre l'empreinte des matériaux de vos projets de construction, poste par
-          poste, et vous montre où se joue vraiment la réduction.
+        <p class="mt-6 max-w-lg text-base leading-relaxed text-pretty text-ink-muted sm:text-lg">
+          Avant la première livraison, l'empreinte d'un bâtiment est déjà écrite dans le choix de
+          ses matériaux. CarbonTrack la chiffre, poste par poste, pendant que vous composez.
         </p>
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <AppButton :to="session.estConnecte ? '/projects/create' : '/register'" size="lg">
+        <div class="mt-7 flex flex-wrap gap-2">
+          <EquationLine quantite="18 m³ de béton" facteur="245,5 kg/m³" resultat="4,42 t" />
+        </div>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <AppButton
+            :to="session.estConnecte ? '/projects/create' : '/register'"
+            size="lg"
+            class="w-full sm:w-auto"
+          >
             {{ session.estConnecte ? 'Créer un projet' : 'Commencer gratuitement' }}
           </AppButton>
-          <AppButton to="/contact" variant="secondary" size="lg">Nous contacter</AppButton>
+          <AppButton to="/contact" variant="secondary" size="lg" class="w-full sm:w-auto">
+            Nous contacter
+          </AppButton>
         </div>
+
+        <p class="mt-5 text-xs text-ink-subtle">Sans carte bancaire · Vos projets restent privés</p>
       </div>
 
-      <!-- Aperçu construit en HTML plutôt qu'une capture : il reste net à
-           toute taille, suit le thème, et ne pèse rien. -->
-      <div class="rounded-card border border-line bg-surface-raised p-5 shadow-2xl shadow-black/40">
-        <div class="flex items-center justify-between">
+      <div class="rounded-card border border-line bg-surface-raised p-5 sm:p-7">
+        <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p class="text-xs text-ink-subtle">Extension ossature bois</p>
-            <p class="font-display text-2xl font-bold text-ink">12,4 t eq. CO₂</p>
+            <p class="text-xs text-ink-subtle">Extension ossature bois · 40 m²</p>
+            <p class="mt-1 text-3xl font-bold tabular-nums text-ink">12,4 t</p>
+            <p class="text-xs text-ink-subtle">équivalent CO₂ · 310 kg/m²</p>
           </div>
           <FootprintBadge :footprint="apercu" />
         </div>
 
-        <ul class="mt-6 space-y-3.5">
-          <li v-for="poste in postes" :key="poste.nom">
-            <div class="mb-1.5 flex justify-between text-sm">
-              <span class="text-ink">{{ poste.nom }}</span>
-              <span class="text-ink-muted">{{ poste.part }}&nbsp;%</span>
-            </div>
-            <div class="h-1.5 overflow-hidden rounded-full bg-surface-overlay">
-              <div
-                class="h-full rounded-full"
-                :style="{ width: `${poste.part}%`, backgroundColor: poste.couleur }"
-              />
-            </div>
-          </li>
-        </ul>
-
-        <p class="mt-6 border-t border-line pt-4 text-xs text-ink-subtle">
-          Soit environ {{ apercu.kilometresVoiture.toLocaleString('fr-FR') }} km en voiture
-          thermique.
-        </p>
+        <div class="mt-5 border-t border-line pt-5">
+          <BuildingSection />
+        </div>
       </div>
     </div>
   </section>
 </template>
 
+
 <script setup>
 import { Footprint } from '@/domain/entities/Footprint.js';
 import { useSessionStore } from '@/presentation/stores/session.js';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
+import EquationLine from '@/presentation/components/ui/EquationLine.vue';
 import FootprintBadge from '@/presentation/components/ui/FootprintBadge.vue';
-import { SERIE } from '@/presentation/components/ui/chart-theme.js';
+import BuildingSection from '@/presentation/modules/home/components/BuildingSection.vue';
 
 const session = useSessionStore();
 const apercu = new Footprint(12_400);
 
-const postes = [
-  { nom: 'Béton de fondation', part: 46, couleur: SERIE[4] },
-  { nom: 'Isolation', part: 24, couleur: SERIE[3] },
-  { nom: 'Ossature bois', part: 18, couleur: SERIE[0] },
-  { nom: 'Menuiseries', part: 12, couleur: SERIE[2] },
-];
+const trame = {
+  backgroundImage: 'radial-gradient(circle at 1px 1px, var(--color-line) 1px, transparent 0)',
+  backgroundSize: '32px 32px',
+  maskImage: 'radial-gradient(ellipse 80% 70% at 50% 0%, #000 35%, transparent 100%)',
+};
 </script>
+

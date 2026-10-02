@@ -1,63 +1,62 @@
 <template>
-  <section class="border-t border-line px-4 py-20 sm:px-6">
+  <section class="border-b border-line px-4 py-16 sm:px-6 sm:py-20">
     <div class="mx-auto w-full max-w-6xl">
-      <div class="max-w-2xl">
-        <p class="text-sm font-medium tracking-wide text-accent uppercase">Fonctionnalités</p>
-        <h2 class="mt-3 font-display text-3xl font-bold text-ink sm:text-4xl">
-          De la liste de matériaux au plan de réduction
-        </h2>
-      </div>
+      <h2 class="max-w-2xl text-3xl font-bold tracking-tight text-balance text-ink sm:text-4xl">
+        Tout ce qu'il faut, rien de plus
+      </h2>
 
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article
-          v-for="atout in atouts"
-          :key="atout.titre"
-          class="rounded-card border border-line bg-surface-raised p-6 transition-colors hover:border-line-strong"
-        >
-          <span class="flex size-10 items-center justify-center rounded-field bg-accent-soft">
-            <component :is="atout.icone" class="size-5 text-accent" aria-hidden="true" />
+      <dl class="mt-12 grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="atout in atouts" :key="atout.titre" class="flex gap-4">
+          <span
+            class="flex size-9 shrink-0 items-center justify-center rounded-field border border-line bg-surface-raised"
+          >
+            <component :is="atout.icone" class="size-4 text-accent" aria-hidden="true" />
           </span>
-          <h3 class="mt-4 font-semibold text-ink">{{ atout.titre }}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-ink-muted">{{ atout.texte }}</p>
-        </article>
-      </div>
+          <div class="min-w-0">
+            <dt class="font-semibold text-ink">{{ atout.titre }}</dt>
+            <dd class="mt-1.5 text-sm leading-relaxed text-ink-muted">{{ atout.texte }}</dd>
+          </div>
+        </div>
+      </dl>
     </div>
   </section>
 </template>
 
+
 <script setup>
-import { BarChart3, Database, FolderKanban, Lightbulb, Scale, ShieldCheck } from 'lucide-vue-next';
+import { ChartColumn, Database, Download, FolderKanban, Scale, ShieldCheck } from 'lucide-vue-next';
 
 const atouts = [
   {
     icone: Database,
     titre: 'Base de matériaux',
-    texte: 'Empreinte, fournisseur, unité et prix pour chaque matériau, rangés par catégorie.',
+    texte: 'Empreinte, fournisseur, unité et prix, rangés par catégorie.',
   },
   {
     icone: Scale,
     titre: 'Calcul par quantité',
-    texte: "L'empreinte se recalcule à chaque changement de quantité, sans tableur.",
+    texte: "L'empreinte se recalcule pendant la saisie, sans valider.",
   },
   {
-    icone: BarChart3,
+    icone: ChartColumn,
     titre: 'Répartition par poste',
-    texte: 'Un graphique montre quels matériaux pèsent vraiment dans le total.',
+    texte: 'Un graphique montre quels matériaux pèsent dans le total.',
   },
   {
     icone: FolderKanban,
-    titre: 'Projets comparables',
-    texte: 'Gardez vos projets côte à côte pour mesurer les progrès entre deux variantes.',
+    titre: 'Variantes comparables',
+    texte: 'Dupliquez, changez un matériau, comparez les empreintes.',
   },
   {
-    icone: Lightbulb,
-    titre: 'Pistes de réduction',
-    texte: 'Des leviers concrets : matériaux biosourcés, circuits courts, réemploi.',
+    icone: Download,
+    titre: 'Export CSV',
+    texte: 'Le détail ligne par ligne, prêt à joindre à un dossier.',
   },
   {
     icone: ShieldCheck,
     titre: 'Vos données vous appartiennent',
-    texte: 'Compte protégé, projets privés, suppression définitive en un clic.',
+    texte: 'Projets privés, suppression définitive en un clic.',
   },
 ];
 </script>
+

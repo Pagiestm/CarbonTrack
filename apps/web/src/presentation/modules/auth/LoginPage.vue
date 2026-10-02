@@ -1,6 +1,6 @@
 <template>
   <AuthLayout title="Content de vous revoir" subtitle="Connectez-vous pour accéder à vos projets.">
-    <form class="space-y-5" @submit.prevent="connecter">
+    <form class="space-y-5" novalidate @submit.prevent="connecter">
       <AppAlert v-if="session.erreur">{{ session.erreur }}</AppAlert>
 
       <AppField
@@ -11,6 +11,7 @@
         :icon="Mail"
         placeholder="vous@exemple.fr"
         autocomplete="email"
+        :error="erreurEmail"
       />
 
       <div>
@@ -22,6 +23,7 @@
           :icon="Lock"
           placeholder="••••••••"
           autocomplete="current-password"
+          :error="erreurMotDePasse"
         />
         <RouterLink
           to="/password-reset/request"
@@ -51,11 +53,19 @@
         Créer un compte
       </RouterLink>
     </template>
+
+
+    <template #aside>
+      <MaterialOfTheDay />
+    </template>
+
   </AuthLayout>
+
 </template>
 
+
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { Lock, Mail } from 'lucide-vue-next';
 import { useSessionStore } from '@/presentation/stores/session.js';
@@ -64,23 +74,35 @@ import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
 import GoogleLogo from '@/presentation/components/ui/GoogleLogo.vue';
+import MaterialOfTheDay from '@/presentation/modules/auth/components/MaterialOfTheDay.vue';
 
 const session = useSessionStore();
 const router = useRouter();
 const route = useRoute();
 const formulaire = reactive({ email: '', password: '' });
 
-// `suite` est posée par le routeur quand une page protégée a renvoyé ici.
 const destination = () => route.query.suite ?? '/';
 
+const erreurEmail = ref('');
+const erreurMotDePasse = ref('');
+
 const connecter = async () => {
-  if (await session.connecter({ ...formulaire })) {
-    router.push(destination());
+  erreurEmail.value = '';
+  erreurMotDePasse.value = '';
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formulaire.email)) {
+    erreurEmail.value = "Le format de l'email est invalide";
   }
+  if (!formulaire.password) {
+    erreurMotDePasse.value = 'Le mot de passe est requis';
+  }
+  if (erreurEmail.value || erreurMotDePasse.value) return;
+
+  if (await session.connecter({ ...formulaire })) router.push(destination());
 };
 
-// Retour de la connexion Google : le jeton arrive dans le fragment de l'URL.
 onMounted(() => {
   if (session.recupererJetonDeLUrl()) router.push(destination());
 });
 </script>
+

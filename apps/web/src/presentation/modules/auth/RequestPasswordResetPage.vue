@@ -3,7 +3,7 @@
     title="Mot de passe oublié"
     subtitle="Entrez votre adresse email, nous vous enverrons un lien."
   >
-    <form v-if="!envoye" class="space-y-5" @submit.prevent="envoyer">
+    <form v-if="!envoye" class="space-y-5" novalidate @submit.prevent="envoyer">
       <AppAlert v-if="erreur">{{ erreur }}</AppAlert>
 
       <AppField
@@ -37,8 +37,16 @@
         Retour à la connexion
       </RouterLink>
     </template>
+
+
+    <template #aside>
+      <MaterialOfTheDay />
+    </template>
+
   </AuthLayout>
+
 </template>
+
 
 <script setup>
 import { ref, watch } from 'vue';
@@ -49,6 +57,7 @@ import AuthLayout from '@/presentation/modules/auth/AuthLayout.vue';
 import AppAlert from '@/presentation/components/ui/AppAlert.vue';
 import AppButton from '@/presentation/components/ui/AppButton.vue';
 import AppField from '@/presentation/components/ui/AppField.vue';
+import MaterialOfTheDay from '@/presentation/modules/auth/components/MaterialOfTheDay.vue';
 
 const email = ref('');
 const erreurEmail = ref('');
@@ -79,3 +88,4 @@ watch(email, (valeur) => {
   if (valide(valeur)) erreurEmail.value = '';
 });
 </script>
+
