@@ -8,6 +8,15 @@
 # Prérequis : cp apps/api/.env.example apps/api/.env
 #             cp apps/web/.env.example apps/web/.env
 #
+# Lancement : docker compose up --watch
+#
+# Les sources ne sont pas montées depuis l'hôte : sous Docker Desktop pour
+# Windows, un dossier de C:\ monté dans un conteneur ne transmet pas les
+# notifications de modification, et ni Vite ni node --watch ne voient rien.
+# Compose Watch (develop.watch) recopie chaque fichier modifié dans le
+# conteneur, où les notifications fonctionnent. Sans --watch, la pile tourne
+# sur les sources de l'image.
+#
 # `environment:` l'emporte sur `env_file:` : la pile impose ainsi ses propres
 # DATABASE_URL et SMTP_* sans qu'il faille toucher aux .env entre Docker et le
 # développement local.
@@ -59,9 +68,12 @@ services:
       dockerfile: apps/api/Dockerfile
       target: dev
     restart: unless-stopped
-    # Le client Prisma est généré dans src/, que le montage masque : il faut le
-    # régénérer au démarrage.
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && node --watch src/server.js"
+    # Le client Prisma n'est pas dans l'image (.dockerignore) : il est généré au
+    # démarrage.
+    # nodemon et non node --watch : Compose Watch remplace les fichiers au lieu
+    # de les réécrire, et node --watch ne voit que le premier changement de
+    # chaque fichier.
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npx nodemon --watch src --ignore src/generated -e js,ts,json src/server.js"
     env_file:
       - apps/api/.env
     environment:
@@ -76,10 +88,27 @@ services:
       SMTP_PASS: ''
     ports:
       - '3000:3000'
+    # prisma/ reste monté : `prisma migrate dev`, lancé dans le conteneur, écrit
+    # ainsi ses migrations directement sur l'hôte.
     volumes:
-      - ./apps/api:/app/apps/api
-      # Volume anonyme : garde le node_modules de l'image sous le montage.
-      - /app/apps/api/node_modules
+      - ./apps/api/prisma:/app/apps/api/prisma
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/api/src
+          target: /app/apps/api/src
+          ignore:
+            - generated/
+        - action: sync
+          path: ./apps/api/test
+          target: /app/apps/api/test
+        - action: sync+restart
+          path: ./apps/api/prisma.config.js
+          target: /app/apps/api/prisma.config.js
+        - action: rebuild
+          path: ./apps/api/package.json
+        - action: rebuild
+          path: ./package-lock.json
     depends_on:
       db:
         condition: service_healthy
@@ -96,9 +125,27 @@ services:
       - apps/web/.env
     ports:
       - '5173:5173'
-    volumes:
-      - ./apps/web:/app/apps/web
-      - /app/apps/web/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web/src
+          target: /app/apps/web/src
+        - action: sync
+          path: ./apps/web/test
+          target: /app/apps/web/test
+        - action: sync
+          path: ./apps/web/public
+          target: /app/apps/web/public
+        - action: sync
+          path: ./apps/web/index.html
+          target: /app/apps/web/index.html
+        - action: sync+restart
+          path: ./apps/web/vite.config.js
+          target: /app/apps/web/vite.config.js
+        - action: rebuild
+          path: ./apps/web/package.json
+        - action: rebuild
+          path: ./package-lock.json
     depends_on:
       - api
 

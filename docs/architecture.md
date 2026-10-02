@@ -89,12 +89,12 @@ dans `apps/api/prisma/migrations/` et appliquées au démarrage en production.
 
 ## Exécution
 
-| Contexte             | Comment                                                                                  |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| développement local  | `npm run dev:api` et `npm run dev:web`                                                   |
-| développement Docker | `docker compose up` — avec Adminer et Mailpit, voir [docker.md](./deploiement/docker.md) |
-| production Docker    | `compose.prod.yaml`, client servi par nginx                                              |
-| production hébergée  | Render — voir [render.md](./deploiement/render.md)                                       |
+| Contexte             | Comment                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| développement local  | `npm run dev:api` et `npm run dev:web`                                                           |
+| développement Docker | `docker compose up --watch` — avec Adminer et Mailpit, voir [docker.md](./deploiement/docker.md) |
+| production Docker    | `compose.prod.yaml`, client servi par nginx                                                      |
+| production hébergée  | Render — voir [render.md](./deploiement/render.md)                                               |
 
 ## Outillage
 

@@ -48,7 +48,7 @@ Les erreurs ont toujours la forme `{ "error": "message", "details"?: [...] }`.
 ## Installation
 
 Le plus simple est la pile Docker, qui fournit aussi PostgreSQL et applique les
-migrations au démarrage — `docker compose up` depuis la racine, détails dans
+migrations au démarrage — `docker compose up --watch` depuis la racine, détails dans
 [docs/deploiement/docker.md](../../docs/deploiement/docker.md).
 
 Sans Docker, il faut Node.js 24 et un PostgreSQL joignable. Depuis la racine du

@@ -89,7 +89,7 @@ francs. Ni halo, ni lueur, ni dégradé décoratif — la couleur vive est rése
 ## Installation
 
 La pile Docker démarre le client avec l'API et la base en une commande —
-`docker compose up` depuis la racine, détails dans
+`docker compose up --watch` depuis la racine, détails dans
 [docs/deploiement/docker.md](../../docs/deploiement/docker.md).
 
 Sans Docker, depuis la racine du dépôt :

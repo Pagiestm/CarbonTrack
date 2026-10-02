@@ -32,7 +32,7 @@ docs/        documentation : architecture, modèle de données, déploiement
 ```sh
 cp apps/api/.env.example apps/api/.env   # puis renseigner JWT_SECRET
 cp apps/web/.env.example apps/web/.env
-docker compose up --build
+docker compose up --build --watch
 ```
 
 | Service                            | Adresse                                                                |

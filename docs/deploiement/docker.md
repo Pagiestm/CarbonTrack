@@ -50,8 +50,12 @@ besoin : l'adresse est figée au build (voir plus bas).
 ## Développement
 
 ```sh
-docker compose up --build        # --build au premier lancement seulement
+docker compose up --build --watch   # --build au premier lancement seulement
 ```
+
+`--watch` active le rechargement à chaud : voir
+[Rechargement à chaud](#rechargement-à-chaud). Sans lui, la pile tourne sur
+les sources copiées dans l'image au dernier build.
 
 | Service | Adresse                                          | Rôle                                   |
 | ------- | ------------------------------------------------ | -------------------------------------- |
@@ -96,30 +100,65 @@ mêmes données.
 `seed:reset` ne touche qu'aux comptes générés (`@carbontrack.test`) et au
 compte de démonstration : les comptes réels sont conservés.
 
-Au démarrage, l'API génère le client Prisma puis applique les migrations.
-Ensuite, `node --watch` et Vite rechargent à chaud : `apps/api` et `apps/web`
-sont montés depuis l'hôte, une modification est prise en compte sans
-reconstruire l'image.
-
-`node_modules`, lui, **reste celui de l'image** : des volumes anonymes le
-protègent du montage. Les binaires natifs (les moteurs Prisma, notamment) y
-sont compilés pour Linux ; ceux installés sur un Mac ne conviendraient pas.
-Conséquence : après avoir ajouté une dépendance, il faut reconstruire.
+**En production, seul le catalogue** se remplit : le compte de démonstration
+est administrateur et son mot de passe est public, dans ce dépôt.
 
 ```sh
-docker compose up --build -d            # après modification d'un package.json
+DATABASE_URL="<url de production>" npm run seed:catalogue -w @carbontrack/api
+```
+
+Comme le reste du script, `seed:catalogue` est idempotent : il n'ajoute que les
+catégories et matériaux absents.
+
+Au démarrage, l'API génère le client Prisma puis applique les migrations.
+
+### Rechargement à chaud
+
+Les sources **ne sont pas montées** depuis l'hôte. Sous Docker Desktop pour
+Windows, un dossier de `C:\` monté dans un conteneur passe par un système de
+fichiers (9p) qui ne transmet pas les notifications de modification : le
+fichier change bien dans le conteneur, mais ni Vite ni l'API ne s'en
+aperçoivent.
+
+`compose.yaml` décrit donc une section `develop.watch` : avec `--watch`,
+Compose recopie chaque fichier modifié dans le conteneur, où les notifications
+fonctionnent normalement.
+
+| Modifié sur l'hôte                                  | Effet dans le conteneur                                |
+| --------------------------------------------------- | ------------------------------------------------------ |
+| `apps/*/src`, `apps/*/test`, `apps/web/index.html`… | recopié ; Vite recharge la page, nodemon relance l'API |
+| `vite.config.js`, `apps/api/prisma.config.js`       | recopié, puis conteneur redémarré                      |
+| un `package.json`, `package-lock.json`              | image reconstruite                                     |
+
+L'API tourne sous `nodemon` et non `node --watch` : Compose remplace les
+fichiers au lieu de les réécrire, et `node --watch` ne voit alors que le
+premier changement de chaque fichier.
+
+`node_modules` est celui de l'image : les binaires natifs y sont compilés pour
+Linux. Après un `npm install`, `--watch` reconstruit l'image tout seul.
+
+```sh
 docker compose logs -f api              # suivre un service
 docker compose exec api sh              # ouvrir un shell dans l'API
 docker compose down                     # arrêter, en gardant la base
 docker compose down -v                  # arrêter et effacer la base
 ```
 
-Les commandes Prisma se jouent dans le conteneur, qui seul voit la base :
+### Prisma
+
+`apps/api/prisma/` est le seul dossier **monté** depuis l'hôte : une migration
+créée dans le conteneur s'écrit directement dans le dépôt. Le conteneur seul
+voit la base. Depuis l'hôte, `localhost:5432` peut viser un autre PostgreSQL
+installé sur la machine.
 
 ```sh
 docker compose exec api npx prisma migrate dev --name ma_migration
-docker compose exec api npx prisma studio
+docker compose restart api        # relance l'API sur le client régénéré
 ```
+
+Comme le dossier est monté et non recopié, une modification de
+`schema.prisma` ne relance rien d'elle-même : c'est `migrate dev` qui
+l'applique.
 
 Les tests aussi :
 
@@ -152,10 +191,10 @@ dépendances dessus : le client n'ouvre pas tant que l'API n'est pas saine.
 
 Les deux `Dockerfile` sont multi-étapes et exposent la même paire de cibles :
 
-| Cible     | Contenu                                                   |
-| --------- | --------------------------------------------------------- |
-| `dev`     | dépendances complètes, sources montées par `compose.yaml` |
-| `runtime` | image finale, par défaut                                  |
+| Cible     | Contenu                                                       |
+| --------- | ------------------------------------------------------------- |
+| `dev`     | dépendances complètes et sources, tenues à jour par `--watch` |
+| `runtime` | image finale, par défaut                                      |
 
 Côté API, `runtime` repart d'une installation `--omit=dev` et ne garde que le
 client Prisma généré et les sources ; elle tourne sous l'utilisateur `node`.
@@ -178,7 +217,8 @@ docker build -f apps/web/Dockerfile --build-arg VITE_API_BASE_URL=/api -t carbon
 | Symptôme                                             | Cause                                                                                           |
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `port is already allocated`                          | un PostgreSQL tourne déjà sur l'hôte : arrêter celui-ci, ou retirer le `ports:` du service `db` |
-| `Cannot find module` après un `npm install`          | le `node_modules` de l'image est périmé : `docker compose up --build`                           |
+| `Cannot find module` après un `npm install`          | le `node_modules` de l'image est périmé : `docker compose up --build --watch`                   |
+| une modification n'apparaît pas                      | la pile a été lancée sans `--watch` : `docker compose up --watch`                               |
 | `env file ... not found`                             | `cp apps/api/.env.example apps/api/.env`                                                        |
 | `Configuration invalide : JWT_SECRET`                | `JWT_SECRET` est vide dans `apps/api/.env`                                                      |
 | en production, l'API ne joint pas la base            | `DATABASE_URL` vise `localhost` au lieu de `db`, ou ne reprend pas les `POSTGRES_*`             |

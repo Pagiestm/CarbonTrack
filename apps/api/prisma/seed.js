@@ -173,6 +173,16 @@ async function semerProjets(utilisateurs, materiauxParNom) {
 }
 
 async function main() {
+  if (process.argv.includes('--catalogue')) {
+    await semerCatalogue();
+    const [categories, materiaux] = await Promise.all([
+      prisma.category.count(),
+      prisma.material.count(),
+    ]);
+    console.log(`Catalogue : ${categories} catégories, ${materiaux} matériaux.`);
+    return;
+  }
+
   if (process.argv.includes('--reset')) await vider();
 
   const materiauxParNom = await semerCatalogue();
