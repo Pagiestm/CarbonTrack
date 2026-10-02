@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { computeFootprint } from '../src/modules/projects/footprint.js';
-import { projectBody } from '../src/modules/projects/projects.schemas.js';
-import { materialBody } from '../src/modules/catalog/catalog.schemas.js';
-import { updateProfileBody } from '../src/modules/users/users.schemas.js';
-import { email, password } from '../src/shared/http/schemas.js';
-import { loginBody, registerBody } from '../src/modules/auth/auth.schemas.js';
-import { loadTemplate } from '../src/shared/mail/mailer.js';
+import { computeFootprint } from '../../src/modules/projects/footprint.js';
+import { projectBody } from '../../src/modules/projects/projects.schemas.js';
+import { materialBody } from '../../src/modules/catalog/catalog.schemas.js';
+import { updateProfileBody } from '../../src/modules/users/users.schemas.js';
+import { email, password } from '../../src/shared/http/schemas.js';
+import { loginBody, registerBody } from '../../src/modules/auth/auth.schemas.js';
+import { renderTemplate } from '../../src/shared/mail/mailer.js';
 import {
   signAccessToken,
   signResetToken,
   verifyAccessToken,
   verifyResetToken,
-} from '../src/shared/auth/tokens.js';
+} from '../../src/shared/auth/tokens.js';
 
 describe('computeFootprint', () => {
   it('additionne empreinte × quantité, y compris des Decimal en texte', () => {
@@ -79,7 +79,12 @@ describe('schémas', () => {
         userId: null,
         materials: [{ materialId: 1, quantity: '2' }],
       }),
-    ).toEqual({ name: 'P', materials: [{ materialId: 1, quantity: 2 }] });
+    ).toEqual({
+      name: 'P',
+      kind: 'NEUF',
+      status: 'DRAFT',
+      materials: [{ materialId: 1, quantity: 2 }],
+    });
     expect(
       projectBody.safeParse({
         name: 'P',
@@ -116,12 +121,69 @@ describe('emails', () => {
 });
 
 describe("gabarits d'email", () => {
-  it("ne contiennent aucune adresse de site en dur : le lien suit l'environnement", () => {
-    const html = loadTemplate('registrationConfirmation')({
-      name: 'X',
+  it('sont compilés depuis le MJML, sans fichier HTML committé', async () => {
+    const html = await renderTemplate('registrationConfirmation', {
+      name: 'Marie',
       siteUrl: 'http://localhost:5173',
+      preview: 'Bienvenue',
     });
-    expect(html).toContain('href="http://localhost:5173"');
+
+    expect(html).toContain('<!doctype html>');
+    expect(html).toContain('Marie');
+    expect(html).toContain('http://localhost:5173/projects/create');
+    expect(html).not.toContain('{{');
     expect(html).not.toContain('carbontrack.theotimepagies.com');
+  });
+
+  it('construit l’adresse du logo à partir de siteUrl', async () => {
+    const html = await renderTemplate('registrationConfirmation', {
+      name: 'Marie',
+      siteUrl: 'https://exemple.fr',
+      preview: 'x',
+    });
+
+    expect(html).toContain('src="https://exemple.fr/email-logo.png"');
+    expect(html).toContain('alt=""');
+  });
+
+  it('applique la charte du site, et non les valeurs par défaut de MJML', async () => {
+    const html = await renderTemplate('passwordReset', {
+      name: 'Marie',
+      siteUrl: 'https://exemple.fr',
+      resetLink: 'https://exemple.fr/reset-password?token=abc',
+      preview: 'x',
+    });
+
+    expect(html).toContain('#15803d');
+    expect(html).toContain('#fafaf9');
+    expect(html).not.toContain('#414141');
+    expect(html).not.toContain('Ubuntu');
+  });
+
+  it('place le lien de réinitialisation, échappé par Handlebars', async () => {
+    const html = await renderTemplate('passwordReset', {
+      name: 'Marie',
+      resetLink: 'http://localhost:5173/reset-password?token=abc',
+      preview: 'Réinitialisation',
+    });
+
+    const decode = (texte) => texte.replace(/&#x3D;/g, '=').replace(/&amp;/g, '&');
+
+    expect(decode(html)).toContain('reset-password?token=abc');
+    expect(html).not.toContain('{{');
+  });
+
+  it('reprend le sujet et le message du formulaire de contact', async () => {
+    const html = await renderTemplate('contact', {
+      name: 'Marie',
+      email: 'marie@example.fr',
+      subject: 'Une question',
+      message: 'Comment est calculée l’empreinte au m² ?',
+      preview: 'Marie : Une question',
+    });
+
+    expect(html).toContain('Une question');
+    expect(html).toContain('marie@example.fr');
+    expect(html).not.toContain('{{');
   });
 });

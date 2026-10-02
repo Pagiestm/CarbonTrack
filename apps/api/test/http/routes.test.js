@@ -1,10 +1,8 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
-import { signAccessToken, signResetToken } from '../src/shared/auth/tokens.js';
+import { createApp } from '../../src/app.js';
+import { signAccessToken, signResetToken } from '../../src/shared/auth/tokens.js';
 
-// Ces requêtes s'arrêtent avant la base : authentification, droits,
-// validation et routes inconnues.
 const app = createApp();
 const userToken = signAccessToken({ id: 1, role: 'USER' });
 const adminToken = signAccessToken({ id: 2, role: 'ADMIN' });
@@ -99,7 +97,6 @@ describe('limitation de débit', () => {
     const essai = () =>
       request(app).post('/auth/login').send({ email: 'x@y.fr', password: 'faux' });
 
-    // La limite ne compte que les échecs : 10 passent, le 11e est refusé.
     let dernier;
     for (let i = 0; i < 11; i += 1) {
       dernier = await essai();

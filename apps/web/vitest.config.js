@@ -1,11 +1,32 @@
 import { fileURLToPath, URL } from 'node:url';
+import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vitest/config';
 
-// Le domaine ne dépend ni de Vue ni du navigateur : ses tests tournent dans
-// Node, sans environnement DOM ni serveur.
 export default defineConfig({
+  plugins: [vue()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-  test: { include: ['test/**/*.test.js'] },
+  test: {
+    globals: false,
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'domaine',
+          environment: 'node',
+          include: ['test/{domain,use-cases,data}/**/*.test.js'],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'interface',
+          environment: 'jsdom',
+          setupFiles: ['test/helpers/setup.js'],
+          include: ['test/{components,stores,storage}/**/*.test.js'],
+        },
+      },
+    ],
+  },
 });
