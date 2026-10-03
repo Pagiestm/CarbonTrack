@@ -72,12 +72,12 @@ npm run dev:web                          # client http://localhost:5173
 
 ## Documentation
 
-| Document                                                   | Contenu                                   |
-| ---------------------------------------------------------- | ----------------------------------------- |
-| [docs/outillage.md](./docs/outillage.md)                   | ESLint, Prettier, Husky, commitlint       |
-| [docs/architecture.md](./docs/architecture.md)             | organisation du monorepo                  |
-| [docs/merise/](./docs/merise/README.md)                    | modèle de données : MCD, MLD, MPD         |
-| [docs/deploiement/docker.md](./docs/deploiement/docker.md) | Docker, en développement et en production |
-| [docs/deploiement/render.md](./docs/deploiement/render.md) | hébergement sur Render                    |
-| [apps/api/README.md](./apps/api/README.md)                 | l'API en détail                           |
-| [apps/web/README.md](./apps/web/README.md)                 | le client en détail                       |
+| Document                                                   | Contenu                                       |
+| ---------------------------------------------------------- | --------------------------------------------- |
+| [docs/outillage.md](./docs/outillage.md)                   | ESLint, Prettier, Husky, commitlint, Renovate |
+| [docs/architecture.md](./docs/architecture.md)             | organisation du monorepo                      |
+| [docs/merise/](./docs/merise/README.md)                    | modèle de données : MCD, MLD, MPD             |
+| [docs/deploiement/docker.md](./docs/deploiement/docker.md) | Docker, en développement et en production     |
+| [docs/deploiement/render.md](./docs/deploiement/render.md) | hébergement sur Render                        |
+| [apps/api/README.md](./apps/api/README.md)                 | l'API en détail                               |
+| [apps/web/README.md](./apps/web/README.md)                 | le client en détail                           |

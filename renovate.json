@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    "group:allNonMajor",
+    "group:monorepos",
+    ":maintainLockFilesWeekly",
+    ":automergeMinor",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone"
+  ],
+  "timezone": "Europe/Paris",
+  "minimumReleaseAge": "3 days",
+  "platformAutomerge": false,
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null
+  },
+  "packageRules": [
+    {
+      "description": "Avant la 1.0, une mineure peut casser comme une majeure. Relecture avant fusion.",
+      "matchCurrentVersion": "<1.0.0",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "paquets 0.x",
+      "automerge": false
+    },
+    {
+      "description": "Node.js en LTS uniquement (majeures paires), et .node-version monte avec les images Docker.",
+      "matchPackageNames": ["node"],
+      "allowedVersions": "/^[0-9]*[02468]([.-].*)?$/",
+      "groupName": "Node.js"
+    },
+    {
+      "description": "Une majeure de PostgreSQL impose de migrer les données du volume : montée faite à la main.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["postgres"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
+}

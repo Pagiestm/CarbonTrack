@@ -81,3 +81,27 @@ docs: décrire l'outillage à la racine
 Types admis : `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`,
 `build`, `ci`, `chore`, `revert`. Le sujet reste en minuscules, à l'impératif.
 Pour passer outre ponctuellement : `git commit --no-verify`.
+
+## Renovate
+
+[Renovate](https://docs.renovatebot.com/) tient les dépendances à jour :
+paquets npm, images Docker, actions GitHub et version de Node. Sa
+configuration est dans `renovate.json`, à la racine.
+
+| Mise à jour            | Ce que fait Renovate                                 |
+| ---------------------- | ---------------------------------------------------- |
+| mineure ou correctif   | une seule PR groupée, fusionnée seule si la CI passe |
+| majeure                | une PR par paquet, à relire et fusionner à la main   |
+| paquet en 0.x, mineure | PR groupée « paquets 0.x », à relire                 |
+| `package-lock.json`    | rafraîchi chaque lundi matin                         |
+| faille de sécurité     | PR immédiate, sans le délai habituel                 |
+
+Une version doit avoir trois jours avant d'être proposée : le temps qu'une
+publication fautive soit retirée. Node ne monte que vers une LTS (majeure
+paire), `.node-version` et les images Docker ensemble. PostgreSQL ne change
+jamais de majeure seul : il faut migrer les données du volume.
+
+Une PR fusionnée arrive sur `master`, et donc **en production** par le
+déploiement automatique de Render : la CI (lint, format, tests, build, images
+Docker) est le seul garde-fou avant. Le tableau de bord des mises à jour est
+une issue GitHub, « Dependency Dashboard », tenue par Renovate.
