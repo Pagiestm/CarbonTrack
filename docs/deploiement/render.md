@@ -63,8 +63,12 @@ se réveiller. Un moniteur UptimeRobot sur
 ## Limites à connaître
 
 - Render bloque les ports SMTP sortants 25, 465 et 587 sur les instances
-  gratuites. Un compte SMTP sur un autre port (Mailtrap en 2525, par exemple)
-  passe ; sinon il faut un envoi par API HTTP.
+  gratuites. Un compte SMTP sur un autre port passe : avec Brevo,
+  `SMTP_HOST=smtp-relay.brevo.com` et `SMTP_PORT=2525`, `SMTP_USER` et
+  `SMTP_PASS` étant l'identifiant et une clé **SMTP** (pas la clé API), et
+  `EMAIL_USER` un expéditeur validé dans Brevo. Sur un port bloqué, l'envoi
+  échoue au bout de 10 s avec une erreur 503, au lieu de laisser la page
+  charger sans fin.
 - Les gabarits d'email sont des fichiers MJML dans `apps/api/src/templates/email`,
   compilés en HTML à l'exécution. Rien n'est committé en HTML.
 - Le plan gratuit compte 750 heures par mois et par compte : une API qui ne

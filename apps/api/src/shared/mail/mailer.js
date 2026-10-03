@@ -5,6 +5,7 @@ import handlebars from 'handlebars';
 import mjml2html from 'mjml';
 import nodemailer from 'nodemailer';
 import { env } from '../../config/env.js';
+import { HttpError } from '../http/errors.js';
 
 let transporter;
 
@@ -15,13 +16,22 @@ function getTransporter() {
   transporter ??= nodemailer.createTransport({
     host: env.SMTP_HOST,
     port: env.SMTP_PORT,
+    secure: env.SMTP_PORT === 465,
     auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   });
   return transporter;
 }
 
 export async function sendMail({ to, subject, html, replyTo }) {
-  await getTransporter().sendMail({ from: env.EMAIL_USER, to, subject, html, replyTo });
+  try {
+    await getTransporter().sendMail({ from: env.EMAIL_USER, to, subject, html, replyTo });
+  } catch (error) {
+    console.error(`Email « ${subject} » non envoyé :`, error.message);
+    throw new HttpError(503, "L'email n'a pas pu être envoyé, réessayez dans quelques minutes");
+  }
 }
 
 const templatesDir = new URL('../../templates/email/', import.meta.url);
