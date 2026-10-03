@@ -19,7 +19,7 @@ services:
       retries: 12
 
   adminer:
-    image: adminer:5
+    image: adminer:6
     restart: unless-stopped
     environment:
       ADMINER_DEFAULT_SERVER: db
